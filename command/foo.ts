@@ -1,8 +1,3 @@
-// console.log(process.env.TEST)
-// console.log('lol')
-// require('dotenv').config()
-// const axios = require("axios").default;
-
 import axios from "axios";
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
@@ -20,9 +15,11 @@ const headers = {
 let command_data = {
   name: "foo",
   type: 1,
-  description: "replies with bar ;/",
+  description: "replies with bar",
 };
 
-axios.post(url, JSON.stringify(command_data), {
-  headers: headers,
-});
+axios
+  .post(url, JSON.stringify(command_data), {
+    headers: headers,
+  })
+  .then((e) => console.log(e));
