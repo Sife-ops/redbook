@@ -7,6 +7,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const timestamp = event.headers["x-signature-timestamp"];
   const bodyStr = event.body;
 
+  console.log(`___${publicKey}___`);
+
   const responseBad = {
     statusCode: 401,
     body: event.body,
@@ -24,10 +26,28 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
   if (!verified) {
     return responseBad;
-  } else {
+  }
+
+  const body = JSON.parse(bodyStr);
+  console.log("body", body);
+
+  if (body.type === 1) {
     return {
       statusCode: 200,
       body: event.body,
     };
   }
+
+  if (body.data.name === "foo") {
+    return JSON.stringify({
+      type: 4,
+      data: {
+        content: "bar",
+      },
+    });
+  }
+
+  return {
+    statusCode: 404,
+  };
 };
