@@ -1,13 +1,16 @@
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
+import util from "util";
 import nacl from "tweetnacl";
 
+const publicKey = process.env.PUBLIC_KEY;
+const tableName = process.env.TABLE_NAME;
+
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  const publicKey = process.env.PUBLIC_KEY;
+  console.log("env", publicKey, tableName);
+
   const signature = event.headers["x-signature-ed25519"];
   const timestamp = event.headers["x-signature-timestamp"];
   const bodyStr = event.body;
-
-  console.log(`___${publicKey}___`);
 
   const responseBad = {
     statusCode: 401,
@@ -29,7 +32,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   }
 
   const body = JSON.parse(bodyStr);
-  console.log("body", body);
+  console.log("body", util.inspect(body, false, null, true));
 
   if (body.type === 1) {
     return {
@@ -38,13 +41,25 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     };
   }
 
-  if (body.data.name === "foo") {
-    return JSON.stringify({
-      type: 4,
-      data: {
-        content: "bar",
-      },
-    });
+  if (body.type === 2) {
+    switch (body.data.name) {
+      case "foo":
+        return JSON.stringify({
+          type: 4,
+          data: {
+            content: "bar",
+          },
+        });
+
+      default:
+      case "predict":
+        return JSON.stringify({
+          type: 4,
+          data: {
+            content: "ok",
+          },
+        });
+    }
   }
 
   return {

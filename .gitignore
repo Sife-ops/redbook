@@ -1,4 +1,5 @@
 .env.dev
+shadow-realm/
 # dependencies
 node_modules
 
