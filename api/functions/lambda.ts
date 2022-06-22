@@ -52,7 +52,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
         });
 
       default:
-      case "predict":
+      case "prediction":
         return JSON.stringify({
           type: 4,
           data: {

@@ -1,20 +1,20 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { foo } from "./foo";
-import { predict } from "./predict";
+import { foo } from './foo';
+import { prediction } from './prediction';
 
-const commands = [foo, predict];
+const commands = [foo, prediction];
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
 if (!APP_ID || !GUILD_ID || !BOT_TOKEN) {
-  throw new Error("variable not defined");
+  throw new Error('variable not defined');
 }
 
 const url = `https://discord.com/api/v8/applications/${APP_ID}/guilds/${GUILD_ID}/commands`;
 
 const headers = {
   Authorization: `Bot ${BOT_TOKEN}`,
-  "Content-Type": "application/json",
+  'Content-Type': 'application/json',
 };
 
 commands.map((e) => {
