@@ -1,18 +1,4 @@
-import axios from "axios";
-
-const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
-if (!APP_ID || !GUILD_ID || !BOT_TOKEN) {
-  throw new Error("variable not defined");
-}
-
-let url = `https://discord.com/api/v8/applications/${APP_ID}/guilds/${GUILD_ID}/commands`;
-
-const headers = {
-  Authorization: `Bot ${BOT_TOKEN}`,
-  "Content-Type": "application/json",
-};
-
-let command_data = {
+export const predict = {
   name: "predict",
   type: 1,
   description: "make a prediction",
@@ -20,14 +6,14 @@ let command_data = {
     {
       type: 3,
       name: "prediction",
-      description: "your prediction in full",
+      description: "Your prediction in full.",
+      required: true,
+    },
+    {
+      type: 6,
+      name: "validator",
+      description: "The Nth validator for your prediction.",
       required: true,
     },
   ],
 };
-
-axios
-  .post(url, JSON.stringify(command_data), {
-    headers: headers,
-  })
-  .then((e) => console.log(e.status));
