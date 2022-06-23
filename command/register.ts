@@ -2,8 +2,9 @@ import axios from 'axios';
 
 import { foo } from './foo';
 import { prediction } from './prediction';
+import { vote } from './vote';
 
-const commands = [foo, prediction];
+const commands = [foo, prediction, vote];
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
 if (!APP_ID || !GUILD_ID || !BOT_TOKEN) {
