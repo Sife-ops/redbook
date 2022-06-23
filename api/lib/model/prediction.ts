@@ -3,7 +3,7 @@ import { EntityClass, entity } from './entity';
 
 export class PredictionClass extends EntityClass {
   conditions?: string;
-  correct?: boolean;
+  verdict?: boolean;
   prediction?: string;
 }
 
@@ -19,7 +19,7 @@ const predictionSchema = new dynamoose.Schema({
   conditions: {
     type: String,
   },
-  correct: {
+  verdict: {
     type: Boolean,
   },
   prediction: {

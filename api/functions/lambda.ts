@@ -1,15 +1,12 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import util from 'util';
 import nacl from 'tweetnacl';
-import model from '../lib/model';
+import model, { PredictionClass } from '../lib/model';
 import { faker } from '@faker-js/faker';
 
 const publicKey = process.env.PUBLIC_KEY;
-const tableName = process.env.TABLE_NAME;
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  // console.log('env', publicKey, tableName);
-
   const signature = event.headers['x-signature-ed25519'];
   const timestamp = event.headers['x-signature-timestamp'];
   const bodyStr = event.body;
@@ -43,18 +40,24 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     };
   }
 
+  /*
+   * Commands
+   */
+
   if (body.type === 2) {
+    const { username, discriminator } = body.member.user;
+
     switch (body.data.name) {
-      case 'foo':
+      case 'foo': {
         return JSON.stringify({
           type: 4,
           data: {
             content: 'bar',
           },
         });
+      }
 
-      default:
-      case 'prediction':
+      case 'prediction': {
         // todo: can't allow self as judge
 
         /*
@@ -64,8 +67,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
          */
 
         // 1) Create prediction.
-        const { username, discriminator } = body.member.user;
-
         const pk = `${username}${discriminator}`;
         let sk = `prediction:${mnemonic()}`;
 
@@ -87,10 +88,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
         const conditions = body.data.options.find(
           (e: any) => e.name === 'conditions'
         ).value;
-        const judgeValue = body.data.options.find(
-          (e: any) => e.name === 'judge'
-        ).value;
-        const judge = body.data.resolved.users[judgeValue];
 
         const prediction = await model.prediction.create({
           pk,
@@ -101,6 +98,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
         console.log('prediction', prediction);
 
         // 2) Create relation.
+        const judgeValue = body.data.options.find(
+          (e: any) => e.name === 'judge'
+        ).value;
+
+        const judge = body.data.resolved.users[judgeValue];
+
         const predictionUser = await model.prediction.create({
           pk,
           sk: `${sk}#${judge.username}${judge.discriminator}`,
@@ -119,6 +122,94 @@ Default judge: ${judge.username}.
 Prediction ID: ${sk.split(':')[1]}`,
           },
         });
+      }
+
+      case 'vote': {
+        // voter must be a judge
+        const id = body.data.options.find((e: any) => e.name === 'id').value;
+
+        const predictionUsers: PredictionClass[] = await model.prediction
+          .query('prediction')
+          .eq(`prediction:${id}`)
+          .where('sk')
+          .eq(`prediction:${id}#${username}${discriminator}`)
+          .using('predictionUserIndex')
+          .exec();
+
+        if (predictionUsers.length < 1) {
+          return JSON.stringify({
+            type: 4,
+            data: {
+              content:
+                'Vote failed because the prediction does not exist or you are not a judge.',
+            },
+          });
+        }
+
+        // update verdict
+        const predictionUser = predictionUsers[0];
+
+        const verdict = body.data.options.find(
+          (e: any) => e.name === 'verdict'
+        ).value;
+
+        const a = await model.prediction.update({
+          ...predictionUser,
+          verdict,
+        });
+
+        // count votes
+        const b = await model.prediction
+          .query('pk')
+          .eq(predictionUser.pk)
+          .where('sk')
+          .beginsWith(`prediction:${id}#`)
+          .exec();
+
+        const c = b.reduce(
+          (
+            a: { yes: number; no: number; undecided: number },
+            c: PredictionClass
+          ) => {
+            if (c.verdict === undefined) {
+              return {
+                ...a,
+                undecided: a.undecided + 1,
+              };
+            } else if (c.verdict === true) {
+              return {
+                ...a,
+                yes: a.yes + 1,
+              };
+            } else if (c.verdict === false) {
+              return {
+                ...a,
+                no: a.no + 1,
+              };
+            }
+            return a;
+          },
+          {
+            yes: 0,
+            no: 0,
+            undecided: 0,
+          }
+        );
+
+        //
+
+        console.log(c);
+
+        return JSON.stringify({
+          type: 4,
+          data: {
+            content: 'ok',
+          },
+        });
+      }
+
+      default:
+        break;
     }
   }
 
