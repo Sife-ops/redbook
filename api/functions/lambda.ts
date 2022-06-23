@@ -146,9 +146,29 @@ Prediction ID: ${sk.split(':')[1]}`,
           });
         }
 
-        // update verdict
         const predictionUser = predictionUsers[0];
 
+        // check vote status
+        const predictions = await model.prediction
+          .query('pk')
+          .eq(predictionUser.pk)
+          .where('sk')
+          .beginsWith(`prediction:${id}`)
+          .exec();
+
+        const prediction = predictions.find((e) => e.sk === `prediction:${id}`);
+        if (!prediction) throw new Error('missing prediction');
+
+        if (prediction.verdict !== undefined) {
+          return JSON.stringify({
+            type: 4,
+            data: {
+              content: 'Voting on this prediction has ended.',
+            },
+          });
+        }
+
+        // update verdict
         const verdict = body.data.options.find(
           (e: any) => e.name === 'verdict'
         ).value;
@@ -181,13 +201,12 @@ Prediction ID: ${sk.split(':')[1]}`,
                 ...a,
                 yes: a.yes + 1,
               };
-            } else if (c.verdict === false) {
+            } else {
               return {
                 ...a,
                 no: a.no + 1,
               };
             }
-            return a;
           },
           {
             yes: 0,
@@ -196,16 +215,39 @@ Prediction ID: ${sk.split(':')[1]}`,
           }
         );
 
-        //
-
-        console.log(c);
-
-        return JSON.stringify({
-          type: 4,
-          data: {
-            content: 'ok',
-          },
-        });
+        // decide vote
+        if (c.undecided > 0) {
+          return JSON.stringify({
+            type: 4,
+            data: {
+              content: 'Thank you for voting.',
+            },
+          });
+        } else if (c.yes < 1) {
+          const res = await model.prediction.update({
+            ...prediction,
+            verdict: false,
+          });
+          return JSON.stringify({
+            type: 4,
+            data: {
+              content:
+                'The prediction ... by ... has been voted incorrect by ...',
+            },
+          });
+        } else {
+          const res = await model.prediction.update({
+            ...prediction,
+            verdict: true,
+          });
+          return JSON.stringify({
+            type: 4,
+            data: {
+              content:
+                'Congratulations ...! Your prediction has been voted correct by ...',
+            },
+          });
+        }
       }
 
       default:
