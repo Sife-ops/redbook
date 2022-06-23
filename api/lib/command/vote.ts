@@ -1,20 +1,29 @@
 import model, { PredictionClass } from '../model';
 
 export const vote = async (body: any) => {
-  // voter must be a judge
-  const { username, discriminator } = body.member.user;
+  /*
+   * 1) voter must be a judge
+   * 2) check prediction verdict
+   * 3) update predictionUser verdict
+   * 4) count votes
+   * 5) decide vote
+   */
 
+  // 1) voter must be a judge
+  const { username, discriminator } = body.member.user;
   const id = body.data.options.find((e: any) => e.name === 'id').value;
 
-  const predictionUsers: PredictionClass[] = await model.prediction
+  const sk = `prediction:${id}`;
+
+  const predictionUserRes: PredictionClass[] = await model.prediction
     .query('prediction')
-    .eq(`prediction:${id}`)
+    .eq(sk)
     .where('sk')
-    .eq(`prediction:${id}#${username}${discriminator}`)
+    .eq(`${sk}#${username}${discriminator}`)
     .using('predictionUserIndex')
     .exec();
 
-  if (predictionUsers.length < 1) {
+  if (predictionUserRes.length < 1) {
     return JSON.stringify({
       type: 4,
       data: {
@@ -24,20 +33,15 @@ export const vote = async (body: any) => {
     });
   }
 
-  const predictionUser = predictionUsers[0];
+  const predictionUser = predictionUserRes[0];
 
-  // check vote status
-  const predictions = await model.prediction
-    .query('pk')
-    .eq(predictionUser.pk)
-    .where('sk')
-    .beginsWith(`prediction:${id}`)
-    .exec();
+  // 2) check prediction verdict
+  const predictionRes = await model.prediction.get({
+    pk: predictionUser.pk,
+    sk,
+  });
 
-  const prediction = predictions.find((e) => e.sk === `prediction:${id}`);
-  if (!prediction) throw new Error('missing prediction');
-
-  if (prediction.verdict !== undefined) {
+  if (predictionRes.verdict !== undefined) {
     return JSON.stringify({
       type: 4,
       data: {
@@ -46,25 +50,25 @@ export const vote = async (body: any) => {
     });
   }
 
-  // update verdict
+  // 3) update predictionUser verdict
   const verdict = body.data.options.find(
     (e: any) => e.name === 'verdict'
   ).value;
 
-  const a = await model.prediction.update({
+  await model.prediction.update({
     ...predictionUser,
     verdict,
   });
 
-  // count votes
-  const b = await model.prediction
+  // 4) count votes
+  const predictionUsersRes = await model.prediction
     .query('pk')
     .eq(predictionUser.pk)
     .where('sk')
-    .beginsWith(`prediction:${id}#`)
+    .beginsWith(`${sk}#`)
     .exec();
 
-  const c = b.reduce(
+  const count = predictionUsersRes.reduce(
     (a: { yes: number; no: number; undecided: number }, c: PredictionClass) => {
       if (c.verdict === undefined) {
         return {
@@ -90,36 +94,62 @@ export const vote = async (body: any) => {
     }
   );
 
-  // decide vote
-  if (c.undecided > 0) {
+  // 5) decide vote
+  const voterUsernames = predictionUsersRes.reduce((a: string, c, i, arr) => {
+    const nick = getNick(c.sk.split('#')[1]);
+    if (arr.length < 2) {
+      return nick;
+    } else if (arr.length < 3) {
+      if (i === 0) {
+        return `${nick}`;
+      } else {
+        return `${a} and ${nick}`;
+      }
+    } else {
+      if (i < arr.length - 1) {
+        return `${a}${nick}, `;
+      } else {
+        return `${a}and ${nick}`;
+      }
+    }
+  }, '');
+
+  if (count.undecided > 0) {
     return JSON.stringify({
       type: 4,
       data: {
-        content: 'Thank you for voting.',
+        content: `Thank you for voting, ${getNick(username)}!`,
       },
     });
-  } else if (c.yes < 1) {
-    const res = await model.prediction.update({
-      ...prediction,
+  } else if (count.yes < 1) {
+    await model.prediction.update({
+      ...predictionRes,
       verdict: false,
     });
     return JSON.stringify({
       type: 4,
       data: {
-        content: 'The prediction ... by ... has been voted incorrect by ...',
+        content: `The prediction ${predictionRes.conditions} by ${getNick(
+          predictionRes.pk
+        )} has been voted incorrect by ${voterUsernames}.`,
       },
     });
   } else {
-    const res = await model.prediction.update({
-      ...prediction,
+    await model.prediction.update({
+      ...predictionRes,
       verdict: true,
     });
     return JSON.stringify({
       type: 4,
       data: {
-        content:
-          'Congratulations ...! Your prediction has been voted correct by ...',
+        content: `Congratulations ${getNick(
+          predictionRes.pk
+        )}! Your prediction has been voted correct by ${voterUsernames}.`,
       },
     });
   }
+};
+
+const getNick = (i: string) => {
+  return i.slice(0, i.length - 4);
 };

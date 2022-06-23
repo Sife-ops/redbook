@@ -1,13 +1,6 @@
 import model from '../model';
 import { faker } from '@faker-js/faker';
 
-const mnemonic = () => {
-  const a = faker.word.adjective();
-  const b = faker.word.adjective();
-  const c = faker.word.noun();
-  return `${a}-${b}-${c}`;
-};
-
 export const prediction = async (body: any) => {
   /*
    * 1) Create prediction.
@@ -18,10 +11,12 @@ export const prediction = async (body: any) => {
   // 1) Create prediction.
   const { username, discriminator } = body.member.user;
 
+  // todo: hyphenate discriminator
   const pk = `${username}${discriminator}`;
   let sk = `prediction:${mnemonic()}`;
 
   while (true) {
+    // todo: need to query predictionUserIndex
     const found = await model.prediction
       .query('pk')
       .eq(pk)
@@ -49,6 +44,7 @@ export const prediction = async (body: any) => {
   console.log('prediction', prediction);
 
   // 2) Create relation.
+  // todo: can't add self as judge
   const judgeValue = body.data.options.find(
     (e: any) => e.name === 'judge'
   ).value;
@@ -73,4 +69,11 @@ Default judge: ${judge.username}.
 Prediction ID: ${sk.split(':')[1]}`,
     },
   });
+};
+
+const mnemonic = () => {
+  const a = faker.word.adjective();
+  const b = faker.word.adjective();
+  const c = faker.word.noun();
+  return `${a}-${b}-${c}`;
 };

@@ -1,4 +1,3 @@
-import model, { PredictionClass } from '../lib/model';
 import nacl from 'tweetnacl';
 import util from 'util';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
@@ -36,7 +35,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   }
 
   const body = JSON.parse(bodyStr);
-  console.log('body', util.inspect(body, false, null, true));
+  // console.log('body', util.inspect(body, false, null, true));
 
   if (body.type === 1) {
     return {
