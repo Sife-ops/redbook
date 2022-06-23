@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {},
   "dependencies": {
+    "@faker-js/faker": "^7.3.0",
     "aws-sdk": "^2.1159.0",
     "dynamoose": "^2.8.5",
     "tweetnacl": "^1.0.3"
