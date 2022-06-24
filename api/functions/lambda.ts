@@ -1,51 +1,18 @@
-import nacl from 'tweetnacl';
-import util from 'util';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import * as command from '../lib/command';
+import util from 'util';
+import { APIGatewayProxyResultV2, Handler } from 'aws-lambda';
+import { Event } from '../lib/event';
+import { verify } from '../lib/verify';
 
-const publicKey = process.env.PUBLIC_KEY;
+type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;
 
-export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  /*
-   * verification
-   */
-
-  const signature = event.headers['x-signature-ed25519'];
-  const timestamp = event.headers['x-signature-timestamp'];
-  const bodyStr = event.body;
-
-  const responseBad = {
-    statusCode: 401,
-    body: event.body,
-  };
-
-  if (!publicKey || !signature || !timestamp || !bodyStr) {
-    return responseBad;
-  }
-
-  const verified = nacl.sign.detached.verify(
-    Buffer.from(timestamp + bodyStr),
-    Buffer.from(signature, 'hex'),
-    Buffer.from(publicKey, 'hex')
-  );
-
-  if (!verified) {
-    return responseBad;
-  }
-
-  const body = JSON.parse(bodyStr);
-  // console.log('body', util.inspect(body, false, null, true));
+export const handler: EventHandler = async (event) => {
+  const body = JSON.parse(event.body);
+  console.log('body', util.inspect(body, false, null, true));
 
   if (body.type === 1) {
-    return {
-      statusCode: 200,
-      body: event.body,
-    };
+    return verify(event);
   }
-
-  /*
-   * Commands
-   */
 
   if (body.type === 2) {
     try {
