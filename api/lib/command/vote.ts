@@ -69,7 +69,7 @@ export const vote = async (body: any) => {
     .exec();
 
   const count = predictionUsersRes.reduce(
-    (a: { yes: number; no: number; undecided: number }, c: PredictionClass) => {
+    (a: { yes: number; no: number; undecided: number }, c) => {
       if (c.verdict === undefined) {
         return {
           ...a,
@@ -114,37 +114,39 @@ export const vote = async (body: any) => {
     }
   }, '');
 
-  if (count.undecided > 0) {
+  if (count.undecided < 1) {
+    if (count.yes < 1) {
+      await model.prediction.update({
+        ...predictionRes,
+        verdict: false,
+      });
+      return JSON.stringify({
+        type: 4,
+        data: {
+          content: `The prediction ${predictionRes.conditions} by ${getNick(
+            predictionRes.pk
+          )} has been voted incorrect by ${voterUsernames}.`,
+        },
+      });
+    } else {
+      await model.prediction.update({
+        ...predictionRes,
+        verdict: true,
+      });
+      return JSON.stringify({
+        type: 4,
+        data: {
+          content: `Congratulations ${getNick(
+            predictionRes.pk
+          )}! Your prediction has been voted correct by ${voterUsernames}.`,
+        },
+      });
+    }
+  } else {
     return JSON.stringify({
       type: 4,
       data: {
         content: `Thank you for voting, ${getNick(username)}!`,
-      },
-    });
-  } else if (count.yes < 1) {
-    await model.prediction.update({
-      ...predictionRes,
-      verdict: false,
-    });
-    return JSON.stringify({
-      type: 4,
-      data: {
-        content: `The prediction ${predictionRes.conditions} by ${getNick(
-          predictionRes.pk
-        )} has been voted incorrect by ${voterUsernames}.`,
-      },
-    });
-  } else {
-    await model.prediction.update({
-      ...predictionRes,
-      verdict: true,
-    });
-    return JSON.stringify({
-      type: 4,
-      data: {
-        content: `Congratulations ${getNick(
-          predictionRes.pk
-        )}! Your prediction has been voted correct by ${voterUsernames}.`,
       },
     });
   }

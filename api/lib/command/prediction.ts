@@ -1,10 +1,11 @@
 import model from '../model';
 import { faker } from '@faker-js/faker';
+import {} from 'discord-api-types/v10'
 
 export const prediction = async (body: any) => {
   /*
    * 1) Create prediction.
-   * 2) Create relation.
+   * 2) Create predictionUser.
    * 3) Show details.
    */
 
@@ -43,7 +44,7 @@ export const prediction = async (body: any) => {
 
   console.log('prediction', prediction);
 
-  // 2) Create relation.
+  // 2) Create predictionUser.
   // todo: can't add self as judge
   const judgeValue = body.data.options.find(
     (e: any) => e.name === 'judge'

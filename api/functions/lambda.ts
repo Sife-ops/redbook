@@ -1,8 +1,7 @@
 import nacl from 'tweetnacl';
 import util from 'util';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { prediction } from '../lib/command/prediction';
-import { vote } from '../lib/command/vote';
+import * as command from '../lib/command';
 
 const publicKey = process.env.PUBLIC_KEY;
 
@@ -49,26 +48,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
    */
 
   if (body.type === 2) {
-    switch (body.data.name) {
-      case 'foo': {
-        return JSON.stringify({
-          type: 4,
-          data: {
-            content: 'bar',
-          },
-        });
-      }
-
-      case 'prediction': {
-        return await prediction(body);
-      }
-
-      case 'vote': {
-        return await vote(body);
-      }
-
-      default:
-        break;
+    try {
+      //@ts-ignore
+      return await command[body.data.name](body);
+    } catch (ex: unknown) {
+      console.log(ex);
     }
   }
 
