@@ -22,7 +22,7 @@ export const vote = async (body: any) => {
     .query('prediction')
     .eq(sk)
     .where('sk')
-    .eq(`${sk}#${id}`)
+    .eq(`${sk}#user:${id}`)
     .using('predictionUserIndex')
     .exec();
 
@@ -99,7 +99,7 @@ export const vote = async (body: any) => {
 
   // 5) decide vote
   const voterIds = predictionUsersRes.reduce((a: string, c, i, arr) => {
-    const id = c.sk.split('#')[1];
+    const id = c.sk.split('user:')[1];
     if (arr.length < 2) {
       return id;
     } else if (arr.length < 3) {
@@ -137,9 +137,7 @@ export const vote = async (body: any) => {
       return JSON.stringify({
         type: 4,
         data: {
-          content: `Congratulations ${getNick(
-            predictionRes.pk
-          )}! Your prediction has been voted correct by ${voterIds}.`,
+          content: `Congratulations ${predictionRes.pk}! Your prediction has been voted correct by ${voterIds}.`,
         },
       });
     }
@@ -153,6 +151,6 @@ export const vote = async (body: any) => {
   }
 };
 
-const getNick = (i: string) => {
-  return i.slice(0, i.length - 4);
-};
+// const getNick = (i: string) => {
+//   return i.slice(0, i.length - 4);
+// };
