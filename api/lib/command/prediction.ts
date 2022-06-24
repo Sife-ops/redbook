@@ -13,7 +13,7 @@ export const prediction = async (body: any) => {
   const { id } = body.member.user;
 
   // todo: hyphenate discriminator
-  const pk = id;
+  const pk = `user:${id}`;
   let sk = `prediction:${mnemonic()}`;
 
   while (true) {
@@ -54,7 +54,7 @@ export const prediction = async (body: any) => {
 
   const predictionUser = await model.prediction.create({
     pk,
-    sk: `${sk}#${judge.id}`,
+    sk: `${sk}#user:${judge.id}`,
     prediction: sk,
   });
 
