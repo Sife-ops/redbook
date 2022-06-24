@@ -65,9 +65,33 @@ export const prediction = async (body: any) => {
     type: 4,
     data: {
       // todo: formatting
-      content: `New prediction by ${id}: "${conditions}".
-Default judge: ${judge.id}.
-Prediction ID: ${sk.split(':')[1]}`,
+      embeds: [
+        {
+          title: `New Prediction`,
+          description: `${conditions}`,
+          color: 0xFF0000,
+          footer: {
+            text: `Permalink?`,
+          },
+          fields: [
+            {
+              name: `Predictor`,
+              value: `<@${id}>`,
+              inline: true,
+            },
+            {
+              name: `Default judge`,
+              value: `<@${judge.id}>`,
+              inline: true,
+            },
+            {
+              name: `Prediction ID`,
+              value: `${sk.split(':')[1]}`,
+              inline: false,
+            },
+          ],
+        },
+      ],
     },
   });
 };
