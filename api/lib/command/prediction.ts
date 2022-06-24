@@ -1,6 +1,6 @@
 import model from '../model';
 import { faker } from '@faker-js/faker';
-import {} from 'discord-api-types/v10'
+import {} from 'discord-api-types/v10';
 
 export const prediction = async (body: any) => {
   /*
@@ -10,10 +10,10 @@ export const prediction = async (body: any) => {
    */
 
   // 1) Create prediction.
-  const { username, discriminator } = body.member.user;
+  const { id } = body.member.user;
 
   // todo: hyphenate discriminator
-  const pk = `${username}${discriminator}`;
+  const pk = id;
   let sk = `prediction:${mnemonic()}`;
 
   while (true) {
@@ -54,7 +54,7 @@ export const prediction = async (body: any) => {
 
   const predictionUser = await model.prediction.create({
     pk,
-    sk: `${sk}#${judge.username}${judge.discriminator}`,
+    sk: `${sk}#${judge.id}`,
     prediction: sk,
   });
 
@@ -65,8 +65,8 @@ export const prediction = async (body: any) => {
     type: 4,
     data: {
       // todo: formatting
-      content: `New prediction by ${username}: "${conditions}".
-Default judge: ${judge.username}.
+      content: `New prediction by ${id}: "${conditions}".
+Default judge: ${judge.id}.
 Prediction ID: ${sk.split(':')[1]}`,
     },
   });

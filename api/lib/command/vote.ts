@@ -10,16 +10,19 @@ export const vote = async (body: any) => {
    */
 
   // 1) voter must be a judge
-  const { username, discriminator } = body.member.user;
-  const id = body.data.options.find((e: any) => e.name === 'id').value;
+  const { id } = body.member.user;
 
-  const sk = `prediction:${id}`;
+  const predictionId = body.data.options.find(
+    (e: any) => e.name === 'id'
+  ).value;
+
+  const sk = `prediction:${predictionId}`;
 
   const predictionUserRes: PredictionClass[] = await model.prediction
     .query('prediction')
     .eq(sk)
     .where('sk')
-    .eq(`${sk}#${username}${discriminator}`)
+    .eq(`${sk}#${id}`)
     .using('predictionUserIndex')
     .exec();
 
@@ -95,21 +98,21 @@ export const vote = async (body: any) => {
   );
 
   // 5) decide vote
-  const voterUsernames = predictionUsersRes.reduce((a: string, c, i, arr) => {
-    const nick = getNick(c.sk.split('#')[1]);
+  const voterIds = predictionUsersRes.reduce((a: string, c, i, arr) => {
+    const id = c.sk.split('#')[1];
     if (arr.length < 2) {
-      return nick;
+      return id;
     } else if (arr.length < 3) {
       if (i === 0) {
-        return `${nick}`;
+        return id;
       } else {
-        return `${a} and ${nick}`;
+        return `${a} and ${id}`;
       }
     } else {
       if (i < arr.length - 1) {
-        return `${a}${nick}, `;
+        return `${a}${id}, `;
       } else {
-        return `${a}and ${nick}`;
+        return `${a}and ${id}`;
       }
     }
   }, '');
@@ -123,9 +126,7 @@ export const vote = async (body: any) => {
       return JSON.stringify({
         type: 4,
         data: {
-          content: `The prediction ${predictionRes.conditions} by ${getNick(
-            predictionRes.pk
-          )} has been voted incorrect by ${voterUsernames}.`,
+          content: `The prediction ${predictionRes.conditions} by ${id} has been voted incorrect by ${voterIds}.`,
         },
       });
     } else {
@@ -138,7 +139,7 @@ export const vote = async (body: any) => {
         data: {
           content: `Congratulations ${getNick(
             predictionRes.pk
-          )}! Your prediction has been voted correct by ${voterUsernames}.`,
+          )}! Your prediction has been voted correct by ${voterIds}.`,
         },
       });
     }
@@ -146,7 +147,7 @@ export const vote = async (body: any) => {
     return JSON.stringify({
       type: 4,
       data: {
-        content: `Thank you for voting, ${getNick(username)}!`,
+        content: `Thank you for voting, ${id}!`,
       },
     });
   }
