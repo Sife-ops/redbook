@@ -1,20 +1,20 @@
 import nacl from 'tweetnacl';
 import { Event } from './event';
 
-const publicKey = process.env.PUBLIC_KEY;
+const { PUBLIC_KEY } = process.env;
 
 export const verify = (event: Event) => {
   const signature = event.headers['x-signature-ed25519'];
   const timestamp = event.headers['x-signature-timestamp'];
 
-  if (!publicKey || !signature || !timestamp) {
+  if (!PUBLIC_KEY || !signature || !timestamp) {
     throw new Error('something wrong');
   }
 
   const verified = nacl.sign.detached.verify(
     Buffer.from(timestamp + event.body),
     Buffer.from(signature, 'hex'),
-    Buffer.from(publicKey, 'hex')
+    Buffer.from(PUBLIC_KEY, 'hex')
   );
 
   if (!verified) {

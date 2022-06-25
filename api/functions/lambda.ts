@@ -4,6 +4,13 @@ import { APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { Event } from '../lib/event';
 import { verify } from '../lib/verify';
 
+const {
+  POSTGRES_DATABASE,
+  POSTGRES_HOST,
+  POSTGRES_PASSWORD,
+  POSTGRES_USERNAME,
+} = process.env;
+
 type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;
 
 export const handler: EventHandler = async (event) => {
