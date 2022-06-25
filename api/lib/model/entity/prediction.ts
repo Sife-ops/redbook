@@ -3,4 +3,5 @@ export interface PredictionTable {
   user_id: string;
   conditions: string;
   verdict?: boolean;
+  created_at?: string;
 }

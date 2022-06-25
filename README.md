@@ -7,5 +7,6 @@
     - save history of edits
   - delete
   - add judge
-- created-at/updated-at for all records
+- created-at column for records :heavy_check_mark:
 - migrations
+- POSTGRES_PORT

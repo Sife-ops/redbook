@@ -3,12 +3,34 @@ import { optionValue, mnemonic } from './utility';
 
 export const prediction = async (body: any) => {
   /*
-   * 1) Create prediction.
-   * 2) Create judge.
-   * 3) Format message.
+   * 1) create user record
+   * 2) create prediction
+   * 3) create judge
+   * 4) format message
    */
 
-  // 1) Create prediction
+  // 1) create user record
+  const { id, avatar, discriminator, username } = body.member.user;
+
+  try {
+    await db
+      .selectFrom('user')
+      .selectAll()
+      .where('id', '=', id)
+      .executeTakeFirstOrThrow();
+  } catch {
+    await db
+      .insertInto('user')
+      .values({
+        avatar,
+        discriminator,
+        id,
+        username,
+      })
+      .executeTakeFirst();
+  }
+
+  // 2) create prediction
   let predictionId = mnemonic();
 
   // unique mnemonic id
@@ -38,7 +60,7 @@ export const prediction = async (body: any) => {
     })
     .executeTakeFirstOrThrow();
 
-  // 2) Create judge
+  // 3) create judge
   const judgeUserId = optionValue(options, 'judge');
 
   await db
@@ -49,29 +71,29 @@ export const prediction = async (body: any) => {
     })
     .executeTakeFirstOrThrow();
 
-  // 3) Format message
+  // 4) format message
   return JSON.stringify({
     type: 4,
     data: {
       embeds: [
         {
           title: 'New Prediction',
-          description: `${conditions}`,
+          description: conditions,
           color: 0x00ffff,
           fields: [
             {
-              name: `Predictor`,
+              name: 'By',
               value: `<@${predictorUserId}>`,
               inline: true,
             },
             {
-              name: `Default judge`,
+              name: 'Default Judge',
               value: `<@${judgeUserId}>`,
               inline: true,
             },
             {
-              name: `Prediction ID`,
-              value: `${predictionId}`,
+              name: 'ID',
+              value: predictionId,
               inline: false,
             },
           ],

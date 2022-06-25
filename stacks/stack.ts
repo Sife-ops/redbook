@@ -38,10 +38,6 @@ export function stack({ stack }: StackContext) {
   const api = new Api(stack, 'api', {
     defaults: {
       function: {
-        // bundle: {
-        //   externalModules: ['pg-native'],
-        //   minify: false,
-        // },
         environment: {
           POSTGRES_DATABASE,
           POSTGRES_HOST,

@@ -123,7 +123,12 @@ export const vote = async (body: any) => {
                 inline: false,
               },
               {
-                name: 'Predictor',
+                name: 'Made On',
+                value: prediction.created_at,
+                inline: false,
+              },
+              {
+                name: 'By',
                 value: `<@${prediction.user_id}>`,
                 inline: false,
               },
@@ -151,14 +156,14 @@ export const vote = async (body: any) => {
                 inline: false,
               },
               {
-                name: 'Predictor',
+                name: 'By',
                 value: `<@${prediction.user_id}>`,
                 inline: false,
               },
               // todo: list undecided judges
               {
-                name: `Prediction ID`,
-                value: `${predictionId}`,
+                name: 'ID',
+                value: predictionId,
                 inline: false,
               },
             ],
