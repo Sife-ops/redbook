@@ -8,9 +8,13 @@
     "aws-sdk": "^2.1159.0",
     "discord-api-types": "^0.34.0",
     "dynamoose": "^2.8.5",
+    "kysely": "^0.19.3",
+    "pg": "^8.7.3",
+    "pg-native": "^3.0.0",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.101"
+    "@types/aws-lambda": "^8.10.101",
+    "@types/pg": "^8.6.5"
   }
 }
