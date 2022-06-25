@@ -1,6 +1,5 @@
 import { db } from '../model-sql';
-import { faker } from '@faker-js/faker';
-import { optionValue } from './utility';
+import { optionValue, mnemonic } from './utility';
 
 export const prediction = async (body: any) => {
   /*
@@ -55,15 +54,11 @@ export const prediction = async (body: any) => {
   return JSON.stringify({
     type: 4,
     data: {
-      // todo: formatting
       embeds: [
         {
-          title: `New Prediction`,
+          title: 'New Prediction',
           description: `${conditions}`,
-          color: 0xff0000,
-          footer: {
-            text: `Permalink?`,
-          },
+          color: 0x00ffff,
           fields: [
             {
               name: `Predictor`,
@@ -81,15 +76,12 @@ export const prediction = async (body: any) => {
               inline: false,
             },
           ],
+          footer: {
+            // todo: why?
+            text: `Permalink?`,
+          },
         },
       ],
     },
   });
-};
-
-const mnemonic = () => {
-  const a = faker.word.adjective();
-  const b = faker.word.adjective();
-  const c = faker.word.noun();
-  return `${a}-${b}-${c}`;
 };

@@ -7,7 +7,7 @@ export const vote = async (body: any) => {
    * 2) check prediction verdict
    * 3) update judge verdict
    * 4) count votes
-   * 5) decide vote
+   * 5) format response
    */
 
   // 1) voter must be a judge
@@ -91,7 +91,7 @@ export const vote = async (body: any) => {
     }
   );
 
-  // 5) decide vote
+  // 5) format response
   if (count.undecided < 1) {
     if (count.yes < 1) {
       await db
@@ -99,30 +99,71 @@ export const vote = async (body: any) => {
         .set({ verdict: false })
         .where('id', '=', predictionId)
         .executeTakeFirstOrThrow();
-      return JSON.stringify({
-        type: 4,
-        data: {
-          content: `The prediction "${prediction.conditions}" by ${prediction.user_id} has been voted incorrect by ...`,
-        },
-      });
     } else {
       await db
         .updateTable('prediction')
         .set({ verdict: true })
         .where('id', '=', predictionId)
         .executeTakeFirstOrThrow();
-      return JSON.stringify({
-        type: 4,
-        data: {
-          content: `Congratulations ${prediction.user_id}! Your prediction has been voted correct by ...`,
-        },
-      });
     }
+    return JSON.stringify({
+      type: 4,
+      data: {
+        embeds: [
+          {
+            title: 'Verdict',
+            description: `A prediction has been voted ${
+              count.yes < 1 ? 'incorrect' : 'correct'
+            } by the judges.`,
+            color: count.yes < 1 ? 0xff0000 : 0x00ff00,
+            fields: [
+              {
+                name: 'Prediction',
+                value: prediction.conditions,
+                inline: false,
+              },
+              {
+                name: 'Predictor',
+                value: `<@${prediction.user_id}>`,
+                inline: false,
+              },
+              // todo: list all judges
+            ],
+          },
+        ],
+      },
+    });
   } else {
     return JSON.stringify({
       type: 4,
       data: {
-        content: `Thank you for voting, ${voterUserId}!`,
+        embeds: [
+          {
+            title: 'Vote',
+            description: `<@${voterUserId}> has voted ${
+              verdict ? 'in favor of' : 'against'
+            } a prediction.`,
+            color: 0x0000ff,
+            fields: [
+              {
+                name: 'Prediction',
+                value: prediction.conditions,
+                inline: false,
+              },
+              {
+                name: 'Predictor',
+                value: `<@${prediction.user_id}>`,
+                inline: false,
+              },
+              // todo: list undecided judges
+              {
+                name: `Prediction ID`,
+                value: `${predictionId}`,
+                inline: false,
+              },
+            ],
+          },
+        ],
       },
     });
   }
