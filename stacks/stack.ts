@@ -17,7 +17,7 @@ export function stack({ stack }: StackContext) {
     !POSTGRES_PASSWORD ||
     !POSTGRES_USERNAME
   ) {
-    throw new Error('variable undefined');
+    throw new Error('environment variable undefined');
   }
 
   const table = new Table(stack, 'table', {

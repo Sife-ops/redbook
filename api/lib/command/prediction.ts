@@ -29,7 +29,6 @@ export const prediction = async (body: any) => {
   const { options } = body.data;
   const conditions = optionValue(options, 'conditions');
 
-  // todo: use executeTakeFirstOrThrow
   await db
     .insertInto('prediction')
     .values({

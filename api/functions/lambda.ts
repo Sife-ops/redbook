@@ -11,6 +11,7 @@ export const handler: EventHandler = async (event) => {
   const body = JSON.parse(event.body);
   console.log('body', util.inspect(body, false, null, true));
 
+  // todo: move insert
   const { id, avatar, discriminator, username } = body.member.user;
 
   let user;
