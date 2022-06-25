@@ -1,4 +1,4 @@
-import { db } from '../model-sql';
+import { db } from '../model';
 import { optionValue } from './utility';
 
 export const vote = async (body: any) => {

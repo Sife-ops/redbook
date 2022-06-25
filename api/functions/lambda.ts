@@ -2,7 +2,7 @@ import * as command from '../lib/command';
 import util from 'util';
 import { APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { Event } from '../lib/event';
-import { db } from '../lib/model-sql';
+import { db } from '../lib/model';
 import { verify } from '../lib/verify';
 
 type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;

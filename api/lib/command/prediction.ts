@@ -1,4 +1,4 @@
-import { db } from '../model-sql';
+import { db } from '../model';
 import { optionValue, mnemonic } from './utility';
 
 export const prediction = async (body: any) => {

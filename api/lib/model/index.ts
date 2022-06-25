@@ -1,7 +1,37 @@
-import { predictionModel as prediction } from './prediction';
+import { Kysely, PostgresDialect } from 'kysely';
+import { Pool } from 'pg';
 
-export { PredictionClass } from './prediction';
+import { UserTable } from './entity/user';
+import { PredictionTable } from './entity/prediction';
+import { JudgeTable } from './entity/judge';
 
-export default {
-  prediction,
+interface Database {
+  user: UserTable;
+  prediction: PredictionTable;
+  judge: JudgeTable;
+}
+
+const {
+  POSTGRES_DATABASE,
+  POSTGRES_HOST,
+  POSTGRES_PASSWORD,
+  POSTGRES_USERNAME,
+} = process.env;
+
+const db = new Kysely<Database>({
+  dialect: new PostgresDialect({
+    pool: new Pool({
+      database: POSTGRES_DATABASE,
+      host: POSTGRES_HOST,
+      password: POSTGRES_PASSWORD,
+      user: POSTGRES_USERNAME,
+    }),
+  }),
+});
+
+export {
+  //
+  db,
+  UserTable,
+  Database,
 };
