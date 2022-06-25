@@ -8,3 +8,4 @@
   - delete
   - add judge
 - created-at/updated-at for all records
+- migrations
