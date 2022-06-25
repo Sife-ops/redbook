@@ -1,32 +1,29 @@
-import model, { PredictionClass } from '../model';
+import { db } from '../model-sql';
+import { optionValue } from './utility';
 
 export const vote = async (body: any) => {
   /*
    * 1) voter must be a judge
    * 2) check prediction verdict
-   * 3) update predictionUser verdict
+   * 3) update judge verdict
    * 4) count votes
    * 5) decide vote
    */
 
   // 1) voter must be a judge
-  const { id } = body.member.user;
+  const voterUserId = body.member.user.id;
+  const { options } = body.data;
+  const predictionId = optionValue(options, 'id');
 
-  const predictionId = body.data.options.find(
-    (e: any) => e.name === 'id'
-  ).value;
-
-  const sk = `prediction:${predictionId}`;
-
-  const predictionUserRes: PredictionClass[] = await model.prediction
-    .query('prediction')
-    .eq(sk)
-    .where('sk')
-    .eq(`${sk}#user:${id}`)
-    .using('predictionUserIndex')
-    .exec();
-
-  if (predictionUserRes.length < 1) {
+  let judge;
+  try {
+    judge = await db
+      .selectFrom('judge')
+      .select('id')
+      .where('prediction_id', '=', predictionId)
+      .where('user_id', '=', voterUserId)
+      .executeTakeFirstOrThrow();
+  } catch {
     return JSON.stringify({
       type: 4,
       data: {
@@ -36,15 +33,14 @@ export const vote = async (body: any) => {
     });
   }
 
-  const predictionUser = predictionUserRes[0];
-
   // 2) check prediction verdict
-  const predictionRes = await model.prediction.get({
-    pk: predictionUser.pk,
-    sk,
-  });
+  const prediction = await db
+    .selectFrom('prediction')
+    .selectAll()
+    .where('id', '=', predictionId)
+    .executeTakeFirst();
 
-  if (predictionRes.verdict !== undefined) {
+  if (prediction?.verdict !== null) {
     return JSON.stringify({
       type: 4,
       data: {
@@ -53,25 +49,23 @@ export const vote = async (body: any) => {
     });
   }
 
-  // 3) update predictionUser verdict
-  const verdict = body.data.options.find(
-    (e: any) => e.name === 'verdict'
-  ).value;
+  // 3) update judge verdict
+  const verdict = optionValue(options, 'verdict');
 
-  await model.prediction.update({
-    ...predictionUser,
-    verdict,
-  });
+  await db
+    .updateTable('judge')
+    .set({ verdict })
+    .where('id', '=', judge.id)
+    .executeTakeFirstOrThrow();
 
   // 4) count votes
-  const predictionUsersRes = await model.prediction
-    .query('pk')
-    .eq(predictionUser.pk)
-    .where('sk')
-    .beginsWith(`${sk}#`)
-    .exec();
+  const judges = await db
+    .selectFrom('judge')
+    .selectAll()
+    .where('prediction_id', '=', predictionId)
+    .execute();
 
-  const count = predictionUsersRes.reduce(
+  const count = judges.reduce(
     (a: { yes: number; no: number; undecided: number }, c) => {
       if (c.verdict === undefined) {
         return {
@@ -98,46 +92,29 @@ export const vote = async (body: any) => {
   );
 
   // 5) decide vote
-  const voterIds = predictionUsersRes.reduce((a: string, c, i, arr) => {
-    const id = c.sk.split('user:')[1];
-    if (arr.length < 2) {
-      return id;
-    } else if (arr.length < 3) {
-      if (i === 0) {
-        return id;
-      } else {
-        return `${a} and ${id}`;
-      }
-    } else {
-      if (i < arr.length - 1) {
-        return `${a}${id}, `;
-      } else {
-        return `${a}and ${id}`;
-      }
-    }
-  }, '');
-
   if (count.undecided < 1) {
     if (count.yes < 1) {
-      await model.prediction.update({
-        ...predictionRes,
-        verdict: false,
-      });
+      await db
+        .updateTable('prediction')
+        .set({ verdict: false })
+        .where('id', '=', predictionId)
+        .executeTakeFirstOrThrow();
       return JSON.stringify({
         type: 4,
         data: {
-          content: `The prediction ${predictionRes.conditions} by ${id} has been voted incorrect by ${voterIds}.`,
+          content: `The prediction "${prediction.conditions}" by ${prediction.user_id} has been voted incorrect by ...`,
         },
       });
     } else {
-      await model.prediction.update({
-        ...predictionRes,
-        verdict: true,
-      });
+      await db
+        .updateTable('prediction')
+        .set({ verdict: true })
+        .where('id', '=', predictionId)
+        .executeTakeFirstOrThrow();
       return JSON.stringify({
         type: 4,
         data: {
-          content: `Congratulations ${predictionRes.pk}! Your prediction has been voted correct by ${voterIds}.`,
+          content: `Congratulations ${prediction.user_id}! Your prediction has been voted correct by ...`,
         },
       });
     }
@@ -145,12 +122,8 @@ export const vote = async (body: any) => {
     return JSON.stringify({
       type: 4,
       data: {
-        content: `Thank you for voting, ${id}!`,
+        content: `Thank you for voting, ${voterUserId}!`,
       },
     });
   }
 };
-
-// const getNick = (i: string) => {
-//   return i.slice(0, i.length - 4);
-// };
