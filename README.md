@@ -11,3 +11,5 @@
 - migrations
 - POSTGRES_PORT :heavy_check_mark:
 - support AWS RDS
+- support TypeOrm
+  - `bundle: { nodeModules: ['pg-native'] }`
