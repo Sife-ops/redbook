@@ -1,6 +1,6 @@
 export interface PredictionTable {
-  id: number;
+  id: string;
   user_id: string;
-  prediction: string;
-  verdict: boolean;
+  conditions: string;
+  verdict?: boolean;
 }

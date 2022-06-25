@@ -3,10 +3,12 @@ import { Pool } from 'pg';
 
 import { UserTable } from './entity/user';
 import { PredictionTable } from './entity/prediction';
+import { JudgeTable } from './entity/judge';
 
 interface Database {
   user: UserTable;
   prediction: PredictionTable;
+  judge: JudgeTable;
 }
 
 const {

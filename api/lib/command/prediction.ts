@@ -1,66 +1,57 @@
-import model from '../model';
+import { db } from '../model-sql';
 import { faker } from '@faker-js/faker';
-import {} from 'discord-api-types/v10';
+import { optionValue } from './utility';
 
 export const prediction = async (body: any) => {
   /*
    * 1) Create prediction.
-   * 2) Create predictionUser.
-   * 3) Show details.
+   * 2) Create judge.
+   * 3) Format message.
    */
 
-  // 1) Create prediction.
-  const { id } = body.member.user;
+  // 1) Create prediction
+  let predictionId = mnemonic();
 
-  // todo: hyphenate discriminator
-  const pk = `user:${id}`;
-  let sk = `prediction:${mnemonic()}`;
-
+  // unique mnemonic id
   while (true) {
-    // todo: need to query predictionUserIndex
-    const found = await model.prediction
-      .query('pk')
-      .eq(pk)
-      .where('sk')
-      .eq(sk)
-      .exec();
-
-    if (found.length < 1) {
+    const prediction = await db
+      .selectFrom('prediction')
+      .selectAll()
+      .where('id', '=', predictionId)
+      .executeTakeFirst();
+    if (prediction) {
+      predictionId = mnemonic();
+    } else {
       break;
     }
-
-    sk = `prediction:${mnemonic()}`;
   }
 
-  const conditions = body.data.options.find(
-    (e: any) => e.name === 'conditions'
-  ).value;
+  const predictorUserId = body.member.user.id;
+  const { options } = body.data;
+  const conditions = optionValue(options, 'conditions');
 
-  const prediction = await model.prediction.create({
-    pk,
-    sk,
-    conditions,
-  });
+  // todo: use executeTakeFirstOrThrow
+  await db
+    .insertInto('prediction')
+    .values({
+      id: predictionId,
+      user_id: predictorUserId,
+      conditions,
+    })
+    .executeTakeFirstOrThrow();
 
-  console.log('prediction', prediction);
+  // 2) Create judge
+  const judgeUserId = optionValue(options, 'judge');
 
-  // 2) Create predictionUser.
-  // todo: can't add self as judge
-  const judgeValue = body.data.options.find(
-    (e: any) => e.name === 'judge'
-  ).value;
+  await db
+    .insertInto('judge')
+    .values({
+      prediction_id: predictionId,
+      user_id: judgeUserId,
+    })
+    .executeTakeFirstOrThrow();
 
-  const judge = body.data.resolved.users[judgeValue];
-
-  const predictionUser = await model.prediction.create({
-    pk,
-    sk: `${sk}#user:${judge.id}`,
-    prediction: sk,
-  });
-
-  console.log('predictionUser', predictionUser);
-
-  // 3) Show details.
+  // 3) Format message
   return JSON.stringify({
     type: 4,
     data: {
@@ -69,24 +60,24 @@ export const prediction = async (body: any) => {
         {
           title: `New Prediction`,
           description: `${conditions}`,
-          color: 0xFF0000,
+          color: 0xff0000,
           footer: {
             text: `Permalink?`,
           },
           fields: [
             {
               name: `Predictor`,
-              value: `<@${id}>`,
+              value: `<@${predictorUserId}>`,
               inline: true,
             },
             {
               name: `Default judge`,
-              value: `<@${judge.id}>`,
+              value: `<@${judgeUserId}>`,
               inline: true,
             },
             {
               name: `Prediction ID`,
-              value: `${sk.split(':')[1]}`,
+              value: `${predictionId}`,
               inline: false,
             },
           ],
