@@ -8,5 +8,6 @@ export const mnemonic = () => {
 };
 
 export const optionValue = (options: any[], optionName: string) => {
-  return options.find((e: any) => e.name === optionName).value;
+  const option = options.find((e: any) => e.name === optionName);
+  return option.value;
 };

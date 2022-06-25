@@ -1,7 +1,7 @@
-import { db } from '../model';
-import { optionValue, mnemonic } from './utility';
+import { db } from '../../../model';
+import { optionValue, mnemonic } from '../../utility';
 
-export const prediction = async (body: any) => {
+export const create = async (body: any) => {
   /*
    * 1) create user record
    * 2) create prediction
@@ -27,9 +27,9 @@ export const prediction = async (body: any) => {
   }
 
   // 2) create prediction
-  let predictionId = mnemonic();
 
-  // unique mnemonic id
+  // generate unique mnemonic id
+  let predictionId = mnemonic();
   while (true) {
     const prediction = await db
       .selectFrom('prediction')
@@ -44,7 +44,7 @@ export const prediction = async (body: any) => {
   }
 
   const predictorUserId = body.member.user.id;
-  const { options } = body.data;
+  const { options } = body.data.options[0];
   const conditions = optionValue(options, 'conditions');
 
   await db

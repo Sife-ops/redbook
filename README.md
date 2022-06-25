@@ -1,6 +1,13 @@
 # redbook
 
+## features
+
+- battle-tested
+- gold standard
+- blazingly fast
+
 ## todo
+
 - prediction sub-commands
   - create
   - ammend
@@ -13,3 +20,4 @@
 - support AWS RDS
 - support TypeOrm
   - `bundle: { nodeModules: ['pg-native'] }`
+- delete unused commands
