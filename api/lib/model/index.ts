@@ -15,6 +15,7 @@ const {
   POSTGRES_DATABASE,
   POSTGRES_HOST,
   POSTGRES_PASSWORD,
+  POSTGRES_PORT,
   POSTGRES_USERNAME,
 } = process.env;
 
@@ -24,6 +25,7 @@ const db = new Kysely<Database>({
       database: POSTGRES_DATABASE,
       host: POSTGRES_HOST,
       password: POSTGRES_PASSWORD,
+      port: parseInt(POSTGRES_PORT!),
       user: POSTGRES_USERNAME,
     }),
   }),

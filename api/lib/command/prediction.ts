@@ -13,6 +13,7 @@ export const prediction = async (body: any) => {
   const { id, avatar, discriminator, username } = body.member.user;
 
   try {
+    // todo: don't query first
     await db
       .selectFrom('user')
       .selectAll()
