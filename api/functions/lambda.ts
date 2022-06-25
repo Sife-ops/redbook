@@ -2,65 +2,41 @@ import * as command from '../lib/command';
 import util from 'util';
 import { APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { Event } from '../lib/event';
+import { db } from '../lib/model-sql';
 import { verify } from '../lib/verify';
-import { Kysely, Generated, PostgresDialect } from 'kysely';
-import { Pool } from 'pg';
-
-const {
-  POSTGRES_DATABASE,
-  POSTGRES_HOST,
-  POSTGRES_PASSWORD,
-  POSTGRES_USERNAME,
-} = process.env;
-
-interface UserTable {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
-}
-
-interface Database {
-  user: UserTable;
-}
 
 type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;
 
 export const handler: EventHandler = async (event) => {
-  const db = new Kysely<Database>({
-    // Use MysqlDialect for MySQL and SqliteDialect for SQLite.
-    dialect: new PostgresDialect({
-      pool: new Pool({
-        database: POSTGRES_DATABASE,
-        host: POSTGRES_HOST,
-        password: POSTGRES_PASSWORD,
-        user: POSTGRES_USERNAME,
-      }),
-    }),
-  });
-
-  const a = await db
-    .insertInto('user')
-    .values({
-      avatar: 'a',
-      discriminator: 'a',
-      id: 'a',
-      username: 'a',
-    })
-    .returning('id')
-    .execute();
-
-  console.log(a);
-
   const body = JSON.parse(event.body);
-  // console.log('body', util.inspect(body, false, null, true));
+  console.log('body', util.inspect(body, false, null, true));
 
-  return JSON.stringify({
-    type: 4,
-    data: {
-      content: 'test',
-    },
-  });
+  const { id, avatar, discriminator, username } = body.member.user;
+
+  let user;
+
+  user = await db
+    .selectFrom('user')
+    .selectAll()
+    .where('id', '=', id)
+    .executeTakeFirst();
+
+  console.log('existing user', user);
+
+  if (!user) {
+    user = await db
+      .insertInto('user')
+      .values({
+        avatar,
+        discriminator,
+        id,
+        username,
+      })
+      .returningAll()
+      .executeTakeFirst();
+
+    console.log('new user', user);
+  }
 
   if (body.type === 1) {
     return verify(event);
