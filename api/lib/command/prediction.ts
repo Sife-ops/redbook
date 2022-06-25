@@ -10,16 +10,9 @@ export const prediction = async (body: any) => {
    */
 
   // 1) create user record
-  const { id, avatar, discriminator, username } = body.member.user;
-
   try {
-    // todo: don't query first
-    await db
-      .selectFrom('user')
-      .selectAll()
-      .where('id', '=', id)
-      .executeTakeFirstOrThrow();
-  } catch {
+    const { id, avatar, discriminator, username } = body.member.user;
+
     await db
       .insertInto('user')
       .values({
@@ -28,7 +21,9 @@ export const prediction = async (body: any) => {
         id,
         username,
       })
-      .executeTakeFirst();
+      .executeTakeFirstOrThrow();
+  } catch {
+    console.log('user exists');
   }
 
   // 2) create prediction
