@@ -6,6 +6,18 @@
 - gold standard
 - blazingly fast
 
+## usage
+
+- `/prediction`
+  - `create <conditions> <judge>`
+    - `conditions` string - The conditions of the prediction.
+    - `judge` user - The default user to judge the prediction.
+  - `cancel <id>`
+    - `id` string - Prediction mnemonic ID.
+- `/vote <id> <verdict>`
+  - `id` string - Prediction mnemonic ID.
+  - `verdict` boolean - Your verdict of the prediction.
+
 ## todo
 
 - prediction sub-commands
