@@ -1,4 +1,3 @@
-kysely/
 .env.dev
 .env.prod
 shadow-realm/

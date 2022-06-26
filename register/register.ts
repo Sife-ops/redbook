@@ -1,5 +1,5 @@
-import axios from 'axios';
 import * as command from './command';
+import axios from 'axios';
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
 if (!APP_ID || !GUILD_ID || !BOT_TOKEN) {
