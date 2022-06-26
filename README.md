@@ -21,10 +21,10 @@
 ## todo
 
 - prediction sub-commands
-  - create
+  - create :heavy_check_mark:
   - ammend
     - save history of edits
-  - delete
+  - cancel
   - add judge
 - created-at column for records :heavy_check_mark:
 - migrations
@@ -33,3 +33,4 @@
 - support TypeOrm
   - `bundle: { nodeModules: ['pg-native'] }`
 - delete unused commands
+- betting?

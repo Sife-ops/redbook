@@ -27,8 +27,7 @@ export const vote = async (body: any) => {
     return JSON.stringify({
       type: 4,
       data: {
-        content:
-          'Vote failed because the prediction does not exist or you are not a judge.',
+        content: `<@${voterUserId}> Vote failed because the prediction does not exist or you are not a judge.`,
       },
     });
   }
@@ -44,7 +43,7 @@ export const vote = async (body: any) => {
     return JSON.stringify({
       type: 4,
       data: {
-        content: 'Voting on this prediction has ended.',
+        content: `<@${voterUserId}> Voting on this prediction has ended.`,
       },
     });
   }
@@ -114,7 +113,7 @@ export const vote = async (body: any) => {
             title: 'Verdict',
             description: `A prediction has been voted ${
               count.yes < 1 ? 'incorrect' : 'correct'
-            } by the judges.`,
+            } by the judge(s).`,
             color: count.yes < 1 ? 0xff0000 : 0x00ff00,
             fields: [
               {

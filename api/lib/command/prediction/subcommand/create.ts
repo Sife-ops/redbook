@@ -43,7 +43,7 @@ export const create = async (body: any) => {
     }
   }
 
-  const predictorUserId = body.member.user.id;
+  const predictionUserId = body.member.user.id;
   const { options } = body.data.options[0];
   const conditions = optionValue(options, 'conditions');
 
@@ -51,7 +51,7 @@ export const create = async (body: any) => {
     .insertInto('prediction')
     .values({
       id: predictionId,
-      user_id: predictorUserId,
+      user_id: predictionUserId,
       conditions,
     })
     .executeTakeFirstOrThrow();
@@ -79,11 +79,11 @@ export const create = async (body: any) => {
           fields: [
             {
               name: 'By',
-              value: `<@${predictorUserId}>`,
+              value: `<@${predictionUserId}>`,
               inline: true,
             },
             {
-              name: 'Default Judge',
+              name: 'Judge',
               value: `<@${judgeUserId}>`,
               inline: true,
             },
@@ -93,10 +93,10 @@ export const create = async (body: any) => {
               inline: false,
             },
           ],
-          footer: {
-            // todo: why?
-            text: `Permalink?`,
-          },
+          // todo: user footer
+          // footer: {
+          //   text: `Permalink?`,
+          // },
         },
       ],
     },
