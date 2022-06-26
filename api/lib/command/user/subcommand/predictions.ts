@@ -18,7 +18,7 @@ export const predictions = async (body: any) => {
         {
           title: 'Predictions',
           description: `The list of all <@${userId}>'s predictions.`,
-          color: 0xff00ff,
+          color: 0x808080,
           fields: predictions.map((e) => ({
             name: e.id,
             value: e.conditions,
