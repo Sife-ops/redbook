@@ -20,11 +20,14 @@
 
 ## todo
 
+- user commands
+  - summary
+  - predictions
 - prediction sub-commands
   - create :heavy_check_mark:
   - ammend
     - save history of edits
-  - cancel
+  - cancel :heavy_check_mark:
   - add judge
 - created-at column for records :heavy_check_mark:
 - migrations

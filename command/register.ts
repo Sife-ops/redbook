@@ -3,8 +3,9 @@ import axios from 'axios';
 import { foo } from './foo';
 import { prediction } from './prediction';
 import { vote } from './vote';
+import { user } from './user';
 
-const commands = [foo, prediction, vote];
+const commands = [foo, prediction, vote, user];
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
 if (!APP_ID || !GUILD_ID || !BOT_TOKEN) {

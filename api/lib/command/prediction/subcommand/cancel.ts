@@ -6,8 +6,6 @@ export const cancel = async (body: any) => {
   const { options } = body.data.options[0];
   const predictionId = optionValue(options, 'id');
 
-  console.log('cancel', predictionUserId, predictionId);
-
   try {
     const prediction = await db
       .deleteFrom('prediction')
