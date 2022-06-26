@@ -1,12 +1,5 @@
 import axios from 'axios';
-
-import { foo } from './foo';
-import { prediction } from './prediction';
-import { vote } from './vote';
-import { user } from './user';
-
-// const commands = [foo, prediction, vote, user];
-const commands = [foo];
+import * as command from './command';
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = process.env;
 if (!APP_ID || !GUILD_ID || !BOT_TOKEN) {
@@ -20,7 +13,8 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-commands.map((e) => {
+//@ts-ignore
+command.map((e) => {
   axios
     .post(url, JSON.stringify(e), {
       headers: headers,
