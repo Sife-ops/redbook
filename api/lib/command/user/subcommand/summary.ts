@@ -52,7 +52,7 @@ export const summary = async (body: any) => {
         {
           title: 'Summary',
           description: `The summary of <@${userId}>'s predictions.`,
-          color: 0x00ffff,
+          color: 0xff00ff,
           fields: [
             {
               name: 'Total',

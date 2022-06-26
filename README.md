@@ -9,14 +9,17 @@
 ## usage
 
 - `/prediction`
-  - `create <conditions> <judge>`
+  - `create <conditions> <judge>` - Create a prediction.
     - `conditions` string - The conditions of the prediction.
     - `judge` user - The default user to judge the prediction.
-  - `cancel <id>`
+  - `cancel <id>` - Cancel a prediction.
     - `id` string - Prediction mnemonic ID.
 - `/vote <id> <verdict>`
   - `id` string - Prediction mnemonic ID.
   - `verdict` boolean - Your verdict of the prediction.
+- `/user`
+  - `summary <user>` - Summary of user statistics.
+  - `predictions <user>` - List a user's predictions.
 
 ## todo
 
