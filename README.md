@@ -1,5 +1,7 @@
 # redbook
 
+The best prediction record-keeping bot in the universe!
+
 ## features
 
 - battle-tested
