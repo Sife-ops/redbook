@@ -25,13 +25,11 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
-- user commands
-  - summary
-  - predictions
+- user commands :heavy_check_mark:
+  - summary :heavy_check_mark:
+  - predictions :heavy_check_mark:
 - prediction sub-commands
   - create :heavy_check_mark:
-  - ammend
-    - save history of edits
   - cancel :heavy_check_mark:
   - add judge
 - created-at column for records :heavy_check_mark:
@@ -40,5 +38,5 @@ The best prediction record-keeping bot in the universe!
 - support AWS RDS
 - support TypeOrm
   - `bundle: { nodeModules: ['pg-native'] }`
-- delete unused commands
+- delete unused commands :heavy_check_mark:
 - betting?
