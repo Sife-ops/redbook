@@ -45,47 +45,45 @@ export const summary = async (body: any) => {
     }
   );
 
-  console.log(stats);
-
   return JSON.stringify({
     type: 4,
     data: {
-      content: 'test',
+      embeds: [
+        {
+          title: 'Summary',
+          description: `The summary of <@${userId}>'s predictions.`,
+          color: 0x00ffff,
+          fields: [
+            {
+              name: 'Total',
+              value: stats.total,
+              inline: false,
+            },
+            {
+              name: 'Undecided',
+              value: stats.undecided,
+              inline: false,
+            },
+            {
+              name: 'Correct',
+              value: stats.correct,
+              inline: true,
+            },
+            {
+              name: 'Incorrect',
+              value: stats.incorrect,
+              inline: true,
+            },
+            {
+              name: 'Accuracy',
+              value: `${
+                (stats.correct / (stats.total - stats.undecided)) * 100
+              }%`,
+              inline: false,
+            },
+          ],
+        },
+      ],
     },
   });
-
-  //   try {
-  //     const prediction = await db
-  //       .deleteFrom('prediction')
-  //       .where('user_id', '=', predictionUserId)
-  //       .where('id', '=', predictionId)
-  //       .returningAll()
-  //       .executeTakeFirstOrThrow();
-  //     return JSON.stringify({
-  //       type: 4,
-  //       data: {
-  //         embeds: [
-  //           {
-  //             title: 'Prediction Cancelled',
-  //             description: prediction.conditions,
-  //             color: 0xffff00,
-  //             fields: [
-  //               {
-  //                 name: 'By',
-  //                 value: `<@${prediction.user_id}>`,
-  //                 inline: false,
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     });
-  //   } catch {
-  //     return JSON.stringify({
-  //       type: 4,
-  //       data: {
-  //         content: `<@${predictionUserId}> Cancellation failed because the prediction does not exist or it is not your prediction.`,
-  //       },
-  //     });
-  //   }
 };
