@@ -1,5 +1,5 @@
 export const foo = {
-  name: 'foo',
+  name: 'predict',
   description: 'replies with bar',
   options: [
     {

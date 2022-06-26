@@ -1,5 +1,6 @@
 kysely/
 .env.dev
+.env.prod
 shadow-realm/
 # dependencies
 node_modules
