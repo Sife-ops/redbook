@@ -1,4 +1,3 @@
-import * as command from './command';
 import axios from 'axios';
 import config from '../../redbook-config';
 
@@ -11,13 +10,13 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-Object.keys(command).map((e) => {
-  axios
-    //@ts-ignore
-    .post(url, JSON.stringify(command[e]), {
-      headers: headers,
-    })
-    .then((e) => {
-      console.log(e.status, e.data);
-    });
-});
+const commandId = process.argv[2];
+
+axios
+  .delete(`${url}/${commandId}`, {
+    headers: headers,
+  })
+  .then((e) => {
+    // console.log(e.status, e.data);
+    console.log(e);
+  });
