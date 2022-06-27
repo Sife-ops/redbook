@@ -1,6 +1,6 @@
 import * as command from './command';
 import axios from 'axios';
-import config from '../../redbook-config';
+import config from '../config';
 
 const { APP_ID, GUILD_ID, BOT_TOKEN } = config;
 

@@ -1,6 +1,6 @@
 import { Kysely, PostgresDialect, sql } from 'kysely';
 import { Pool } from 'pg';
-import config from '../../redbook-config';
+import config from '../config';
 
 const {
   POSTGRES_DATABASE,
