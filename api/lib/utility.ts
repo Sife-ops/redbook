@@ -1,3 +1,4 @@
+import Joi from 'joi';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { faker } from '@faker-js/faker';
 
@@ -15,15 +16,18 @@ export const optionValue = (options: any[], optionName: string) => {
   return option.value;
 };
 
-export const runner = async (commands: any, commandName: any, body: any) => {
-  //@ts-ignore
+export const runner = async (
+  commands: Record<string, { schema: Joi.ObjectSchema; handler: any }>,
+  commandName: string,
+  body: any
+) => {
   const command = commands[commandName];
 
   if (command.schema) {
     const validation = command.schema.validate(body);
 
     if (validation.error) {
-      throw new Error(validation.error);
+      throw new Error(validation.error.message);
     }
   }
 

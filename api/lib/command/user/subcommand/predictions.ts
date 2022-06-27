@@ -1,6 +1,6 @@
+import Joi from 'joi';
 import { db } from '../../../model';
 import { optionValue } from '../../../utility';
-import Joi from 'joi';
 
 export const predictions = {
   schema: Joi.object({
