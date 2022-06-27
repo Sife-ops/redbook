@@ -1,8 +1,6 @@
 import * as subcommand from './subcommand';
+import { runner } from '../../utility';
 
 export const prediction = async (body: any) => {
-  const name = body.data.options[0].name;
-
-  //@ts-ignore
-  return await subcommand[name](body);
+  return await runner(subcommand, body.data.options[0].name, body);
 };
