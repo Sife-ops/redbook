@@ -8,6 +8,7 @@
     "aws-sdk": "^2.1159.0",
     "discord-api-types": "^0.34.0",
     "dynamoose": "^2.8.5",
+    "joi": "^17.6.0",
     "kysely": "^0.19.3",
     "pg": "^8.7.3",
     "pg-native": "^3.0.0",

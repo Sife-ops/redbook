@@ -1,5 +1,18 @@
 import { db } from '../model';
 import { optionValue } from './utility';
+import Joi from 'joi';
+
+const a = Joi.array()
+  .has(
+    Joi.object({
+      name: Joi.string().valid('id'),
+    })
+  )
+  .has(
+    Joi.object({
+      name: Joi.string().valid('verdict'),
+    })
+  );
 
 export const vote = async (body: any) => {
   /*
