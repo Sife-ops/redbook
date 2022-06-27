@@ -1,5 +1,5 @@
 import { db } from '../../../model';
-import { optionValue } from '../../utility';
+import { optionValue } from '../../../utility';
 
 export const cancel = async (body: any) => {
   const predictionUserId = body.member.user.id;

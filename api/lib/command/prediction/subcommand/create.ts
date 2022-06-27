@@ -1,5 +1,5 @@
 import { db } from '../../../model';
-import { optionValue, mnemonic } from '../../utility';
+import { optionValue, mnemonic } from '../../../utility';
 
 export const create = async (body: any) => {
   /*

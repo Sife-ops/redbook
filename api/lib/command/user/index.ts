@@ -1,8 +1,6 @@
-import * as subcommand from './subcommand';
+import * as subcommands from './subcommand';
+import { runner } from '../../utility';
 
 export const user = async (body: any) => {
-  const name = body.data.options[0].name;
-
-  //@ts-ignore
-  return await subcommand[name](body);
+  return await runner(subcommands, body.data.options[0].name, body);
 };
