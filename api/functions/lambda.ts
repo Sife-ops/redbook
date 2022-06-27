@@ -1,7 +1,7 @@
 import * as command from '../lib/command';
 import util from 'util';
 import { APIGatewayProxyResultV2, Handler } from 'aws-lambda';
-import { Event } from '../lib/utility';
+import { Event, runner } from '../lib/utility';
 import { verify } from '../lib/verify';
 
 type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;
@@ -16,8 +16,7 @@ export const handler: EventHandler = async (event) => {
 
   if (body.type === 2) {
     try {
-      //@ts-ignore
-      return await command[body.data.name](body);
+      return await runner(command, body.data.name, body);
     } catch (ex: unknown) {
       console.log(ex);
     }

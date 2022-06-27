@@ -17,7 +17,10 @@ export const optionValue = (options: any[], optionName: string) => {
 };
 
 export const runner = async (
-  commands: Record<string, { schema: Joi.ObjectSchema; handler: any }>,
+  commands: Record<
+    string,
+    { schema: Joi.ObjectSchema | undefined; handler: any }
+  >,
   commandName: string,
   body: any
 ) => {
