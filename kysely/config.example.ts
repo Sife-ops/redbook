@@ -1,7 +1,0 @@
-export const config = {
-  POSTGRES_DATABASE: '',
-  POSTGRES_HOST: '',
-  POSTGRES_PASSWORD: '',
-  POSTGRES_PORT: 5432,
-  POSTGRES_USERNAME: '',
-};
