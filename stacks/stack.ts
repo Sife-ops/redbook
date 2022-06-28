@@ -8,16 +8,28 @@ const {
   POSTGRES_PORT,
   POSTGRES_USERNAME,
   PUBLIC_KEY,
+
+  POSTGRES_DATABASE_TYPEORM,
+  POSTGRES_HOST_TYPEORM,
+  POSTGRES_PASSWORD_TYPEORM,
+  POSTGRES_PORT_TYPEORM,
+  POSTGRES_USERNAME_TYPEORM,
 } = process.env;
 
 export function stack({ stack }: StackContext) {
   if (
-    !PUBLIC_KEY ||
     !POSTGRES_DATABASE ||
     !POSTGRES_HOST ||
     !POSTGRES_PASSWORD ||
     !POSTGRES_PORT ||
-    !POSTGRES_USERNAME
+    !POSTGRES_USERNAME ||
+    !PUBLIC_KEY ||
+    //
+    !POSTGRES_DATABASE_TYPEORM ||
+    !POSTGRES_HOST_TYPEORM ||
+    !POSTGRES_PASSWORD_TYPEORM ||
+    !POSTGRES_PORT_TYPEORM ||
+    !POSTGRES_USERNAME_TYPEORM
   ) {
     throw new Error('environment variable undefined');
   }
@@ -25,6 +37,9 @@ export function stack({ stack }: StackContext) {
   const api = new Api(stack, 'api', {
     defaults: {
       function: {
+        bundle: {
+          nodeModules: ['pg-native'],
+        },
         environment: {
           POSTGRES_DATABASE,
           POSTGRES_HOST,
@@ -32,6 +47,12 @@ export function stack({ stack }: StackContext) {
           POSTGRES_PORT,
           POSTGRES_USERNAME,
           PUBLIC_KEY,
+
+          POSTGRES_DATABASE_TYPEORM,
+          POSTGRES_HOST_TYPEORM,
+          POSTGRES_PASSWORD_TYPEORM,
+          POSTGRES_PORT_TYPEORM,
+          POSTGRES_USERNAME_TYPEORM,
         },
       },
     },

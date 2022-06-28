@@ -12,10 +12,13 @@
     "kysely": "^0.19.3",
     "pg": "^8.7.3",
     "pg-native": "^3.0.0",
-    "tweetnacl": "^1.0.3"
+    "reflect-metadata": "^0.1.13",
+    "tweetnacl": "^1.0.3",
+    "typeorm": "^0.3.6"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.101",
+    "@types/node": "^18.0.0",
     "@types/pg": "^8.6.5"
   }
 }
