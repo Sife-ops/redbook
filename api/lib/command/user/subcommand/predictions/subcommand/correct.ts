@@ -1,26 +1,9 @@
-import Joi from 'joi';
 import { db } from '../../../../../model';
 import { optionValue } from '../../../../../utility';
+import { schema } from './common';
 
 export const correct = {
-  schema: Joi.object({
-    data: Joi.object({
-      options: Joi.array().has(
-        Joi.object({
-          options: Joi.array().has(
-            Joi.object({
-              options: Joi.array().has(
-                Joi.object({
-                  name: Joi.string().valid('user'),
-                })
-              ),
-            })
-          ),
-        })
-      ),
-    }),
-  }).options({ allowUnknown: true }),
-
+  schema,
   handler: async (body: any) => {
     const { options } = body.data.options[0].options[0];
     const userId = optionValue(options, 'user');
@@ -36,7 +19,7 @@ export const correct = {
       data: {
         embeds: [
           {
-            title: 'Predictions',
+            title: 'Correct Predictions',
             description: `The list of <@${userId}>'s correct predictions.`,
             color: 0x808080,
             fields: predictions
