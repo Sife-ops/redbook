@@ -87,7 +87,7 @@ export const vote = {
 
     const count = judges.reduce(
       (a: { yes: number; no: number; undecided: number }, c) => {
-        if (c.verdict === undefined) {
+        if (c.verdict !== true && c.verdict !== false) {
           return {
             ...a,
             undecided: a.undecided + 1,
@@ -152,7 +152,13 @@ export const vote = {
                   value: `<@${prediction.user_id}>`,
                   inline: false,
                 },
-                // todo: list all judges
+                {
+                  name: 'Judge(s)',
+                  value: judges.reduce((a, c) => {
+                    return `${a}<@${c.user_id}>`;
+                  }, ''),
+                  inline: false,
+                },
               ],
             },
           ],
@@ -180,7 +186,16 @@ export const vote = {
                   value: `<@${prediction.user_id}>`,
                   inline: false,
                 },
-                // todo: list undecided judges
+                {
+                  name: 'Undecided',
+                  value: judges.reduce((a, c) => {
+                    if (c.verdict !== true && c.verdict !== false) {
+                      return `${a}<@${c.user_id}>`;
+                    }
+                    return a;
+                  }, ''),
+                  inline: false,
+                },
                 {
                   name: 'ID',
                   value: predictionId,
