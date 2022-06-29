@@ -1,15 +1,19 @@
 import Joi from 'joi';
-import { db } from '../../../model';
-import { optionValue } from '../../../utility';
+import { db } from '../../../../../model';
+import { optionValue } from '../../../../../utility';
 
-export const predictions = {
+export const all = {
   schema: Joi.object({
     data: Joi.object({
       options: Joi.array().has(
         Joi.object({
           options: Joi.array().has(
             Joi.object({
-              name: Joi.string().valid('user'),
+              options: Joi.array().has(
+                Joi.object({
+                  name: Joi.string().valid('user'),
+                })
+              ),
             })
           ),
         })
@@ -18,7 +22,7 @@ export const predictions = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const { options } = body.data.options[0];
+    const { options } = body.data.options[0].options[0];
     const userId = optionValue(options, 'user');
 
     const predictions = await db
@@ -33,7 +37,7 @@ export const predictions = {
         embeds: [
           {
             title: 'Predictions',
-            description: `The list of all <@${userId}>'s predictions.`,
+            description: `The list of <@${userId}>'s predictions.`,
             color: 0x808080,
             fields: predictions.map((e) => ({
               name: e.id,
