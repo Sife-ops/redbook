@@ -46,12 +46,32 @@ export const user = {
             },
           ],
         },
-        // {
-        //   type: 6,
-        //   name: 'user',
-        //   description: 'user',
-        //   required: true,
-        // },
+        {
+          name: 'incorrect',
+          description: 'List incorrect predictions.',
+          type: 1,
+          options: [
+            {
+              type: 6,
+              name: 'user',
+              description: 'user',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'undecided',
+          description: 'List undecided predictions.',
+          type: 1,
+          options: [
+            {
+              type: 6,
+              name: 'user',
+              description: 'user',
+              required: true,
+            },
+          ],
+        },
       ],
     },
   ],
