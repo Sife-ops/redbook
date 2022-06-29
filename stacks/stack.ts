@@ -38,7 +38,7 @@ export function stack({ stack }: StackContext) {
     defaults: {
       function: {
         bundle: {
-          nodeModules: ['pg-native'],
+          nodeModules: ['pg-native', 'typeorm'],
         },
         environment: {
           POSTGRES_DATABASE,
