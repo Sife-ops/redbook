@@ -16,7 +16,8 @@ export const handler: EventHandler = async (event) => {
 
   if (body.type === 2) {
     try {
-      return await runner(command, body.data.name, body);
+      const response = await runner(command, body.data.name, body);
+      return JSON.stringify(response);
     } catch (ex: unknown) {
       console.log(ex);
     }

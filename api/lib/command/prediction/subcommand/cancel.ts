@@ -35,7 +35,7 @@ export const cancel = {
         .returningAll()
         .executeTakeFirstOrThrow();
 
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           embeds: [
@@ -53,14 +53,14 @@ export const cancel = {
             },
           ],
         },
-      });
+      };
     } catch {
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           content: `<@${predictionUserId}> Cancellation failed because the prediction does not exist or it is not your prediction.`,
         },
-      });
+      };
     }
   },
 };

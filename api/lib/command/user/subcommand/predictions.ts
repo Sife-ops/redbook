@@ -27,7 +27,7 @@ export const predictions = {
       .selectAll()
       .execute();
 
-    return JSON.stringify({
+    return {
       type: 4,
       data: {
         embeds: [
@@ -43,6 +43,6 @@ export const predictions = {
           },
         ],
       },
-    });
+    };
   },
 };

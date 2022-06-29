@@ -45,12 +45,12 @@ export const vote = {
         .where('user_id', '=', voterUserId)
         .executeTakeFirstOrThrow();
     } catch {
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           content: `<@${voterUserId}> Vote failed because the prediction does not exist or you are not a judge.`,
         },
-      });
+      };
     }
 
     // 2) check prediction verdict
@@ -61,12 +61,12 @@ export const vote = {
       .executeTakeFirst();
 
     if (prediction?.verdict !== null) {
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           content: `<@${voterUserId}> Voting on this prediction has ended.`,
         },
-      });
+      };
     }
 
     // 3) update judge verdict
@@ -126,7 +126,7 @@ export const vote = {
           .where('id', '=', predictionId)
           .executeTakeFirstOrThrow();
       }
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           embeds: [
@@ -163,9 +163,9 @@ export const vote = {
             },
           ],
         },
-      });
+      };
     } else {
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           embeds: [
@@ -205,7 +205,7 @@ export const vote = {
             },
           ],
         },
-      });
+      };
     }
   },
 };

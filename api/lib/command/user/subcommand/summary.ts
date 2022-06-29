@@ -61,7 +61,7 @@ export const summary = {
       }
     );
 
-    return JSON.stringify({
+    return {
       type: 4,
       data: {
         embeds: [
@@ -101,6 +101,6 @@ export const summary = {
           },
         ],
       },
-    });
+    };
   },
 };

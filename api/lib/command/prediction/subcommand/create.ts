@@ -98,7 +98,7 @@ export const create = {
       .executeTakeFirstOrThrow();
 
     // 4) format message
-    return JSON.stringify({
+    return {
       type: 4,
       data: {
         embeds: [
@@ -130,6 +130,6 @@ export const create = {
           },
         ],
       },
-    });
+    };
   },
 };

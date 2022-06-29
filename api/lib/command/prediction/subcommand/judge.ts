@@ -53,7 +53,7 @@ export const judge = {
         .returningAll()
         .executeTakeFirstOrThrow();
 
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           embeds: [
@@ -81,14 +81,14 @@ export const judge = {
             },
           ],
         },
-      });
+      };
     } catch {
-      return JSON.stringify({
+      return {
         type: 4,
         data: {
           content: `<@${predictionUserId}> Adding judge failed because the prediction does not exist or it is not your prediction.`,
         },
-      });
+      };
     }
   },
 };
