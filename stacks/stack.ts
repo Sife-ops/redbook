@@ -1,6 +1,5 @@
 import { StackContext, Api } from '@serverless-stack/resources';
 
-// todo: env definition
 const {
   POSTGRES_DATABASE,
   POSTGRES_HOST,
@@ -11,17 +10,6 @@ const {
 } = process.env;
 
 export function stack({ stack }: StackContext) {
-  if (
-    !PUBLIC_KEY ||
-    !POSTGRES_DATABASE ||
-    !POSTGRES_HOST ||
-    !POSTGRES_PASSWORD ||
-    !POSTGRES_PORT ||
-    !POSTGRES_USERNAME
-  ) {
-    throw new Error('environment variable undefined');
-  }
-
   const api = new Api(stack, 'api', {
     defaults: {
       function: {

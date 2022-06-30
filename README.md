@@ -25,18 +25,20 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
-- user commands :heavy_check_mark:
+- update usage
+- user commands
   - summary :heavy_check_mark:
   - predictions :heavy_check_mark:
 - prediction sub-commands
   - create :heavy_check_mark:
   - cancel :heavy_check_mark:
-  - add judge
+  - add judge :heavy_check_mark:
 - created-at column for records :heavy_check_mark:
 - migrations
 - POSTGRES_PORT :heavy_check_mark:
 - support AWS RDS
 - support TypeOrm
-  - `bundle: { nodeModules: ['pg-native'] }`
+  - `bundle: { nodeModules: ['pg-native'] }` :x:
+    - will not work due to 'import-metadata' and esbuild
 - delete unused commands :heavy_check_mark:
 - betting?
