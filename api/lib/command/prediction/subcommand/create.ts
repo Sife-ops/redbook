@@ -89,6 +89,19 @@ export const create = {
     // 3) create judge
     const judgeUserId = optionValue(options, 'judge');
 
+    // cannot make self default judge
+    if (
+      process.env.REDBOOK_ENV === 'prod' &&
+      judgeUserId === predictionUserId
+    ) {
+      return {
+        type: 4,
+        data: {
+          content: `<@${predictionUserId}> You cannot make yourself the default judge.`,
+        },
+      };
+    }
+
     await db
       .insertInto('judge')
       .values({
