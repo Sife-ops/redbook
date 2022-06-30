@@ -7,6 +7,7 @@ const {
   POSTGRES_PORT,
   POSTGRES_USERNAME,
   PUBLIC_KEY,
+  REDBOOK_ENV,
 } = process.env;
 
 export function stack({ stack }: StackContext) {
@@ -20,6 +21,7 @@ export function stack({ stack }: StackContext) {
           POSTGRES_PORT,
           POSTGRES_USERNAME,
           PUBLIC_KEY,
+          REDBOOK_ENV,
         },
       },
     },

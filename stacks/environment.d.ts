@@ -7,6 +7,7 @@ declare global {
       POSTGRES_PORT: string;
       POSTGRES_USERNAME: string;
       PUBLIC_KEY: string;
+      REDBOOK_ENV: string;
     }
   }
 }
