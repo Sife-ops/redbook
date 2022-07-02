@@ -8,9 +8,9 @@ export const prediction = {
       type: 1,
       options: [
         {
-          type: 3,
           name: 'id',
           description: 'The prediction ID.',
+          type: 3,
           required: true,
         },
       ],
@@ -21,35 +21,61 @@ export const prediction = {
       type: 1,
       options: [
         {
-          type: 3,
           name: 'conditions',
           description: 'The conditions for the prediction being true.',
+          type: 3,
           required: true,
         },
         {
-          type: 6,
           name: 'judge',
           description: 'The default judge for your prediction.',
+          type: 6,
           required: true,
         },
       ],
     },
     {
       name: 'judge',
-      description: 'Add a judge to a prediction.',
-      type: 1,
+      description: 'Manage judges.',
+      type: 2,
       options: [
         {
-          type: 3,
-          name: 'id',
-          description: 'The prediction ID.',
-          required: true,
+          name: 'add',
+          description: 'Add a judge to a prediction.',
+          type: 1,
+          options: [
+            {
+              name: 'id',
+              description: 'The prediction ID.',
+              type: 3,
+              required: true,
+            },
+            {
+              name: 'judge',
+              description: 'The judge for your prediction.',
+              type: 6,
+              required: true,
+            },
+          ],
         },
         {
-          type: 6,
-          name: 'judge',
-          description: 'The judge for your prediction.',
-          required: true,
+          name: 'remove',
+          description: 'Remove a judge from a prediction.',
+          type: 1,
+          options: [
+            {
+              name: 'id',
+              description: 'The prediction ID.',
+              type: 3,
+              required: true,
+            },
+            {
+              name: 'judge',
+              description: 'The judge for your prediction.',
+              type: 6,
+              required: true,
+            },
+          ],
         },
       ],
     },
