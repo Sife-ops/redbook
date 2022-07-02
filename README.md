@@ -25,6 +25,7 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
+- Shell REDBOOK_ENV overwrites .env file, consider changing
 - update usage
 - user commands
   - summary :heavy_check_mark:
