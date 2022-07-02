@@ -16,7 +16,7 @@ const DB = {
 };
 
 export function stack({ stack }: StackContext) {
-  const api = new Api(stack, 'api', {
+  const bot = new Api(stack, 'api', {
     defaults: {
       function: {
         environment: {
@@ -44,8 +44,7 @@ export function stack({ stack }: StackContext) {
   });
 
   stack.addOutputs({
-    // todo: rename
-    ApiEndpoint: api.url,
+    BotEndpoint: bot.url,
     ExportJsonBucket: exportJsonBucket.bucketName,
   });
 }
