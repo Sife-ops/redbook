@@ -2,22 +2,16 @@ import Joi from 'joi';
 import { db } from '../../../model';
 import { optionValue } from '../../../utility';
 
-export const judge = {
+export const describe = {
   schema: Joi.object({
     data: Joi.object({
       options: Joi.array().has(
         Joi.object({
-          options: Joi.array()
-            .has(
-              Joi.object({
-                name: Joi.string().valid('judge'),
-              })
-            )
-            .has(
-              Joi.object({
-                name: Joi.string().valid('id'),
-              })
-            ),
+          options: Joi.array().has(
+            Joi.object({
+              name: Joi.string().valid('id'),
+            })
+          ),
         })
       ),
     }),
@@ -30,37 +24,31 @@ export const judge = {
 
   handler: async (body: any) => {
     const predictionUserId = body.member.user.id;
-
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
     try {
+      // todo: query relation?
       const prediction = await db
         .selectFrom('prediction')
-        .where('user_id', '=', predictionUserId)
         .where('id', '=', predictionId)
         .selectAll()
         .executeTakeFirstOrThrow();
 
-      const judgeUserId = optionValue(options, 'judge');
-
-      await db
-        .insertInto('judge')
-        .values({
-          prediction_id: predictionId,
-          user_id: judgeUserId,
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
+      const judges = await db
+        .selectFrom('judge')
+        .where('prediction_id', '=', predictionId)
+        .selectAll()
+        .execute();
 
       return {
         type: 4,
         data: {
           embeds: [
             {
-              title: 'Judge Added',
+              title: 'Prediction',
               description: prediction.conditions,
-              color: 0x00baff,
+              color: 0x00ffff,
               fields: [
                 {
                   name: 'By',
@@ -68,8 +56,18 @@ export const judge = {
                   inline: true,
                 },
                 {
-                  name: 'Judge',
-                  value: `<@${judgeUserId}>`,
+                  name: 'Made On',
+                  value: prediction.created_at,
+                  inline: false,
+                },
+                {
+                  name: 'Judge(s)',
+                  value: judges.reduce((a, c) => {
+                    if (!a) {
+                      return `<@${c.user_id}>`;
+                    }
+                    return `${a} <@${c.user_id}>`;
+                  }, ''),
                   inline: true,
                 },
                 {
@@ -86,7 +84,7 @@ export const judge = {
       return {
         type: 4,
         data: {
-          content: `<@${predictionUserId}> Adding judge failed because the prediction does not exist or it is not your prediction.`,
+          content: `<@${predictionUserId}> Prediction does not exist.`,
         },
       };
     }

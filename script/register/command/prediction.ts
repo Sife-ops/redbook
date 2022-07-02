@@ -35,6 +35,19 @@ export const prediction = {
       ],
     },
     {
+      name: 'describe',
+      description: 'Describe a prediction.',
+      type: 1,
+      options: [
+        {
+          name: 'id',
+          description: 'The prediction ID.',
+          type: 3,
+          required: true,
+        },
+      ],
+    },
+    {
       name: 'judge',
       description: 'Manage judges.',
       type: 2,
