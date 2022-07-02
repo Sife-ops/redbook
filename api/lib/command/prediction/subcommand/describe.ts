@@ -52,7 +52,7 @@ export const describe = {
               fields: [
                 {
                   name: 'By',
-                  value: `<@${predictionUserId}>`,
+                  value: `<@${prediction.user_id}>`,
                   inline: true,
                 },
                 {
