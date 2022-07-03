@@ -28,18 +28,19 @@ export const describe = {
     const predictionId = optionValue(options, 'id');
 
     try {
-      // todo: query relation?
-      const prediction = await db
+      const predictionJudges = await db
         .selectFrom('prediction')
-        .where('id', '=', predictionId)
-        .selectAll()
-        .executeTakeFirstOrThrow();
-
-      const judges = await db
-        .selectFrom('judge')
-        .where('prediction_id', '=', predictionId)
-        .selectAll()
+        .innerJoin('judge', 'judge.prediction_id', 'prediction.id')
+        .where('prediction.id', '=', predictionId)
+        .select('prediction.id')
+        .select('prediction.user_id')
+        .select('prediction.conditions')
+        .select('prediction.created_at')
+        .select('judge.user_id as judge_id')
+        .select('judge.verdict')
         .execute();
+
+      const prediction = predictionJudges[0];
 
       return {
         type: 4,
@@ -62,17 +63,17 @@ export const describe = {
                 },
                 {
                   name: 'Judge(s)',
-                  value: judges.reduce((a, c) => {
+                  value: predictionJudges.reduce((a, c) => {
                     if (!a) {
-                      return `<@${c.user_id}>`;
+                      return `<@${c.judge_id}>`;
                     }
-                    return `${a} <@${c.user_id}>`;
+                    return `${a} <@${c.judge_id}>`;
                   }, ''),
                   inline: true,
                 },
                 {
                   name: 'ID',
-                  value: predictionId,
+                  value: prediction.id,
                   inline: false,
                 },
               ],
