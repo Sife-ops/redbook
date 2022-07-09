@@ -1,4 +1,4 @@
-import { db } from '../lib/model';
+import { db } from '@redbook/lib/model';
 import AWS from 'aws-sdk';
 
 const S3 = new AWS.S3();

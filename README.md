@@ -6,6 +6,7 @@ The best prediction record-keeping bot in the universe!
 
 - battle-tested
 - gold standard
+- batteries-included
 - blazingly fast
 
 ## usage
@@ -25,6 +26,7 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
+- migrate to ElectroDB
 - Color scheme
 - Shell REDBOOK_ENV overwrites .env file, consider changing
 - update usage

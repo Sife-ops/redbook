@@ -1,5 +1,5 @@
 import * as subcommand from './subcommand';
-import { runner } from '../../../../utility';
+import { runner } from '@redbook/lib/utility';
 
 export const predictions = {
   schema: undefined,

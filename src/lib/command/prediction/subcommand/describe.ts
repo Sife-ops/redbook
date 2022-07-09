@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { db } from '../../../model';
-import { optionValue } from '../../../utility';
+import { db } from '@redbook/lib/model';
+import { optionValue } from '@redbook/lib/utility';
 
 export const describe = {
   schema: Joi.object({
@@ -66,8 +66,9 @@ export const describe = {
                   value: predictionJudges.reduce((a, c) => {
                     if (!a) {
                       return `<@${c.judge_id}>`;
+                    } else {
+                      return `${a} <@${c.judge_id}>`;
                     }
-                    return `${a} <@${c.judge_id}>`;
                   }, ''),
                   inline: true,
                 },

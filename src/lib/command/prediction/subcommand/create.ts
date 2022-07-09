@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { db } from '../../../model';
-import { optionValue, mnemonic } from '../../../utility';
+import { db } from '@redbook/lib/model';
+import { optionValue, mnemonic } from '@redbook/lib/utility';
 
 export const create = {
   schema: Joi.object({

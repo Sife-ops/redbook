@@ -1,5 +1,5 @@
-import { db } from '../../../../../model';
-import { optionValue } from '../../../../../utility';
+import { db } from '@redbook/lib/model';
+import { optionValue } from '@redbook/lib/utility';
 import { schema } from './common';
 
 export const correct = {
