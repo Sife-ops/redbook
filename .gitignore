@@ -1,6 +1,7 @@
 redbook-config.ts
 .env.dev
 .env.prod
+.env.int
 shadow-realm/
 # dependencies
 node_modules
