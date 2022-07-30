@@ -2,7 +2,7 @@ import axios from 'axios'
 import { commandBody } from '../../../command-body'
 import { expect, test } from 'vitest'
 
-test("hello", async () => {
+test("prediction create", async () => {
 
   const input = {
     conditions: 'kurt angle'
