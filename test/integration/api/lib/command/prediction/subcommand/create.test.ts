@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { commandBody } from '../../../command-body'
+import { commandBody } from '../../command-body'
 import { expect, test } from 'vitest'
 
 test("prediction create", async () => {
