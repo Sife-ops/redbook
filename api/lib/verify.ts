@@ -2,6 +2,8 @@ import nacl from 'tweetnacl';
 import { Event } from './utility';
 
 // todo: need test
+// todo: use discord-interactions https://github.com/discord/discord-interactions-js
+// Discord API Reference: https://discord.com/developers/docs/interactions/receiving-and-responding#security-and-authorization
 export const verify = (event: Event) => {
   const signature = event.headers['x-signature-ed25519'];
   const timestamp = event.headers['x-signature-timestamp'];
