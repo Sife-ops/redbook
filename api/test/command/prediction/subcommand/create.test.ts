@@ -8,8 +8,6 @@ test("prediction create", async () => {
     conditions: 'kurt angle'
   }
 
-  // todo: remove hardcoded url
-  // 'https://dbq3scig4h.execute-api.us-east-1.amazonaws.com'
   const res = await axios.post(process.env.REDBOOK_BOT_URL,
     commandBody({
       name: 'prediction',
