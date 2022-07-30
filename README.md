@@ -26,6 +26,7 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
+- track mnemonic collisions
 - integration tests
 - migrate to ElectroDB
 - Color scheme
