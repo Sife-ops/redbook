@@ -26,6 +26,7 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
+- integration tests
 - migrate to ElectroDB
 - Color scheme
 - Shell REDBOOK_ENV overwrites .env file, consider changing
