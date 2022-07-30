@@ -1,3 +1,4 @@
+// todo: only if running integration
 export const setup = () => {
   if (!process.env.REDBOOK_BOT_URL) {
     throw new Error(`
