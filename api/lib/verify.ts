@@ -1,6 +1,7 @@
 import nacl from 'tweetnacl';
 import { Event } from './utility';
 
+// todo: need test
 export const verify = (event: Event) => {
   const signature = event.headers['x-signature-ed25519'];
   const timestamp = event.headers['x-signature-timestamp'];
