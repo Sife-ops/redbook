@@ -9,7 +9,8 @@ test("prediction create", async () => {
   }
 
   // todo: remove hardcoded url
-  const res = await axios.post('https://dbq3scig4h.execute-api.us-east-1.amazonaws.com',
+  // 'https://dbq3scig4h.execute-api.us-east-1.amazonaws.com'
+  const res = await axios.post(process.env.REDBOOK_BOT_URL,
     commandBody({
       name: 'prediction',
       options: [
