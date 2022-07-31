@@ -73,6 +73,7 @@ export const create = {
         console.log('WARNING');
         console.log('mnemonic predictionId conflict:', predictionId);
 
+        // todo: test duplicate mnemonic dlq
         sqs.sendMessage({
           QueueUrl: process.env.MNEMONIC_DLQ!,
           MessageBody: JSON.stringify({
