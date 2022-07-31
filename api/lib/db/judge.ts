@@ -1,14 +1,22 @@
-export * as User from "./user";
+export * as Judge from "./judge";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
 import { ulid } from "ulid";
 
+// export interface JudgeTable {
+//   id?: number;
+//   prediction_id: string;
+//   user_id: string;
+//   verdict?: boolean;
+//   created_at?: string;
+// }
+
 export const UserEntity = new Entity(
   {
     model: {
       version: "1",
-      entity: "User",
+      entity: "Judge",
       service: "redbook",
     },
     attributes: {
@@ -40,7 +48,7 @@ export const UserEntity = new Entity(
           composite: ["userId"],
         },
       },
-      predictor: {
+      prognosticator: {
         collection: 'predictions',
         index: 'gsi1',
         pk: {
