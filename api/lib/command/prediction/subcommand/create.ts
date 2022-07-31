@@ -1,6 +1,9 @@
+import AWS from "aws-sdk";
 import Joi from 'joi';
 import { db } from '@redbook/lib/model';
 import { optionValue, mnemonic } from '@redbook/lib/utility';
+
+const sqs = new AWS.SQS();
 
 export const create = {
   schema: Joi.object({
@@ -67,6 +70,16 @@ export const create = {
         .where('id', '=', predictionId)
         .executeTakeFirst();
       if (prediction) {
+        console.log('WARNING');
+        console.log('mnemonic predictionId conflict:', predictionId);
+
+        sqs.sendMessage({
+          QueueUrl: process.env.MNEMONIC_DLQ!,
+          MessageBody: JSON.stringify({
+            mnemonic: predictionId
+          })
+        });
+
         predictionId = mnemonic();
       } else {
         break;
