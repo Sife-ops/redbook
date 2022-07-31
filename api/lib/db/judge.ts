@@ -2,15 +2,6 @@ export * as Judge from "./judge";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
-// import { ulid } from "ulid";
-
-// export interface JudgeTable {
-//   id?: number;
-//   prediction_id: string;
-//   user_id: string;
-//   verdict?: boolean;
-//   created_at?: string;
-// }
 
 export const JudgeEntity = new Entity(
   {
@@ -44,18 +35,18 @@ export const JudgeEntity = new Entity(
           composite: ["judgeId"],
         },
       },
-      // prognosticator: {
-      //   collection: 'predictions',
-      //   index: 'gsi1',
-      //   pk: {
-      //     field: "gsi1pk",
-      //     composite: ["userId"],
-      //   },
-      //   sk: {
-      //     field: "gsi1sk",
-      //     composite: [],
-      //   },
-      // }
+      predictionJudges: {
+        collection: 'predictionJudges',
+        index: 'gsi2',
+        pk: {
+          field: "gsi2pk",
+          composite: ["predictionId"],
+        },
+        sk: {
+          field: "gsi2sk",
+          composite: [],
+        },
+      }
     },
   },
   Dynamo.Configuration
@@ -63,20 +54,16 @@ export const JudgeEntity = new Entity(
 
 export type JudgeEntityType = EntityItem<typeof JudgeEntity>;
 
-// export function create({
-//   username,
-//   discriminator,
-//   avatar,
-// }: {
-//   username: string;
-//   discriminator: string;
-//   avatar: string;
-// }) {
-//   return UserEntity.create({
-//     userId: ulid(),
-//     username,
-//     discriminator,
-//     avatar,
-//   }).go();
-// }
+export function create({
+  judgeId,
+  predictionId
+}: {
+  judgeId: string;
+  predictionId: string;
+}) {
+  return JudgeEntity.create({
+    judgeId,
+    predictionId,
+  }).go();
+}
 

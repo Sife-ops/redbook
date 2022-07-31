@@ -55,6 +55,18 @@ export const PredictionEntity = new Entity(
           field: "gsi1sk",
           composite: [],
         },
+      },
+      predictionJudges: {
+        collection: 'predictionJudges',
+        index: 'gsi2',
+        pk: {
+          field: "gsi2pk",
+          composite: ["predictionId"],
+        },
+        sk: {
+          field: "gsi2sk",
+          composite: [],
+        },
       }
     },
   },
