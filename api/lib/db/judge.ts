@@ -2,7 +2,7 @@ export * as Judge from "./judge";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
-import { ulid } from "ulid";
+// import { ulid } from "ulid";
 
 // export interface JudgeTable {
 //   id?: number;
@@ -12,7 +12,7 @@ import { ulid } from "ulid";
 //   created_at?: string;
 // }
 
-export const UserEntity = new Entity(
+export const JudgeEntity = new Entity(
   {
     model: {
       version: "1",
@@ -20,67 +20,63 @@ export const UserEntity = new Entity(
       service: "redbook",
     },
     attributes: {
-      userId: {
+      judgeId: {
         type: "string",
         required: true,
       },
-      username: {
+      predictionId: {
         type: "string",
         required: true,
       },
-      discriminator: {
-        type: "string",
-        required: true,
-      },
-      avatar: {
-        type: "string",
-        required: true,
+      verdict: {
+        type: "boolean",
+        // required: true,
       },
     },
     indexes: {
-      users: {
+      judges: {
         pk: {
           field: "pk",
           composite: [],
         },
         sk: {
           field: "sk",
-          composite: ["userId"],
+          composite: ["judgeId"],
         },
       },
-      prognosticator: {
-        collection: 'predictions',
-        index: 'gsi1',
-        pk: {
-          field: "gsi1pk",
-          composite: ["userId"],
-        },
-        sk: {
-          field: "gsi1sk",
-          composite: [],
-        },
-      }
+      // prognosticator: {
+      //   collection: 'predictions',
+      //   index: 'gsi1',
+      //   pk: {
+      //     field: "gsi1pk",
+      //     composite: ["userId"],
+      //   },
+      //   sk: {
+      //     field: "gsi1sk",
+      //     composite: [],
+      //   },
+      // }
     },
   },
   Dynamo.Configuration
 );
 
-export type UserEntityType = EntityItem<typeof UserEntity>;
+export type JudgeEntityType = EntityItem<typeof JudgeEntity>;
 
-export function create({
-  username,
-  discriminator,
-  avatar,
-}: {
-  username: string;
-  discriminator: string;
-  avatar: string;
-}) {
-  return UserEntity.create({
-    userId: ulid(),
-    username,
-    discriminator,
-    avatar,
-  }).go();
-}
+// export function create({
+//   username,
+//   discriminator,
+//   avatar,
+// }: {
+//   username: string;
+//   discriminator: string;
+//   avatar: string;
+// }) {
+//   return UserEntity.create({
+//     userId: ulid(),
+//     username,
+//     discriminator,
+//     avatar,
+//   }).go();
+// }
 

@@ -16,7 +16,7 @@ export const PredictionEntity = new Entity(
         type: "string",
         required: true,
       },
-      userId: {
+      prognosticatorId: {
         type: "string",
         required: true,
       },
@@ -49,7 +49,7 @@ export const PredictionEntity = new Entity(
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userId"],
+          composite: ["prognosticatorId"],
         },
         sk: {
           field: "gsi1sk",
@@ -64,15 +64,15 @@ export const PredictionEntity = new Entity(
 export type PredictionEntityType = EntityItem<typeof PredictionEntity>;
 
 export function create({
-  userId,
+  prognosticatorId,
   conditions
 }: {
-  userId: string;
+  prognosticatorId: string;
   conditions: string;
 }) {
   return PredictionEntity.create({
     predictionId: ulid(),
-    userId,
+    prognosticatorId,
     conditions,
     created_at: 'todo' // todo: timestamp
   }).go();

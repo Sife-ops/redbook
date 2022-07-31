@@ -1,18 +1,17 @@
-export * as User from "./user";
+export * as Prognosticator from "./prognosticator";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
-import { ulid } from "ulid";
 
-export const UserEntity = new Entity(
+export const PrognosticatorEntity = new Entity(
   {
     model: {
       version: "1",
-      entity: "User",
+      entity: "Prognosticator",
       service: "redbook",
     },
     attributes: {
-      userId: {
+      prognosticatorId: {
         type: "string",
         required: true,
       },
@@ -30,22 +29,22 @@ export const UserEntity = new Entity(
       },
     },
     indexes: {
-      users: {
+      prognosticators: {
         pk: {
           field: "pk",
           composite: [],
         },
         sk: {
           field: "sk",
-          composite: ["userId"],
+          composite: ["prognosticatorId"],
         },
       },
-      predictor: {
+      prognosticator: {
         collection: 'predictions',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userId"],
+          composite: ["prognosticatorId"],
         },
         sk: {
           field: "gsi1sk",
@@ -57,19 +56,21 @@ export const UserEntity = new Entity(
   Dynamo.Configuration
 );
 
-export type UserEntityType = EntityItem<typeof UserEntity>;
+export type PrognosticatorEntityType = EntityItem<typeof PrognosticatorEntity>;
 
 export function create({
+  prognosticatorId,
   username,
   discriminator,
   avatar,
 }: {
+  prognosticatorId: string;
   username: string;
   discriminator: string;
   avatar: string;
 }) {
-  return UserEntity.create({
-    userId: ulid(),
+  return PrognosticatorEntity.create({
+    prognosticatorId,
     username,
     discriminator,
     avatar,
