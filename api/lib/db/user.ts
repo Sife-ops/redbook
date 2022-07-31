@@ -4,13 +4,6 @@ import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
 import { ulid } from "ulid";
 
-// export interface UserTable {
-//   id: string;
-//   username: string;
-//   discriminator: string;
-//   avatar: string;
-// }
-
 export const UserEntity = new Entity(
   {
     model: {
@@ -19,12 +12,19 @@ export const UserEntity = new Entity(
       service: "redbook",
     },
     attributes: {
-      userID: {
+      userId: {
         type: "string",
         required: true,
-        readOnly: true,
       },
-      name: {
+      username: {
+        type: "string",
+        required: true,
+      },
+      discriminator: {
+        type: "string",
+        required: true,
+      },
+      avatar: {
         type: "string",
         required: true,
       },
@@ -37,15 +37,15 @@ export const UserEntity = new Entity(
         },
         sk: {
           field: "sk",
-          composite: ["userID"],
+          composite: ["userId"],
         },
       },
-      contributor: {
-        collection: 'contributions',
+      prognosticator: {
+        collection: 'predictions',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userID"],
+          composite: ["userId"],
         },
         sk: {
           field: "gsi1sk",
@@ -59,17 +59,20 @@ export const UserEntity = new Entity(
 
 export type UserEntityType = EntityItem<typeof UserEntity>;
 
-export function create(name: string) {
+export function create({
+  username,
+  discriminator,
+  avatar,
+}: {
+  username: string;
+  discriminator: string;
+  avatar: string;
+}) {
   return UserEntity.create({
-    userID: ulid(),
-    name
+    userId: ulid(),
+    username,
+    discriminator,
+    avatar,
   }).go();
 }
-
-// export async function list() {
-//   const a = UserEntity.query.users({}).go();
-//   console.log(await a);
-//   return a;
-// }
-
 
