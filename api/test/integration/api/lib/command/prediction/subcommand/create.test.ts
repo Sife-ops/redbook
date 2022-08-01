@@ -8,7 +8,7 @@ test("prediction create", async () => {
     conditions: 'kurt angle'
   }
 
-  const res = await axios.post(process.env.REDBOOK_BOT_URL,
+  const res = await axios.post(process.env.REDBOOK_BOT_URL!,
     commandBody({
       name: 'prediction',
       options: [

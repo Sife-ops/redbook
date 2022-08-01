@@ -26,12 +26,12 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
-- track mnemonic collisions
 - integration tests
 - migrate to ElectroDB
 - Color scheme
 - Shell REDBOOK_ENV overwrites .env file, consider changing
 - update usage
+- track mnemonic collisions :heavy_check_mark:
 - user commands
   - summary :heavy_check_mark:
   - predictions :heavy_check_mark:
