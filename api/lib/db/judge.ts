@@ -25,26 +25,26 @@ export const JudgeEntity = new Entity(
       },
     },
     indexes: {
-      judges: {
+      judge: {
         pk: {
           field: "pk",
-          composite: [],
+          composite: ["predictionId"],
         },
         sk: {
           field: "sk",
           composite: ["judgeId"],
         },
       },
-      predictionJudges: {
+      predictoinJudges: {
         collection: 'predictionJudges',
-        index: 'gsi2',
+        index: 'gsi1',
         pk: {
-          field: "gsi2pk",
+          field: "gsi1pk",
           composite: ["predictionId"],
         },
         sk: {
-          field: "gsi2sk",
-          composite: [],
+          field: "gsi1sk",
+          composite: ["judgeId"],
         },
       }
     },

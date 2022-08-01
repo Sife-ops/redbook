@@ -1,7 +1,7 @@
 import AWS from "aws-sdk";
 import Joi from 'joi';
-import { db } from '@redbook/lib/model';
 import { optionValue, mnemonic } from '@redbook/lib/utility';
+import { redbookModel } from '@redbook/lib/db'
 
 const sqs = new AWS.SQS();
 
@@ -36,95 +36,71 @@ export const create = {
 
   handler: async (body: any) => {
     /*
-     * 1) create user record
-     * 2) create prediction
-     * 3) create judge
-     * 4) format message
+     * 1) create prediction
+     * 2) create judge
+     * 3) format message
      */
 
-    // 1) create user record
-    try {
-      const { id, avatar, discriminator, username } = body.member.user;
+    // 1) create prediction
 
-      await db
-        .insertInto('user')
-        .values({
-          avatar,
-          discriminator,
-          id,
-          username,
-        })
-        .executeTakeFirstOrThrow();
-    } catch {
-      console.log('user exists');
-    }
-
-    // 2) create prediction
-
-    // generate unique mnemonic id
     let predictionId = mnemonic();
-    while (true) {
-      const prediction = await db
-        .selectFrom('prediction')
-        .selectAll()
-        .where('id', '=', predictionId)
-        .executeTakeFirst();
-      if (prediction) {
-        console.log('WARNING');
-        console.log('mnemonic predictionId conflict:', predictionId);
 
-        // todo: test duplicate mnemonic dlq
-        sqs.sendMessage({
-          QueueUrl: process.env.MNEMONIC_DLQ!,
-          MessageBody: JSON.stringify({
-            mnemonic: predictionId
-          })
-        });
+    // // report mnemonic predictionId collisions
+    // redbookModel.entities.PredictionEntity.query.prediction({ predictionId })
+    //   .go()
+    //   .then(e => {
+    //     if (e.length > 1) {
+    //       console.log('WARNING');
+    //       console.log('mnemonic predictionId conflict:', predictionId);
+    //       // todo: test duplicate mnemonic dlq
+    //       sqs.sendMessage({
+    //         QueueUrl: process.env.MNEMONIC_DLQ!,
+    //         MessageBody: JSON.stringify({
+    //           mnemonic: predictionId
+    //         })
+    //       });
+    //     }
+    //   })
 
-        predictionId = mnemonic();
-      } else {
-        break;
-      }
-    }
-
-    const predictionUserId = body.member.user.id;
+    const { avatar, discriminator, username } = body.member.user;
+    const prognosticatorId = body.member.user.id;
     const { options } = body.data.options[0];
     const conditions = optionValue(options, 'conditions');
 
-    await db
-      .insertInto('prediction')
-      .values({
-        id: predictionId,
-        user_id: predictionUserId,
-        conditions,
-      })
-      .executeTakeFirstOrThrow();
+    redbookModel.entities.PredictionEntity.create({
+      predictionId,
+      prognosticatorId,
+      username,
+      discriminator,
+      avatar,
+      conditions,
+      created_at: 'todo' // todo: timestamp
+    }).go()
 
-    // 3) create judge
-    const judgeUserId = optionValue(options, 'judge');
+    // 2) create judge
+
+    const judgeId = optionValue(options, 'judge');
 
     // cannot make self default judge
     if (
       process.env.REDBOOK_ENV === 'prod' &&
-      judgeUserId === predictionUserId
+      judgeId === prognosticatorId
     ) {
       return {
         type: 4,
         data: {
-          content: `<@${predictionUserId}> You cannot make yourself the default judge.`,
+          content: `<@${prognosticatorId}> You cannot make yourself the default judge.`,
         },
       };
     }
 
-    await db
-      .insertInto('judge')
-      .values({
-        prediction_id: predictionId,
-        user_id: judgeUserId,
-      })
-      .executeTakeFirstOrThrow();
+    redbookModel.entities.JudgeEntity.create({
+      judgeId,
+      predictionId,
+    }).go()
 
-    // 4) format message
+    // 3) format message
+
     return {
       type: 4,
       data: {
@@ -136,12 +112,12 @@ export const create = {
             fields: [
               {
                 name: 'By',
-                value: `<@${predictionUserId}>`,
+                value: `<@${prognosticatorId}>`,
                 inline: true,
               },
               {
                 name: 'Judge',
-                value: `<@${judgeUserId}>`,
+                value: `<@${judgeId}>`,
                 inline: true,
               },
               {

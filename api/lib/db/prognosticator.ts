@@ -3,6 +3,7 @@ export * as Prognosticator from "./prognosticator";
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
 
+// todo: remove file, deprecated
 export const PrognosticatorEntity = new Entity(
   {
     model: {
@@ -29,28 +30,16 @@ export const PrognosticatorEntity = new Entity(
       },
     },
     indexes: {
-      prognosticators: {
+      prognosticator: {
         pk: {
           field: "pk",
-          composite: [],
+          composite: ["prognosticatorId"],
         },
         sk: {
           field: "sk",
-          composite: ["prognosticatorId"],
-        },
-      },
-      prognosticator: {
-        collection: 'predictions',
-        index: 'gsi1',
-        pk: {
-          field: "gsi1pk",
-          composite: ["prognosticatorId"],
-        },
-        sk: {
-          field: "gsi1sk",
           composite: [],
         },
-      }
+      },
     },
   },
   Dynamo.Configuration

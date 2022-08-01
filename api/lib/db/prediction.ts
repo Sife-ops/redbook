@@ -20,6 +20,18 @@ export const PredictionEntity = new Entity(
         type: "string",
         required: true,
       },
+      username: {
+        type: "string",
+        required: true,
+      },
+      discriminator: {
+        type: "string",
+        required: true,
+      },
+      avatar: {
+        type: "string",
+        required: true,
+      },
       conditions: {
         type: "string",
         required: true,
@@ -34,40 +46,28 @@ export const PredictionEntity = new Entity(
       },
     },
     indexes: {
-      predictions: {
+      prognosticatorPrediction: {
         pk: {
           field: "pk",
-          composite: [],
+          composite: ["prognosticatorId"],
         },
         sk: {
           field: "sk",
           composite: ["predictionId"],
         },
       },
-      predicted: {
-        collection: 'predictions',
+      prediction: {
+        collection: 'predictionJudges',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["prognosticatorId"],
+          composite: ["predictionId"],
         },
         sk: {
           field: "gsi1sk",
           composite: [],
         },
       },
-      predictionJudges: {
-        collection: 'predictionJudges',
-        index: 'gsi2',
-        pk: {
-          field: "gsi2pk",
-          composite: ["predictionId"],
-        },
-        sk: {
-          field: "gsi2sk",
-          composite: [],
-        },
-      }
     },
   },
   Dynamo.Configuration
