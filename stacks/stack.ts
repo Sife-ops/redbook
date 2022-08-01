@@ -2,6 +2,7 @@ import {
   Api,
   Bucket,
   Function,
+  Queue,
   StackContext,
   Table,
 } from '@serverless-stack/resources';
@@ -48,14 +49,17 @@ export function stack({ stack }: StackContext) {
     },
   });
 
+  const mnemonicDlq = new Queue(stack, "mnemonic-dlq");
+
   const bot = new Api(stack, 'api', {
     defaults: {
       function: {
-        permissions: [table],
+        permissions: [table, mnemonicDlq],
         environment: {
           ...DB,
           PUBLIC_KEY,
           REDBOOK_ENV,
+          MNEMONIC_DLQ: mnemonicDlq.queueUrl, // todo: can't use queueName???
           TABLE: table.tableName
         },
       },
@@ -78,6 +82,7 @@ export function stack({ stack }: StackContext) {
   });
 
   stack.addOutputs({
+    MnemonicDlq: mnemonicDlq.queueUrl,
     BotEndpoint: bot.url,
     ExportJsonBucket: exportJsonBucket.bucketName,
   });
