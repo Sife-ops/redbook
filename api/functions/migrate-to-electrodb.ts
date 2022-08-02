@@ -1,9 +1,6 @@
-import AWS from 'aws-sdk';
+import util from 'util';
 import { db } from '@redbook/lib/model';
-
-const S3 = new AWS.S3();
-
-const { BUCKET } = process.env;
+import { redbookModel } from '@redbook/lib/db'
 
 export const handler = async () => {
   const users = await db.selectFrom('user').selectAll().execute();
@@ -20,18 +17,20 @@ export const handler = async () => {
       })),
   }));
 
-  console.log(data);
+  console.log('body', util.inspect(data, false, null, true));
 
-  try {
-    const res = await S3.putObject({
-      Bucket: BUCKET!,
-      Key: new Date().toISOString(),
-      //   Body: Buffer.from(JSON.stringify(data)),
-      Body: JSON.stringify(data),
-      ContentType: 'application/json',
-    }).promise();
-    console.log(res);
-  } catch (e) {
-    console.log(e);
+  for (const user of data) {
+    for (const prediction of user.predictions) {
+      redbookModel.entities.PredictionEntity.create({
+        prognosticatorId: user.id,
+        predictionId: prediction.id,
+        avatar: user.avatar,
+        discriminator: user.discriminator,
+        username: user.username,
+        conditions: prediction.conditions,
+        created_at: 'todo',
+      }).go()
+    }
   }
 };
+

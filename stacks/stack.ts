@@ -81,6 +81,19 @@ export function stack({ stack }: StackContext) {
     permissions: [exportJsonBucket],
   });
 
+  const migrateToElectrodbLambda = new Function(
+    stack,
+    'migrateToElectrodbLambda',
+    {
+      handler: 'functions/migrate-to-electrodb.handler',
+      environment: {
+        ...DB,
+        TABLE: table.tableName
+      },
+      permissions: [table],
+    }
+  );
+
   stack.addOutputs({
     MnemonicDlq: mnemonicDlq.queueUrl,
     BotEndpoint: bot.url,
