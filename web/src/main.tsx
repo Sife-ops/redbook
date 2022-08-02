@@ -1,6 +1,6 @@
 // import { List } from "./pages/Article";
 import "./index.css";
-import React from "react";
+// import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Dev } from "./pages/Dev"
@@ -12,11 +12,11 @@ const urql = createClient({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  /*<React.StrictMode>*/
     <UrqlProvider value={urql}>
       <App />
     </UrqlProvider>
-  </React.StrictMode>
+  /*</React.StrictMode>*/
 );
 
 function App() {

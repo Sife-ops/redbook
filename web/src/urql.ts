@@ -7,7 +7,7 @@ import {
   QueryResult,
   MutationRequest,
   MutationResult
-} from "@galaxis/graphql/genql";
+} from "@redbook/graphql/genql";
 
 export function useTypedQuery<Query extends QueryRequest>(opts: {
   query: Query;
