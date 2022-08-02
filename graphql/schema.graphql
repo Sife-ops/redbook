@@ -1,3 +1,9 @@
+type Judge {
+  judgeId: ID!
+  predictionId: String!
+  verdict: Boolean
+}
+
 type Mutation {
   mello: String!
 }
@@ -7,6 +13,7 @@ type Prediction {
   conditions: String!
   created_at: String!
   discriminator: String!
+  judges: [Judge!]!
   predictionId: ID!
   prognosticatorId: String!
   username: String!

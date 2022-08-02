@@ -1,7 +1,17 @@
 import { builder } from "./builder";
-import { PredictionEntityType, redbookModel } from '@redbook/lib/db';
+import { PredictionEntityType, JudgeEntityType, redbookModel } from '@redbook/lib/db';
 
 // import "./types/article";
+
+const JudgeType = builder
+  .objectRef<JudgeEntityType>("Judge")
+  .implement({
+    fields: t => ({
+      judgeId: t.exposeID("judgeId"),
+      predictionId: t.exposeString("predictionId"),
+      verdict: t.exposeBoolean("verdict", { nullable: true })
+    })
+  })
 
 const PredictionType = builder
   .objectRef<PredictionEntityType>("Prediction")
@@ -15,6 +25,18 @@ const PredictionType = builder
       conditions: t.exposeString("conditions"),
       verdict: t.exposeBoolean("verdict", { nullable: true }),
       created_at: t.exposeString("created_at"),
+      judges: t.field({
+        type: [JudgeType],
+        resolve: async (parent) => {
+          // todo: parent resolver resolves judges...
+          const { JudgeEntity } = await redbookModel
+            .collections
+            .predictionJudges({
+              predictionId: parent.predictionId,
+            }).go()
+          return JudgeEntity;
+        }
+      })
     })
   })
 
@@ -30,17 +52,30 @@ builder.queryFields(t => ({
       predictionId: t.arg.string({ required: true })
     },
     resolve: async (_, args) => {
-      const { JudgeEntity, PredictionEntity } = await redbookModel
-        .collections
-        .predictionJudges({
-          predictionId: args.predictionId,
+      const predictions = await redbookModel
+        .entities
+        .PredictionEntity
+        .query
+        .prediction({
+          predictionId: args.predictionId
         }).go()
 
-      if (PredictionEntity.length < 1) {
-        throw new Error('ree')
+      // todo: lodash
+      if (predictions.length < 1) {
+        throw new Error('prediction not found')
       }
 
-      return PredictionEntity[0]
+      return predictions[0]
+
+      // const { JudgeEntity, PredictionEntity } = await redbookModel
+      //   .collections
+      //   .predictionJudges({
+      //     predictionId: args.predictionId,
+      //   }).go()
+      // if (PredictionEntity.length < 1) {
+      //   throw new Error('ree')
+      // }
+      // return PredictionEntity[0]
     }
   })
 }));

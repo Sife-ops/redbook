@@ -18,7 +18,10 @@ export function Dev() {
           predictionId: params.predictionId!
         },
         {
-          conditions: true
+          conditions: true,
+          judges: {
+            judgeId: true
+          }
         }
       ]
     }
