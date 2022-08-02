@@ -45,6 +45,7 @@ export const create = {
 
     let predictionId = mnemonic();
 
+    // todo: automation service to detect collisions
     // // report mnemonic predictionId collisions
     // redbookModel.entities.PredictionEntity.query.prediction({ predictionId })
     //   .go()
