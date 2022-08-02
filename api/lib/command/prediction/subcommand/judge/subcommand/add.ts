@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { db } from '@redbook/lib/model';
 import { optionValue } from '@redbook/lib/utility';
+import { redbookModel } from '@redbook/lib/db';
 
 export const add = {
   schema: Joi.object({
@@ -33,66 +33,61 @@ export const add = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const predictionUserId = body.member.user.id;
-
+    const prognosticatorId = body.member.user.id;
     const { options } = body.data.options[0].options[0];
     const predictionId = optionValue(options, 'id');
 
-    try {
-      const prediction = await db
-        .selectFrom('prediction')
-        .where('user_id', '=', predictionUserId)
-        .where('id', '=', predictionId)
-        .selectAll()
-        .executeTakeFirstOrThrow();
+    const res = await redbookModel.entities.PredictionEntity.query.prognosticatorPrediction({
+      prognosticatorId,
+      predictionId,
+    }).go()
 
-      const judgeUserId = optionValue(options, 'judge');
-
-      await db
-        .insertInto('judge')
-        .values({
-          prediction_id: predictionId,
-          user_id: judgeUserId,
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-
+    if (res.length < 1) {
       return {
         type: 4,
         data: {
-          embeds: [
-            {
-              title: 'Judge Added',
-              description: prediction.conditions,
-              color: 0x00baff,
-              fields: [
-                {
-                  name: 'By',
-                  value: `<@${predictionUserId}>`,
-                  inline: true,
-                },
-                {
-                  name: 'Judge',
-                  value: `<@${judgeUserId}>`,
-                  inline: true,
-                },
-                {
-                  name: 'ID',
-                  value: predictionId,
-                  inline: false,
-                },
-              ],
-            },
-          ],
-        },
-      };
-    } catch {
-      return {
-        type: 4,
-        data: {
-          content: `<@${predictionUserId}> Adding judge failed because the prediction does not exist or it is not your prediction.`,
+          content: `<@${prognosticatorId}> Adding judge failed because the prediction does not exist or it is not your prediction.`,
         },
       };
     }
+
+    const judgeId = optionValue(options, 'judge');
+
+    redbookModel.entities.JudgeEntity.create({
+      judgeId,
+      predictionId,
+    }).go()
+
+    const prediction = res[0]
+
+    return {
+      type: 4,
+      data: {
+        embeds: [
+          {
+            title: 'Judge Added',
+            description: prediction.conditions,
+            color: 0x00baff,
+            fields: [
+              {
+                name: 'By',
+                value: `<@${prognosticatorId}>`,
+                inline: true,
+              },
+              {
+                name: 'Judge',
+                value: `<@${judgeId}>`,
+                inline: true,
+              },
+              {
+                name: 'ID',
+                value: predictionId,
+                inline: false,
+              },
+            ],
+          },
+        ],
+      },
+    };
   },
 };
