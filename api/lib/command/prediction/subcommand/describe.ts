@@ -77,6 +77,11 @@ export const describe = {
                 value: prediction.predictionId,
                 inline: false,
               },
+              {
+                name: 'Web',
+                value: `${process.env.SITE_URL}/${prediction.predictionId}`,
+                inline: false,
+              },
             ],
           },
         ],
