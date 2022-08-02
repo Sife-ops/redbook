@@ -1,18 +1,21 @@
-import { db } from '@redbook/lib/model';
 import { optionValue } from '@redbook/lib/utility';
+import { redbookModel } from '@redbook/lib/db';
 import { schema } from './common';
 
 export const correct = {
   schema,
   handler: async (body: any) => {
     const { options } = body.data.options[0].options[0];
-    const userId = optionValue(options, 'user');
+    const prognosticatorId = optionValue(options, 'user');
 
-    const predictions = await db
-      .selectFrom('prediction')
-      .where('user_id', '=', userId)
-      .selectAll()
-      .execute();
+    const predictions = await redbookModel
+      .entities
+      .PredictionEntity
+      .query
+      .prognosticatorPrediction({
+        prognosticatorId
+      })
+      .go()
 
     return {
       type: 4,
@@ -20,12 +23,12 @@ export const correct = {
         embeds: [
           {
             title: 'Correct Predictions',
-            description: `The list of <@${userId}>'s correct predictions.`,
+            description: `The list of <@${prognosticatorId}>'s correct predictions.`,
             color: 0x808080,
             fields: predictions
               .filter((e) => e.verdict)
               .map((e) => ({
-                name: e.id,
+                name: e.predictionId,
                 value: e.conditions,
                 inline: false,
               })),
