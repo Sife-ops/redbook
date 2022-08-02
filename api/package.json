@@ -6,10 +6,12 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.137.0",
     "@faker-js/faker": "^7.3.0",
+    "@pothos/core": "^3.13.0",
     "aws-sdk": "^2.1159.0",
     "discord-api-types": "^0.34.0",
     "dynamoose": "^2.8.5",
     "electrodb": "^1.11.1",
+    "graphql": "^16.5.0",
     "joi": "^17.6.0",
     "kysely": "^0.19.3",
     "pg": "^8.7.3",
