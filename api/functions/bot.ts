@@ -8,7 +8,10 @@ type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;
 
 export const handler: EventHandler = async (event) => {
   const body = JSON.parse(event.body);
-  // console.log('body', util.inspect(body, false, null, true));
+
+  if (process.env.REDBOOK_ENV === 'dev') {
+    console.log('body', util.inspect(body, false, null, true));
+  }
 
   if (body.type === 1) {
     return verify(event);

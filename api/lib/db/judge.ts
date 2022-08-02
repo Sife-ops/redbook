@@ -35,7 +35,7 @@ export const JudgeEntity = new Entity(
           composite: ["judgeId"],
         },
       },
-      predictoinJudges: {
+      predictionJudges: {
         collection: 'predictionJudges',
         index: 'gsi1',
         pk: {
