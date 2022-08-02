@@ -5,6 +5,7 @@ import {
   Queue,
   StackContext,
   Table,
+  ViteStaticSite,
 } from '@serverless-stack/resources';
 
 const { PUBLIC_KEY, REDBOOK_ENV } = process.env;
@@ -84,6 +85,14 @@ export function stack({ stack }: StackContext) {
     },
   });
 
+  const site = new ViteStaticSite(stack, "site", {
+    path: "web",
+    buildCommand: "npm run build",
+    environment: {
+      VITE_GRAPHQL_URL: graphqlApi.url + "/graphql",
+    },
+  });
+
   const exportJsonBucket = new Bucket(stack, 'exportJsonBucket');
 
   const exportJsonLambda = new Function(stack, 'exportJsonLambda', {
@@ -100,5 +109,6 @@ export function stack({ stack }: StackContext) {
     ExportJsonBucket: exportJsonBucket.bucketName,
     GraphqlApi: graphqlApi.url,
     MnemonicDlq: mnemonicDlq.queueUrl,
+    SiteUrl: site.url,
   });
 }

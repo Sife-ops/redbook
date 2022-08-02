@@ -24,7 +24,8 @@
   },
   "workspaces": [
     "api",
-    "graphql"
+    "graphql",
+    "web"
   ],
   "dependencies": {
     "axios": "^0.27.2",
