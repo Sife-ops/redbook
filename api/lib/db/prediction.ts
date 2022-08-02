@@ -75,18 +75,18 @@ export const PredictionEntity = new Entity(
 
 export type PredictionEntityType = EntityItem<typeof PredictionEntity>;
 
-export function create({
-  prognosticatorId,
-  conditions
-}: {
-  prognosticatorId: string;
-  conditions: string;
-}) {
-  return PredictionEntity.create({
-    predictionId: ulid(),
-    prognosticatorId,
-    conditions,
-    created_at: 'todo' // todo: timestamp
-  }).go();
-}
+// export function create({
+//   prognosticatorId,
+//   conditions
+// }: {
+//   prognosticatorId: string;
+//   conditions: string;
+// }) {
+//   return PredictionEntity.create({
+//     predictionId: ulid(),
+//     prognosticatorId,
+//     conditions,
+//     created_at: 'todo' // todo: timestamp
+//   }).go();
+// }
 

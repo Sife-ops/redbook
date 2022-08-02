@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { db } from '@redbook/lib/model';
 import { optionValue } from '@redbook/lib/utility';
+import { redbookModel } from '@redbook/lib/db';
 
 export const describe = {
   schema: Joi.object({
@@ -23,72 +23,64 @@ export const describe = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const predictionUserId = body.member.user.id;
+    const prognosticatorId = body.member.user.id;
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
-    try {
-      const predictionJudges = await db
-        .selectFrom('prediction')
-        .innerJoin('judge', 'judge.prediction_id', 'prediction.id')
-        .where('prediction.id', '=', predictionId)
-        .select('prediction.id')
-        .select('prediction.user_id')
-        .select('prediction.conditions')
-        .select('prediction.created_at')
-        .select('judge.user_id as judge_id')
-        .select('judge.verdict')
-        .execute();
+    const { PredictionEntity, JudgeEntity } = await redbookModel.collections.predictionJudges({
+      predictionId
+    }).go()
 
-      const prediction = predictionJudges[0];
-
+    if (PredictionEntity.length < 1) {
       return {
         type: 4,
         data: {
-          embeds: [
-            {
-              title: 'Prediction',
-              description: prediction.conditions,
-              color: 0x00ffff,
-              fields: [
-                {
-                  name: 'By',
-                  value: `<@${prediction.user_id}>`,
-                  inline: true,
-                },
-                {
-                  name: 'Made On',
-                  value: prediction.created_at,
-                  inline: false,
-                },
-                {
-                  name: 'Judge(s)',
-                  value: predictionJudges.reduce((a, c) => {
-                    if (!a) {
-                      return `<@${c.judge_id}>`;
-                    } else {
-                      return `${a} <@${c.judge_id}>`;
-                    }
-                  }, ''),
-                  inline: true,
-                },
-                {
-                  name: 'ID',
-                  value: prediction.id,
-                  inline: false,
-                },
-              ],
-            },
-          ],
-        },
-      };
-    } catch {
-      return {
-        type: 4,
-        data: {
-          content: `<@${predictionUserId}> Prediction does not exist.`,
+          content: `<@${prognosticatorId}> Prediction does not exist.`,
         },
       };
     }
+
+    const prediction = PredictionEntity[0];
+
+    return {
+      type: 4,
+      data: {
+        embeds: [
+          {
+            title: 'Prediction',
+            description: prediction.conditions,
+            color: 0x00ffff,
+            fields: [
+              {
+                name: 'By',
+                value: `<@${prediction.prognosticatorId}>`,
+                inline: true,
+              },
+              {
+                name: 'Made On',
+                value: prediction.created_at,
+                inline: false,
+              },
+              {
+                name: 'Judge(s)',
+                value: JudgeEntity.reduce((a, c) => {
+                  if (!a) {
+                    return `<@${c.judgeId}>`;
+                  } else {
+                    return `${a} <@${c.judgeId}>`;
+                  }
+                }, ''),
+                inline: true,
+              },
+              {
+                name: 'ID',
+                value: prediction.predictionId,
+                inline: false,
+              },
+            ],
+          },
+        ],
+      },
+    };
   },
 };
