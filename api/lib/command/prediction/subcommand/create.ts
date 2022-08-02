@@ -43,6 +43,25 @@ export const create = {
 
     // 1) create prediction
 
+    const { avatar, discriminator, username } = body.member.user;
+    const prognosticatorId = body.member.user.id;
+    const { options } = body.data.options[0];
+    const conditions = optionValue(options, 'conditions');
+    const judgeId = optionValue(options, 'judge');
+
+    // cannot make self default judge (prod only)
+    if (
+      process.env.REDBOOK_ENV === 'prod' &&
+      judgeId === prognosticatorId
+    ) {
+      return {
+        type: 4,
+        data: {
+          content: `<@${prognosticatorId}> You cannot make yourself the default judge.`,
+        },
+      };
+    }
+
     let predictionId = mnemonic();
 
     // todo: automation service to detect collisions
@@ -63,12 +82,7 @@ export const create = {
     //     }
     //   })
 
-    const { avatar, discriminator, username } = body.member.user;
-    const prognosticatorId = body.member.user.id;
-    const { options } = body.data.options[0];
-    const conditions = optionValue(options, 'conditions');
-
-    redbookModel.entities.PredictionEntity.create({
+    await redbookModel.entities.PredictionEntity.create({
       predictionId,
       prognosticatorId,
       username,
@@ -80,22 +94,7 @@ export const create = {
 
     // 2) create judge
 
-    const judgeId = optionValue(options, 'judge');
-
-    // cannot make self default judge
-    if (
-      process.env.REDBOOK_ENV === 'prod' &&
-      judgeId === prognosticatorId
-    ) {
-      return {
-        type: 4,
-        data: {
-          content: `<@${prognosticatorId}> You cannot make yourself the default judge.`,
-        },
-      };
-    }
-
-    redbookModel.entities.JudgeEntity.create({
+    await redbookModel.entities.JudgeEntity.create({
       judgeId,
       predictionId,
     }).go()

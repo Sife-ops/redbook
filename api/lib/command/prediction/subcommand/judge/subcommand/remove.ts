@@ -91,7 +91,7 @@ export const remove = {
     }
 
     // todo: use try/catch
-    redbookModel.entities.JudgeEntity.remove({
+    await redbookModel.entities.JudgeEntity.remove({
       judgeId,
       predictionId,
     }).go()

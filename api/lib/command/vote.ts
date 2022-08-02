@@ -69,7 +69,7 @@ export const vote = {
     // 3) update judge verdict
     const verdict = optionValue(options, 'verdict');
 
-    redbookModel.entities.JudgeEntity.put({
+    await redbookModel.entities.JudgeEntity.put({
       judgeId,
       predictionId,
       verdict,
@@ -115,12 +115,12 @@ export const vote = {
     // 5) format response
     if (count.undecided < 1) {
       if (count.yes < 1) {
-        redbookModel.entities.PredictionEntity.put({
+        await redbookModel.entities.PredictionEntity.put({
           ...prediction,
           verdict: false
         }).go()
       } else {
-        redbookModel.entities.PredictionEntity.put({
+        await redbookModel.entities.PredictionEntity.put({
           ...prediction,
           verdict: true
         }).go()

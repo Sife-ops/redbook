@@ -37,12 +37,12 @@ export const add = {
     const { options } = body.data.options[0].options[0];
     const predictionId = optionValue(options, 'id');
 
-    const res = await redbookModel.entities.PredictionEntity.query.prognosticatorPrediction({
+    const predictions = await redbookModel.entities.PredictionEntity.query.prognosticatorPrediction({
       prognosticatorId,
       predictionId,
     }).go()
 
-    if (res.length < 1) {
+    if (predictions.length < 1) {
       return {
         type: 4,
         data: {
@@ -53,12 +53,12 @@ export const add = {
 
     const judgeId = optionValue(options, 'judge');
 
-    redbookModel.entities.JudgeEntity.create({
+    await redbookModel.entities.JudgeEntity.create({
       judgeId,
       predictionId,
     }).go()
 
-    const prediction = res[0]
+    const prediction = predictions[0]
 
     return {
       type: 4,

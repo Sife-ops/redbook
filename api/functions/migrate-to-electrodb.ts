@@ -1,3 +1,4 @@
+import util from 'util';
 import { db } from '@redbook/lib/model';
 import { redbookModel } from '@redbook/lib/db'
 
@@ -16,10 +17,12 @@ export const handler = async () => {
       })),
   }));
 
+  console.log('data', util.inspect(data, false, null, true));
+
   for (const user of data) {
     for (const prediction of user.predictions) {
 
-      redbookModel.entities.PredictionEntity.create({
+      const p = await redbookModel.entities.PredictionEntity.create({
         prognosticatorId: user.id,
         predictionId: prediction.id,
         avatar: user.avatar,
@@ -30,14 +33,16 @@ export const handler = async () => {
         created_at: prediction.created_at.toISOString(),
         verdict: prediction.verdict === null ? undefined : prediction.verdict
       }).go()
+      console.log(p)
 
       for (const judge of prediction.judges) {
 
-        redbookModel.entities.JudgeEntity.create({
+        const j = await redbookModel.entities.JudgeEntity.create({
           predictionId: prediction.id,
           judgeId: judge.user_id,
           verdict: judge.verdict === null ? undefined : judge.verdict
         }).go()
+        console.log(j)
 
       }
 
