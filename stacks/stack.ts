@@ -55,9 +55,32 @@ export function stack({ stack }: StackContext) {
         },
       },
     },
-
     routes: {
       'POST /': 'functions/bot.handler',
+    },
+  });
+
+  const graphqlApi = new Api(stack, "graphqlApi", {
+    defaults: {
+      function: {
+        permissions: [table],
+        environment: {
+          TABLE_NAME: table.tableName,
+        },
+      },
+    },
+    routes: {
+      "POST /graphql": {
+        type: "pothos",
+        function: {
+          handler: "functions/graphql/graphql.handler",
+        },
+        schema: "api/functions/graphql/schema.ts",
+        output: "graphql/schema.graphql",
+        commands: [
+          "npx genql --output ./graphql/genql --schema ./graphql/schema.graphql --esm",
+        ],
+      },
     },
   });
 
@@ -73,8 +96,9 @@ export function stack({ stack }: StackContext) {
   });
 
   stack.addOutputs({
-    MnemonicDlq: mnemonicDlq.queueUrl,
     BotEndpoint: bot.url,
     ExportJsonBucket: exportJsonBucket.bucketName,
+    GraphqlApi: graphqlApi.url,
+    MnemonicDlq: mnemonicDlq.queueUrl,
   });
 }
