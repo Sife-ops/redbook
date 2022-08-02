@@ -19,14 +19,14 @@ export const summary = {
 
   handler: async (body: any) => {
     const { options } = body.data.options[0];
-    const userId = optionValue(options, 'user');
+    const prognosticatorId = optionValue(options, 'user');
 
     const predictions = await redbookModel
       .entities
       .PredictionEntity
       .query
       .prognosticatorPrediction({
-        prognosticatorId: userId
+        prognosticatorId
       }).go()
 
     interface Stats {
@@ -70,7 +70,7 @@ export const summary = {
         embeds: [
           {
             title: 'Summary',
-            description: `The summary of <@${userId}>'s predictions.`,
+            description: `The summary of <@${prognosticatorId}>'s predictions.`,
             color: 0xff00ff,
             fields: [
               {
