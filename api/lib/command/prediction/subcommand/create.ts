@@ -75,7 +75,7 @@ export const create = {
       discriminator,
       avatar,
       conditions,
-      created_at: 'todo' // todo: timestamp
+      created_at: new Date().toISOString()
     }).go()
 
     // 2) create judge
