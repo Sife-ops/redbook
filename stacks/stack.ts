@@ -42,25 +42,6 @@ export function stack({ stack }: StackContext) {
     },
   });
 
-  const mnemonicDlq = new Queue(stack, "mnemonic-dlq");
-
-  const bot = new Api(stack, 'api', {
-    defaults: {
-      function: {
-        permissions: [table, mnemonicDlq],
-        environment: {
-          PUBLIC_KEY,
-          REDBOOK_ENV,
-          MNEMONIC_DLQ: mnemonicDlq.queueUrl, // todo: can't use queueName???
-          TABLE: table.tableName
-        },
-      },
-    },
-    routes: {
-      'POST /': 'functions/bot.handler',
-    },
-  });
-
   const graphqlApi = new Api(stack, "graphqlApi", {
     defaults: {
       function: {
@@ -93,13 +74,34 @@ export function stack({ stack }: StackContext) {
     },
   });
 
+  const mnemonicDlq = new Queue(stack, "mnemonic-dlq");
+
+  // todo: rename to 'bot'
+  const bot = new Api(stack, 'api', {
+    defaults: {
+      function: {
+        permissions: [table, mnemonicDlq],
+        environment: {
+          MNEMONIC_DLQ: mnemonicDlq.queueUrl, // todo: can't use queueName???
+          PUBLIC_KEY,
+          REDBOOK_ENV,
+          SITE_URL: site.url,
+          TABLE: table.tableName,
+        },
+      },
+    },
+    routes: {
+      'POST /': 'functions/bot.handler',
+    },
+  });
+
   const exportJsonBucket = new Bucket(stack, 'exportJsonBucket');
 
   const exportJsonLambda = new Function(stack, 'exportJsonLambda', {
     handler: 'functions/export-json.handler',
     environment: {
-      TABLE: table.tableName,
       BUCKET: exportJsonBucket.bucketName,
+      TABLE: table.tableName,
     },
     permissions: [exportJsonBucket],
   });

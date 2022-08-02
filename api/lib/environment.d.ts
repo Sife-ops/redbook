@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv {
       PUBLIC_KEY: string;
       REDBOOK_ENV: string;
+      SITE_URL: string;
     }
   }
 }

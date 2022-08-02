@@ -125,6 +125,11 @@ export const create = {
                 value: predictionId,
                 inline: false,
               },
+              {
+                name: 'Web',
+                value: `${process.env.SITE_URL}/${predictionId}`,
+                inline: false,
+              },
             ],
             // todo: user footer
             // footer: {
