@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { db } from '@redbook/lib/model';
 import { optionValue } from '@redbook/lib/utility';
+import { redbookModel } from '@redbook/lib/db';
 
 export const summary = {
   schema: Joi.object({
@@ -21,11 +21,13 @@ export const summary = {
     const { options } = body.data.options[0];
     const userId = optionValue(options, 'user');
 
-    const predictions = await db
-      .selectFrom('prediction')
-      .where('user_id', '=', userId)
-      .selectAll()
-      .execute();
+    const predictions = await redbookModel
+      .entities
+      .PredictionEntity
+      .query
+      .prognosticatorPrediction({
+        prognosticatorId: userId
+      }).go()
 
     interface Stats {
       correct: number;
@@ -34,9 +36,10 @@ export const summary = {
       total: number;
     }
 
+    // todo: test after refactoring vote command
     const stats = predictions.reduce(
       (a: Stats, c) => {
-        if (c.verdict === null) {
+        if (c.verdict === undefined) {
           return {
             ...a,
             undecided: a.undecided + 1,
@@ -92,9 +95,7 @@ export const summary = {
               },
               {
                 name: 'Accuracy',
-                value: `${
-                  (stats.correct / (stats.total - stats.undecided)) * 100
-                }%`,
+                value: `${(stats.correct / (stats.total - stats.undecided)) * 100}%`,
                 inline: false,
               },
             ],
