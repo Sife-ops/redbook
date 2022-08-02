@@ -54,16 +54,3 @@ export const JudgeEntity = new Entity(
 
 export type JudgeEntityType = EntityItem<typeof JudgeEntity>;
 
-// export function create({
-//   judgeId,
-//   predictionId
-// }: {
-//   judgeId: string;
-//   predictionId: string;
-// }) {
-//   return JudgeEntity.create({
-//     judgeId,
-//     predictionId,
-//   }).go();
-// }
-
