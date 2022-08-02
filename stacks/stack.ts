@@ -9,14 +9,6 @@ import {
 
 const { PUBLIC_KEY, REDBOOK_ENV } = process.env;
 
-const DB = {
-  POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
-  POSTGRES_HOST: process.env.POSTGRES_HOST,
-  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
-  POSTGRES_PORT: process.env.POSTGRES_PORT,
-  POSTGRES_USERNAME: process.env.POSTGRES_USERNAME,
-};
-
 export function stack({ stack }: StackContext) {
   const table = new Table(stack, "table", {
     fields: {
@@ -56,7 +48,6 @@ export function stack({ stack }: StackContext) {
       function: {
         permissions: [table, mnemonicDlq],
         environment: {
-          ...DB,
           PUBLIC_KEY,
           REDBOOK_ENV,
           MNEMONIC_DLQ: mnemonicDlq.queueUrl, // todo: can't use queueName???
@@ -75,24 +66,11 @@ export function stack({ stack }: StackContext) {
   const exportJsonLambda = new Function(stack, 'exportJsonLambda', {
     handler: 'functions/export-json.handler',
     environment: {
-      ...DB,
+      TABLE: table.tableName,
       BUCKET: exportJsonBucket.bucketName,
     },
     permissions: [exportJsonBucket],
   });
-
-  const migrateToElectrodbLambda = new Function(
-    stack,
-    'migrateToElectrodbLambda',
-    {
-      handler: 'functions/migrate-to-electrodb.handler',
-      environment: {
-        ...DB,
-        TABLE: table.tableName
-      },
-      permissions: [table],
-    }
-  );
 
   stack.addOutputs({
     MnemonicDlq: mnemonicDlq.queueUrl,

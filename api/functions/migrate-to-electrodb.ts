@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED
+ * todo: should be removed after electrodb migration is finalized
+ */
+
 import util from 'util';
 import { db } from '@redbook/lib/model';
 import { redbookModel } from '@redbook/lib/db'

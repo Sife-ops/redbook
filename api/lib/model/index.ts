@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED
+ * todo: this should be removed electrodb folder should be moved to 'model'
+ */
+
 import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 

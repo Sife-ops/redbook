@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED
+ * todo: should be rewritten to use redbookModel
+ */
+
 import AWS from 'aws-sdk';
 import { db } from '@redbook/lib/model';
 

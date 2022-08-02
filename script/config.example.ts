@@ -13,23 +13,11 @@ const config = {
     BOT_TOKEN: '',
     APP_ID: '',
     GUILD_ID: '',
-
-    POSTGRES_DATABASE: '',
-    POSTGRES_HOST: '',
-    POSTGRES_PASSWORD: '',
-    POSTGRES_PORT: 5432,
-    POSTGRES_USERNAME: '',
   },
   prod: {
     BOT_TOKEN: '',
     APP_ID: '',
     GUILD_ID: '',
-
-    POSTGRES_DATABASE: '',
-    POSTGRES_HOST: '',
-    POSTGRES_PASSWORD: '',
-    POSTGRES_PORT: 5433,
-    POSTGRES_USERNAME: '',
   },
 };
 

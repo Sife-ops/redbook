@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED
+ * todo: should be removed after electrodb migration is finalized
+ */
+
 import { Kysely, PostgresDialect, sql } from 'kysely';
 import { Pool } from 'pg';
 import config from '../config';
