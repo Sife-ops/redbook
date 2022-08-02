@@ -1,9 +1,9 @@
-// import { List } from "./pages/Article";
 import "./index.css";
-// import React from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Dev } from "./pages/Dev"
+import { Dev } from "./pages/dev"
+import { Error } from "./pages/error"
 import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 
 const urql = createClient({
@@ -13,9 +13,9 @@ const urql = createClient({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   /*<React.StrictMode>*/
-    <UrqlProvider value={urql}>
-      <App />
-    </UrqlProvider>
+  <UrqlProvider value={urql}>
+    <App />
+  </UrqlProvider>
   /*</React.StrictMode>*/
 );
 
@@ -24,7 +24,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/:predictionId" element={<Dev />} />
-        <Route path="*" element={<Navigate to="/asdf" />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="*" element={<Navigate to="/error" />} />
       </Routes>
     </BrowserRouter>
   );
