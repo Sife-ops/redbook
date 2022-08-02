@@ -7,6 +7,7 @@
     "@aws-sdk/client-dynamodb": "^3.137.0",
     "@faker-js/faker": "^7.3.0",
     "@pothos/core": "^3.13.0",
+    "@serverless-stack/node": "^1.6.6",
     "aws-sdk": "^2.1159.0",
     "discord-api-types": "^0.34.0",
     "dynamoose": "^2.8.5",
