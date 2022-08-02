@@ -66,16 +66,6 @@ builder.queryFields(t => ({
       }
 
       return predictions[0]
-
-      // const { JudgeEntity, PredictionEntity } = await redbookModel
-      //   .collections
-      //   .predictionJudges({
-      //     predictionId: args.predictionId,
-      //   }).go()
-      // if (PredictionEntity.length < 1) {
-      //   throw new Error('ree')
-      // }
-      // return PredictionEntity[0]
     }
   })
 }));
