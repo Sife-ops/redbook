@@ -2,7 +2,6 @@ export * as Prediction from "./prediction";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
-import { ulid } from "ulid";
 
 export const PredictionEntity = new Entity(
   {
