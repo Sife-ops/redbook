@@ -66,7 +66,7 @@ export function stack({ stack }: StackContext) {
       function: {
         permissions: [table],
         environment: {
-          TABLE_NAME: table.tableName,
+          TABLE: table.tableName,
         },
       },
     },

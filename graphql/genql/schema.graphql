@@ -2,6 +2,18 @@ type Mutation {
   mello: String!
 }
 
+type Prediction {
+  avatar: String!
+  conditions: String!
+  created_at: String!
+  discriminator: String!
+  predictionId: ID!
+  prognosticatorId: String!
+  username: String!
+  verdict: Boolean
+}
+
 type Query {
   hello: String!
+  prediction(predictionId: String!): Prediction!
 }

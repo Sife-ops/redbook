@@ -23,8 +23,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        /*<Route path="/" element={<Navigate to="/articles" />} />*/
-        <Route path="articles" element={<Dev />} />
+        <Route path="/:predictionId" element={<Dev />} />
+        <Route path="*" element={<Navigate to="/asdf" />} />
       </Routes>
     </BrowserRouter>
   );

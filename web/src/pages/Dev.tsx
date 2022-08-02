@@ -1,16 +1,33 @@
 import React from 'react';
-import { useTypedMutation, useTypedQuery } from "../urql";
+import { useTypedQuery } from "../urql";
+import { useParams } from 'react-router-dom'
 
 export function Dev() {
-  const [a, b] = useTypedQuery({
+  const params = useParams();
+
+  // const [a] = useTypedQuery({
+  //   query: {
+  //     hello: true
+  //   }
+  // });
+
+  const [b] = useTypedQuery({
     query: {
-      hello: true
+      prediction: [
+        {
+          predictionId: params.predictionId!
+        },
+        {
+          conditions: true
+        }
+      ]
     }
-  });
+  })
 
   React.useEffect(() => {
-    console.log(a.data)
-  }, [a.fetching])
+    console.log(params)
+    console.log(b)
+  }, [b.fetching])
 
   return (
     <div style={{ padding: "1rem" }}>
