@@ -27,8 +27,9 @@ The best prediction record-keeping bot in the universe!
 ## todo
 
 - track mnemonic collisions
+- remove pg dependencies
 - integration tests
-- migrate to ElectroDB
+- migrate to ElectroDB :heavy_check_mark
 - Color scheme
 - Shell REDBOOK_ENV overwrites .env file, consider changing
 - update usage
@@ -40,7 +41,6 @@ The best prediction record-keeping bot in the universe!
   - cancel :heavy_check_mark:
   - add judge :heavy_check_mark:
 - created-at column for records :heavy_check_mark:
-- migrations
 - POSTGRES_PORT :heavy_check_mark:
 - support AWS RDS
 - support TypeOrm

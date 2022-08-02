@@ -77,9 +77,9 @@ export function stack({ stack }: StackContext) {
         },
         schema: "api/functions/graphql/schema.ts",
         output: "graphql/schema.graphql",
-        // commands: [
-        //   "npx genql --output ./graphql/genql --schema ./graphql/schema.graphql --esm",
-        // ],
+        commands: [
+          "npx genql --output ./graphql/genql --schema ./graphql/schema.graphql --esm",
+        ],
       },
     },
   });

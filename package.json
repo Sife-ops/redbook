@@ -12,22 +12,26 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@serverless-stack/cli": "^1.2.27",
-    "@serverless-stack/resources": "^1.2.27",
+    "@serverless-stack/cli": "^1.6.4",
+    "@serverless-stack/resources": "^1.6.4",
     "@serverless/event-mocks": "^1.1.1",
     "@tsconfig/node16": "^1.0.3",
     "@types/pg": "^8.6.5",
-    "aws-cdk-lib": "2.24.0",
+    "aws-cdk-lib": "2.32.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4",
     "vitest": "^0.15.2"
   },
   "workspaces": [
-    "api"
+    "api",
+    "graphql"
   ],
   "dependencies": {
     "axios": "^0.27.2",
     "kysely": "^0.19.3",
     "pg": "^8.7.3"
+  },
+  "overrides": {
+    "graphql": "16.5.0"
   }
 }

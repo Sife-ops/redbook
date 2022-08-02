@@ -6,6 +6,7 @@ export default function (app: App) {
     runtime: "nodejs16.x",
     srcPath: "api",
     bundle: {
+      // todo: delete?
       format: "esm",
     },
   });
