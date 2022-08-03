@@ -39,6 +39,16 @@ export const PredictionEntity = new Entity(
         type: "boolean",
         // required: true,
       },
+      likes: {
+        type: "number",
+        required: true,
+        default: 0,
+      },
+      dislikes: {
+        type: "number",
+        required: true,
+        default: 0,
+      },
       created_at: {
         type: "string",
         required: true,

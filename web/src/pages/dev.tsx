@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTypedQuery } from "../urql";
+import { useTypedQuery, useTypedMutation } from "../urql";
 import { useParams, Navigate } from 'react-router-dom'
 
 export function Dev() {
@@ -20,6 +20,8 @@ export function Dev() {
           prognosticatorId: true,
           username: true,
           verdict: true,
+          likes: true,
+          dislikes: true,
           judges: {
             judgeId: true,
             predictionId: true,
@@ -31,6 +33,41 @@ export function Dev() {
       ]
     }
   })
+
+  const [rateMutationState, rateMutation] = useTypedMutation((vars: {
+    predictionId: string;
+    like: boolean;
+  }) => ({
+    rate: [
+      vars,
+      {
+        likes: true,
+        dislikes: true,
+      }
+    ]
+  }));
+
+  const [likes, setLikes] = React.useState<number>(0)
+  const [dislikes, setDisikes] = React.useState<number>(0)
+
+  React.useEffect(() => {
+    const { data, fetching } = predictionQuery
+    if (!fetching && data) {
+      const { likes, dislikes } = data.prediction
+      setLikes(likes || 0)
+      setDisikes(dislikes || 0)
+    }
+  }, [predictionQuery.fetching])
+
+  React.useEffect(() => {
+    const { data, fetching } = rateMutationState
+    if (!fetching && data) {
+      const { likes, dislikes } = data.rate
+      setLikes(likes)
+      setDisikes(dislikes)
+      // console.log(rateMutationState)
+    }
+  }, [rateMutationState.fetching])
 
   if (predictionQuery.fetching) {
     return (
@@ -47,15 +84,34 @@ export function Dev() {
 
   const { prediction } = predictionQuery.data;
 
+  const handleRate = ({ like }: { like: boolean }) => {
+    return (e: any) => {
+      e.preventDefault();
+      rateMutation({
+        predictionId: prediction.predictionId,
+        like
+      });
+    }
+  }
+
   return (
     <div>
-      <h1>{prediction.predictionId}</h1>
       <div>
-        <h3>conditions</h3>
+        <h1>Prediction:</h1>
         <p>{prediction.conditions}</p>
       </div>
       <div>
-        <h3>judges</h3>
+        {likes}
+        <button onClick={handleRate({ like: true })}>like</button>
+        <button onClick={handleRate({ like: false })}>dislike</button>
+        {dislikes}
+      </div>
+      <div>
+        <h3>Prediction ID:</h3>
+        <p>{prediction.predictionId}</p>
+      </div>
+      <div>
+        <h3>Judges:</h3>
         {prediction.judges.map(e => (
           <div key={e.judgeId}>
             <div>{e.username ? e.username : e.judgeId}{e.discriminator ? `#${e.discriminator}` : ''}</div>
@@ -65,6 +121,7 @@ export function Dev() {
       </div>
     </div>
   );
+
 }
 
 const useVerdict = (i: boolean | undefined) => {

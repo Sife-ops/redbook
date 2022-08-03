@@ -26,6 +26,8 @@ const PredictionType = builder
       avatar: t.exposeString("avatar"),
       conditions: t.exposeString("conditions"),
       verdict: t.exposeBoolean("verdict", { nullable: true }),
+      likes: t.exposeInt("likes", { nullable: true }),
+      dislikes: t.exposeInt("dislikes", { nullable: true }),
       created_at: t.exposeString("created_at"),
       judges: t.field({
         type: [JudgeType],
@@ -39,6 +41,15 @@ const PredictionType = builder
           return JudgeEntity;
         }
       })
+    })
+  })
+
+const RatingType = builder
+  .objectRef<{ likes: number; dislikes: number }>("Rating")
+  .implement({
+    fields: t => ({
+      likes: t.exposeInt("likes"),
+      dislikes: t.exposeInt("dislikes"),
     })
   })
 
@@ -75,6 +86,54 @@ builder.queryFields(t => ({
 builder.mutationFields(t => ({
   mello: t.string({
     resolve: () => 'mello'
+  }),
+
+  // todo: unrate
+  rate: t.field({
+    type: RatingType,
+    args: {
+      predictionId: t.arg.string({ required: true }),
+      // prognosticatorId: t.arg.string({ required: true }),
+      like: t.arg.boolean({ required: true }),
+    },
+    resolve: async (_, args) => {
+      const [{
+        predictionId,
+        prognosticatorId,
+        likes,
+        dislikes
+      }] = await redbookModel
+        .entities
+        .PredictionEntity
+        .query
+        .prediction({
+          predictionId: args.predictionId
+        }).go()
+
+      await redbookModel
+        .entities
+        .PredictionEntity
+        .update({
+          predictionId,
+          prognosticatorId,
+        }).add({
+          [args.like ? 'likes' : 'dislikes']: 1
+          // likes: 1
+        }).go()
+
+      const rating = {
+        likes: likes || 0,
+        dislikes: dislikes || 0,
+      }
+
+      if (args.like) {
+        rating.likes++
+      } else {
+        rating.dislikes++
+      }
+
+      return rating;
+    }
   })
 }))
 

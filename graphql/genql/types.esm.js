@@ -2,7 +2,8 @@ export default {
     "scalars": [
         1,
         2,
-        3
+        3,
+        6
     ],
     "types": {
         "Judge": {
@@ -32,6 +33,19 @@ export default {
             "mello": [
                 1
             ],
+            "rate": [
+                8,
+                {
+                    "like": [
+                        3,
+                        "Boolean!"
+                    ],
+                    "predictionId": [
+                        1,
+                        "String!"
+                    ]
+                }
+            ],
             "__typename": [
                 1
             ]
@@ -49,8 +63,14 @@ export default {
             "discriminator": [
                 1
             ],
+            "dislikes": [
+                6
+            ],
             "judges": [
                 0
+            ],
+            "likes": [
+                6
             ],
             "predictionId": [
                 2
@@ -68,6 +88,7 @@ export default {
                 1
             ]
         },
+        "Int": {},
         "Query": {
             "hello": [
                 1
@@ -80,6 +101,17 @@ export default {
                         "String!"
                     ]
                 }
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "Rating": {
+            "dislikes": [
+                6
+            ],
+            "likes": [
+                6
             ],
             "__typename": [
                 1

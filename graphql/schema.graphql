@@ -8,6 +8,7 @@ type Judge {
 
 type Mutation {
   mello: String!
+  rate(like: Boolean!, predictionId: String!): Rating!
 }
 
 type Prediction {
@@ -15,7 +16,9 @@ type Prediction {
   conditions: String!
   created_at: String!
   discriminator: String!
+  dislikes: Int
   judges: [Judge!]!
+  likes: Int
   predictionId: ID!
   prognosticatorId: String!
   username: String!
@@ -25,4 +28,9 @@ type Prediction {
 type Query {
   hello: String!
   prediction(predictionId: String!): Prediction!
+}
+
+type Rating {
+  dislikes: Int!
+  likes: Int!
 }
