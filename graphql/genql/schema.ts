@@ -1,14 +1,16 @@
 import {FieldsSelection,Observable} from '@genql/runtime'
 
 export type Scalars = {
-    ID: string,
     String: string,
+    ID: string,
     Boolean: boolean,
 }
 
 export interface Judge {
+    discriminator?: Scalars['String']
     judgeId: Scalars['ID']
     predictionId: Scalars['String']
+    username?: Scalars['String']
     verdict?: Scalars['Boolean']
     __typename: 'Judge'
 }
@@ -38,8 +40,10 @@ export interface Query {
 }
 
 export interface JudgeRequest{
+    discriminator?: boolean | number
     judgeId?: boolean | number
     predictionId?: boolean | number
+    username?: boolean | number
     verdict?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
@@ -105,14 +109,18 @@ export const isQuery = (obj?: { __typename?: any } | null): obj is Query => {
 
 
 export interface JudgePromiseChain{
+    discriminator: ({get: (request?: boolean|number, defaultValue?: (Scalars['String'] | undefined)) => Promise<(Scalars['String'] | undefined)>}),
     judgeId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Promise<Scalars['ID']>}),
     predictionId: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
+    username: ({get: (request?: boolean|number, defaultValue?: (Scalars['String'] | undefined)) => Promise<(Scalars['String'] | undefined)>}),
     verdict: ({get: (request?: boolean|number, defaultValue?: (Scalars['Boolean'] | undefined)) => Promise<(Scalars['Boolean'] | undefined)>})
 }
 
 export interface JudgeObservableChain{
+    discriminator: ({get: (request?: boolean|number, defaultValue?: (Scalars['String'] | undefined)) => Observable<(Scalars['String'] | undefined)>}),
     judgeId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Observable<Scalars['ID']>}),
     predictionId: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
+    username: ({get: (request?: boolean|number, defaultValue?: (Scalars['String'] | undefined)) => Observable<(Scalars['String'] | undefined)>}),
     verdict: ({get: (request?: boolean|number, defaultValue?: (Scalars['Boolean'] | undefined)) => Observable<(Scalars['Boolean'] | undefined)>})
 }
 

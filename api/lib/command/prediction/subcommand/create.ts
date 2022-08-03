@@ -23,6 +23,9 @@ export const create = {
             ),
         })
       ),
+      resolved: Joi.object({
+        users: Joi.any(),
+      })
     }),
     member: Joi.object({
       user: Joi.object({
@@ -42,12 +45,12 @@ export const create = {
      */
 
     // 1) create prediction
-
     const { avatar, discriminator, username } = body.member.user;
     const prognosticatorId = body.member.user.id;
     const { options } = body.data.options[0];
     const conditions = optionValue(options, 'conditions');
     const judgeId = optionValue(options, 'judge');
+    const judge = body.data.resolved.users[judgeId]; // todo: validation
 
     // cannot make self default judge (prod only)
     if (
@@ -93,14 +96,14 @@ export const create = {
     }).go()
 
     // 2) create judge
-
     await redbookModel.entities.JudgeEntity.create({
       judgeId,
       predictionId,
+      username: judge.username,
+      discriminator: judge.discriminator,
     }).go()
 
     // 3) format message
-
     return {
       type: 4,
       data: {

@@ -23,17 +23,14 @@ export function Dev() {
           judges: {
             judgeId: true,
             predictionId: true,
-            verdict: true
+            username: true,
+            discriminator: true,
+            verdict: true,
           }
         }
       ]
     }
   })
-
-  // React.useEffect(() => {
-  //   console.log(params)
-  //   console.log(predictionQuery)
-  // }, [predictionQuery.fetching])
 
   if (predictionQuery.fetching) {
     return (
@@ -61,7 +58,7 @@ export function Dev() {
         <h3>judges</h3>
         {prediction.judges.map(e => (
           <div key={e.judgeId}>
-            <div>{e.judgeId}</div>
+            <div>{e.username ? e.username : e.judgeId}{e.discriminator ? `#${e.discriminator}` : ''}</div>
             <div>verdict: {useVerdict(e.verdict)}</div>
           </div>
         ))}

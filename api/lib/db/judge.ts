@@ -19,6 +19,14 @@ export const JudgeEntity = new Entity(
         type: "string",
         required: true,
       },
+      username: {
+        type: "string",
+        required: true,
+      },
+      discriminator: {
+        type: "string",
+        required: true,
+      },
       verdict: {
         type: "boolean",
         // required: true,

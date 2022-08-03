@@ -6,77 +6,83 @@ export default {
     ],
     "types": {
         "Judge": {
-            "judgeId": [
+            "discriminator": [
                 1
             ],
-            "predictionId": [
+            "judgeId": [
                 2
+            ],
+            "predictionId": [
+                1
+            ],
+            "username": [
+                1
             ],
             "verdict": [
                 3
             ],
             "__typename": [
-                2
+                1
             ]
         },
-        "ID": {},
         "String": {},
+        "ID": {},
         "Boolean": {},
         "Mutation": {
             "mello": [
-                2
+                1
             ],
             "__typename": [
-                2
+                1
             ]
         },
         "Prediction": {
             "avatar": [
-                2
+                1
             ],
             "conditions": [
-                2
+                1
             ],
             "created_at": [
-                2
+                1
             ],
             "discriminator": [
-                2
+                1
             ],
             "judges": [
                 0
             ],
             "predictionId": [
-                1
+                2
             ],
             "prognosticatorId": [
-                2
+                1
             ],
             "username": [
-                2
+                1
             ],
             "verdict": [
                 3
             ],
             "__typename": [
-                2
+                1
             ]
         },
         "Query": {
             "hello": [
-                2
+                1
             ],
             "prediction": [
                 5,
                 {
                     "predictionId": [
-                        2,
+                        1,
                         "String!"
                     ]
                 }
             ],
             "__typename": [
-                2
+                1
             ]
         }
     }

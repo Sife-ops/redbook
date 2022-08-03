@@ -52,10 +52,13 @@ export const add = {
     }
 
     const judgeId = optionValue(options, 'judge');
+    const judge = body.data.resolved.users[judgeId]; // todo: validation
 
     await redbookModel.entities.JudgeEntity.create({
       judgeId,
       predictionId,
+      discriminator: judge.discriminator,
+      username: judge.username,
     }).go()
 
     const prediction = predictions[0]

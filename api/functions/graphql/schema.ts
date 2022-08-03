@@ -9,6 +9,8 @@ const JudgeType = builder
     fields: t => ({
       judgeId: t.exposeID("judgeId"),
       predictionId: t.exposeString("predictionId"),
+      username: t.exposeString("username", { nullable: true }),
+      discriminator: t.exposeString("discriminator", { nullable: true }),
       verdict: t.exposeBoolean("verdict", { nullable: true })
     })
   })
