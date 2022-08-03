@@ -1,65 +1,26 @@
 import React from 'react';
-import { useTypedQuery, useTypedMutation } from "../urql";
 import { useParams, Navigate } from 'react-router-dom'
+import { usePredictionQuery, useRateMutation } from '../hook/urql'
 
 export function Dev() {
   const params = useParams();
 
-  // todo: query hooks
-  const [predictionQuery] = useTypedQuery({
-    query: {
-      prediction: [
-        {
-          predictionId: params.predictionId!,
-        },
-        {
-          avatar: true,
-          conditions: true,
-          created_at: true,
-          discriminator: true,
-          predictionId: true,
-          prognosticatorId: true,
-          username: true,
-          verdict: true,
-          likes: true,
-          dislikes: true,
-          judges: {
-            judgeId: true,
-            predictionId: true,
-            username: true,
-            discriminator: true,
-            verdict: true,
-          }
-        }
-      ]
-    }
-  })
+  const [predictionQueryState] = usePredictionQuery(params.predictionId!)
 
-  const [rateMutationState, rateMutation] = useTypedMutation((vars: {
-    predictionId: string;
-    like: boolean;
-  }) => ({
-    rate: [
-      vars,
-      {
-        likes: true,
-        dislikes: true,
-      }
-    ]
-  }));
+  const [rateMutationState, rateMutation] = useRateMutation()
 
   // todo: like button state hook
   const [likes, setLikes] = React.useState<number>(0)
   const [dislikes, setDisikes] = React.useState<number>(0)
 
   React.useEffect(() => {
-    const { data, error, fetching } = predictionQuery
+    const { data, error, fetching } = predictionQueryState
     if (!fetching && !error && data) {
       const { likes, dislikes } = data.prediction
       setLikes(likes || 0)
       setDisikes(dislikes || 0)
     }
-  }, [predictionQuery.fetching])
+  }, [predictionQueryState.fetching])
 
   React.useEffect(() => {
     const { data, error, fetching } = rateMutationState
@@ -71,7 +32,7 @@ export function Dev() {
     }
   }, [rateMutationState.fetching])
 
-  if (predictionQuery.fetching) {
+  if (predictionQueryState.fetching) {
     return (
       <div style={{ padding: "1rem" }}>
         loading...
@@ -79,12 +40,12 @@ export function Dev() {
     );
   }
 
-  if (predictionQuery.error || !predictionQuery.data) {
+  if (predictionQueryState.error || !predictionQueryState.data) {
     // todo: don't push history
     return <Navigate to='/error' />
   }
 
-  const { prediction } = predictionQuery.data;
+  const { prediction } = predictionQueryState.data;
 
   const handleRate = ({ like }: { like: boolean }) => {
     return (e: any) => {
@@ -96,6 +57,16 @@ export function Dev() {
     }
   }
 
+  const useVerdict = (i: boolean | undefined) => {
+    if (i === true) {
+      return 'in favor'
+    } else if (i === false) {
+      return 'against'
+    } else {
+      return 'undecided'
+    }
+  }
+
   return (
     <div>
       <div>
@@ -104,11 +75,11 @@ export function Dev() {
       </div>
       <div>
         {likes}
-        <button 
+        <button
           disabled={!!localStorage.getItem(prediction.predictionId)}
           onClick={handleRate({ like: true })}
         >like</button>
-        <button 
+        <button
           disabled={!!localStorage.getItem(prediction.predictionId)}
           onClick={handleRate({ like: false })}
         >dislike</button>
@@ -129,15 +100,4 @@ export function Dev() {
       </div>
     </div>
   );
-
-}
-
-const useVerdict = (i: boolean | undefined) => {
-  if (i === true) {
-    return 'in favor'
-  } else if (i === false) {
-    return 'against'
-  } else {
-    return 'undecided'
-  }
 }
