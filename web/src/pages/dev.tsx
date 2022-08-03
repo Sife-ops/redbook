@@ -5,6 +5,7 @@ import { useParams, Navigate } from 'react-router-dom'
 export function Dev() {
   const params = useParams();
 
+  // todo: query hooks
   const [predictionQuery] = useTypedQuery({
     query: {
       prediction: [
@@ -47,12 +48,13 @@ export function Dev() {
     ]
   }));
 
+  // todo: like button state hook
   const [likes, setLikes] = React.useState<number>(0)
   const [dislikes, setDisikes] = React.useState<number>(0)
 
   React.useEffect(() => {
-    const { data, fetching } = predictionQuery
-    if (!fetching && data) {
+    const { data, error, fetching } = predictionQuery
+    if (!fetching && !error && data) {
       const { likes, dislikes } = data.prediction
       setLikes(likes || 0)
       setDisikes(dislikes || 0)
@@ -60,12 +62,12 @@ export function Dev() {
   }, [predictionQuery.fetching])
 
   React.useEffect(() => {
-    const { data, fetching } = rateMutationState
-    if (!fetching && data) {
+    const { data, error, fetching } = rateMutationState
+    if (!fetching && !error && data) {
       const { likes, dislikes } = data.rate
       setLikes(likes)
       setDisikes(dislikes)
-      // console.log(rateMutationState)
+      localStorage.setItem(prediction.predictionId, '1')
     }
   }, [rateMutationState.fetching])
 
@@ -102,8 +104,14 @@ export function Dev() {
       </div>
       <div>
         {likes}
-        <button onClick={handleRate({ like: true })}>like</button>
-        <button onClick={handleRate({ like: false })}>dislike</button>
+        <button 
+          disabled={!!localStorage.getItem(prediction.predictionId)}
+          onClick={handleRate({ like: true })}
+        >like</button>
+        <button 
+          disabled={!!localStorage.getItem(prediction.predictionId)}
+          onClick={handleRate({ like: false })}
+        >dislike</button>
         {dislikes}
       </div>
       <div>
