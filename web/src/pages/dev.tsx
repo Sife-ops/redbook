@@ -94,7 +94,7 @@ export function Dev() {
         {prediction.judges.map(e => (
           <div key={e.judgeId}>
             <div>{e.username ? e.username : e.judgeId}{e.discriminator ? `#${e.discriminator}` : ''}</div>
-            <div>verdict: {useVerdict(e.verdict)}</div>
+            <div>{useVerdict(e.verdict)}</div>
           </div>
         ))}
       </div>
