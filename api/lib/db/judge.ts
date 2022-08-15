@@ -11,11 +11,12 @@ export const JudgeEntity = new Entity(
       service: "redbook",
     },
     attributes: {
-      judgeId: {
+      predictionId: {
         type: "string",
         required: true,
       },
-      predictionId: {
+
+      judgeId: {
         type: "string",
         required: true,
       },
@@ -27,24 +28,28 @@ export const JudgeEntity = new Entity(
         type: "string",
         required: true,
       },
+      avatar: {
+        type: "string",
+        required: true,
+      },
+
       verdict: {
         type: "boolean",
-        // required: true,
       },
     },
     indexes: {
-      judge: {
+      judgePrediction: {
         pk: {
           field: "pk",
-          composite: ["predictionId"],
+          composite: ["judgeId"],
         },
         sk: {
           field: "sk",
-          composite: ["judgeId"],
+          composite: ["predictionId"],
         },
       },
-      predictionJudges: {
-        collection: 'predictionJudges',
+      predictionJudge: {
+        collection: 'predictionJudge',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",

@@ -37,7 +37,7 @@ export const remove = {
     const { options } = body.data.options[0].options[0];
     const predictionId = optionValue(options, 'id');
 
-    const { PredictionEntity, JudgeEntity } = await redbookModel.collections.predictionJudges({
+    const { PredictionEntity, JudgeEntity } = await redbookModel.collections.predictionJudge({
       predictionId,
     }).go()
 

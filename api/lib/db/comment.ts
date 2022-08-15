@@ -1,13 +1,13 @@
-export * as Prediction from "./prediction";
+export * as Comment from "./comment";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
 
-export const PredictionEntity = new Entity(
+export const CommentEntity = new Entity(
   {
     model: {
       version: "1",
-      entity: "Prediction",
+      entity: "Comment",
       service: "redbook",
     },
     attributes: {
@@ -15,8 +15,12 @@ export const PredictionEntity = new Entity(
         type: "string",
         required: true,
       },
+      commentId: {
+        type: "string",
+        required: true,
+      },
 
-      prognosticatorId: {
+      commenterId: {
         type: "string",
         required: true,
       },
@@ -33,12 +37,12 @@ export const PredictionEntity = new Entity(
         required: true,
       },
 
-      conditions: {
+      replyTo: {
+        type: "string",
+      },
+      comment: {
         type: "string",
         required: true,
-      },
-      verdict: {
-        type: "boolean",
       },
       created_at: {
         type: "string",
@@ -46,17 +50,17 @@ export const PredictionEntity = new Entity(
       },
     },
     indexes: {
-      prognosticatorPrediction: {
+      commenterComment: {
         pk: {
           field: "pk",
-          composite: ["prognosticatorId"],
+          composite: ['commenterId'],
         },
         sk: {
           field: "sk",
-          composite: ["predictionId"],
+          composite: ['commentId'],
         },
       },
-      prediction: {
+      predictionComment: {
         collection: [
           'predictionJudge',
           'predictionRating',
@@ -69,6 +73,18 @@ export const PredictionEntity = new Entity(
         },
         sk: {
           field: "gsi1sk",
+          composite: ["commenterId"],
+        },
+      },
+      comment: {
+        collection: 'commentRating',
+        index: 'gsi2',
+        pk: {
+          field: "gsi2pk",
+          composite: ["commentId"],
+        },
+        sk: {
+          field: "gsi2sk",
           composite: [],
         },
       },
@@ -77,5 +93,6 @@ export const PredictionEntity = new Entity(
   Dynamo.Configuration
 );
 
-export type PredictionEntityType = EntityItem<typeof PredictionEntity>;
+export type CommentEntityType = EntityItem<typeof CommentEntity>;
+
 

@@ -26,6 +26,7 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
+- secrets manager
 - track mnemonic collisions
 - remove pg dependencies
 - integration tests

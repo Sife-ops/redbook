@@ -27,9 +27,11 @@ export const describe = {
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
-    const { PredictionEntity, JudgeEntity } = await redbookModel.collections.predictionJudges({
-      predictionId
-    }).go()
+    const { PredictionEntity, JudgeEntity } = await redbookModel
+      .collections
+      .predictionJudge({
+        predictionId
+      }).go();
 
     if (PredictionEntity.length < 1) {
       return {

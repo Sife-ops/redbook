@@ -38,7 +38,7 @@ export const vote = {
 
     const { PredictionEntity, JudgeEntity } = await redbookModel
       .collections
-      .predictionJudges({
+      .predictionJudge({
         predictionId
       }).go();
 
@@ -69,11 +69,15 @@ export const vote = {
     // 3) update judge verdict
     const verdict = optionValue(options, 'verdict');
 
-    await redbookModel.entities.JudgeEntity.put({
-      judgeId,
-      predictionId,
-      verdict,
-    }).go()
+    await redbookModel
+      .entities
+      .JudgeEntity
+      .update({
+        judgeId,
+        predictionId
+      })
+      .set({ verdict })
+      .go()
 
     const judges = JudgeEntity.map(e => {
       if (e.judgeId === judgeId) {

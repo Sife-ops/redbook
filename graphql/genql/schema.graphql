@@ -16,9 +16,7 @@ type Prediction {
   conditions: String!
   created_at: String!
   discriminator: String!
-  dislikes: Int
   judges: [Judge!]!
-  likes: Int
   predictionId: ID!
   prognosticatorId: String!
   username: String!

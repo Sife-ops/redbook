@@ -28,11 +28,27 @@ export const cancel = {
     const predictionId = optionValue(options, 'id');
 
     try {
-      // todo: remove orphaned judges
-      await redbookModel.entities.PredictionEntity.remove({
-        prognosticatorId,
-        predictionId,
-      }).go()
+      const { JudgeEntity, PredictionEntity } = await redbookModel
+        .collections
+        .predictionJudge({
+          predictionId
+        })
+        .go()
+
+      // todo: batch-delete
+      await redbookModel
+        .entities
+        .PredictionEntity
+        .remove(PredictionEntity[0])
+        .go()
+
+      for (const judge of JudgeEntity) {
+        await redbookModel
+          .entities
+          .JudgeEntity
+          .remove(judge)
+          .go()
+      }
     } catch {
       return {
         type: 4,

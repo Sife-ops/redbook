@@ -59,6 +59,7 @@ export const add = {
       predictionId,
       discriminator: judge.discriminator,
       username: judge.username,
+      avatar: judge.avatar,
     }).go()
 
     const prediction = predictions[0]

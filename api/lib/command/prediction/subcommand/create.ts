@@ -67,7 +67,7 @@ export const create = {
 
     let predictionId = mnemonic();
 
-    // todo: automation service to detect collisions
+    // // todo: automation service to detect collisions
     // // report mnemonic predictionId collisions
     // redbookModel.entities.PredictionEntity.query.prediction({ predictionId })
     //   .go()
@@ -86,20 +86,21 @@ export const create = {
     //   })
 
     await redbookModel.entities.PredictionEntity.create({
+      avatar,
+      conditions,
+      created_at: new Date().toISOString(),
+      discriminator,
       predictionId,
       prognosticatorId,
       username,
-      discriminator,
-      avatar,
-      conditions,
-      created_at: new Date().toISOString()
     }).go()
 
     // 2) create judge
     await redbookModel.entities.JudgeEntity.create({
+      avatar: judge.avatar,
       judgeId,
-      predictionId,
       username: judge.username,
+      predictionId,
       discriminator: judge.discriminator,
     }).go()
 

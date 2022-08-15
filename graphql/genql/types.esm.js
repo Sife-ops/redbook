@@ -3,7 +3,7 @@ export default {
         1,
         2,
         3,
-        6
+        8
     ],
     "types": {
         "Judge": {
@@ -34,7 +34,7 @@ export default {
                 1
             ],
             "rate": [
-                8,
+                7,
                 {
                     "like": [
                         3,
@@ -63,14 +63,8 @@ export default {
             "discriminator": [
                 1
             ],
-            "dislikes": [
-                6
-            ],
             "judges": [
                 0
-            ],
-            "likes": [
-                6
             ],
             "predictionId": [
                 2
@@ -88,7 +82,6 @@ export default {
                 1
             ]
         },
-        "Int": {},
         "Query": {
             "hello": [
                 1
@@ -108,14 +101,15 @@ export default {
         },
         "Rating": {
             "dislikes": [
-                6
+                8
             ],
             "likes": [
-                6
+                8
             ],
             "__typename": [
                 1
             ]
-        }
+        },
+        "Int": {}
     }
 }
