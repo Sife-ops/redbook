@@ -8,21 +8,25 @@ export const usePredictionQuery = (predictionId: string) => {
           predictionId,
         },
         {
-          avatar: true,
-          conditions: true,
-          created_at: true,
-          discriminator: true,
           predictionId: true,
           prognosticatorId: true,
+
+          avatar: true,
+          discriminator: true,
           username: true,
+
+          conditions: true,
+          created_at: true,
           verdict: true,
-          likes: true,
-          dislikes: true,
+
           judges: {
             judgeId: true,
             predictionId: true,
-            username: true,
+
+            avatar: true,
             discriminator: true,
+            username: true,
+
             verdict: true,
           }
         }

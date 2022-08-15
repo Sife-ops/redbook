@@ -7,30 +7,30 @@ export function Dev() {
 
   const [predictionQueryState] = usePredictionQuery(params.predictionId!)
 
-  const [rateMutationState, rateMutation] = useRateMutation()
+  // const [rateMutationState, rateMutation] = useRateMutation()
 
   // todo: like button state hook
-  const [likes, setLikes] = React.useState<number>(0)
-  const [dislikes, setDisikes] = React.useState<number>(0)
+  // const [likes, setLikes] = React.useState<number>(0)
+  // const [dislikes, setDisikes] = React.useState<number>(0)
 
-  React.useEffect(() => {
-    const { data, error, fetching } = predictionQueryState
-    if (!fetching && !error && data) {
-      const { likes, dislikes } = data.prediction
-      setLikes(likes || 0)
-      setDisikes(dislikes || 0)
-    }
-  }, [predictionQueryState.fetching])
+  // React.useEffect(() => {
+  //   const { data, error, fetching } = predictionQueryState
+  //   if (!fetching && !error && data) {
+  //     // const { likes, dislikes } = data.prediction
+  //     // setLikes(likes || 0)
+  //     // setDisikes(dislikes || 0)
+  //   }
+  // }, [predictionQueryState.fetching])
 
-  React.useEffect(() => {
-    const { data, error, fetching } = rateMutationState
-    if (!fetching && !error && data) {
-      const { likes, dislikes } = data.rate
-      setLikes(likes)
-      setDisikes(dislikes)
-      localStorage.setItem(prediction.predictionId, '1')
-    }
-  }, [rateMutationState.fetching])
+  // React.useEffect(() => {
+  //   const { data, error, fetching } = rateMutationState
+  //   if (!fetching && !error && data) {
+  //     // const { likes, dislikes } = data.rate
+  //     // setLikes(likes)
+  //     // setDisikes(dislikes)
+  //     // localStorage.setItem(prediction.predictionId, '1')
+  //   }
+  // }, [rateMutationState.fetching])
 
   if (predictionQueryState.fetching) {
     return (
@@ -47,15 +47,15 @@ export function Dev() {
 
   const { prediction } = predictionQueryState.data;
 
-  const handleRate = ({ like }: { like: boolean }) => {
-    return (e: any) => {
-      e.preventDefault();
-      rateMutation({
-        predictionId: prediction.predictionId,
-        like
-      });
-    }
-  }
+  // const handleRate = ({ like }: { like: boolean }) => {
+  //   return (e: any) => {
+  //     e.preventDefault();
+  //     rateMutation({
+  //       predictionId: prediction.predictionId,
+  //       like
+  //     });
+  //   }
+  // }
 
   const useVerdict = (i: boolean | undefined) => {
     if (i === true) {
@@ -73,6 +73,7 @@ export function Dev() {
         <h1>Prediction:</h1>
         <p>{prediction.conditions}</p>
       </div>
+      {/*
       <div>
         {likes}
         <button
@@ -85,6 +86,7 @@ export function Dev() {
         >dislike</button>
         {dislikes}
       </div>
+      */}
       <div>
         <h3>Prediction ID:</h3>
         <p>{prediction.predictionId}</p>
@@ -93,7 +95,7 @@ export function Dev() {
         <h3>Judges:</h3>
         {prediction.judges.map(e => (
           <div key={e.judgeId}>
-            <div>{e.username ? e.username : e.judgeId}{e.discriminator ? `#${e.discriminator}` : ''}</div>
+            <div>{`${e.username}#${e.discriminator}`}</div>
             <div>{useVerdict(e.verdict)}</div>
           </div>
         ))}

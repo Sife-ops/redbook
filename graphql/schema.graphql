@@ -1,8 +1,9 @@
 type Judge {
-  discriminator: String
+  avatar: String!
+  discriminator: String!
   judgeId: ID!
   predictionId: String!
-  username: String
+  username: String!
   verdict: Boolean
 }
 

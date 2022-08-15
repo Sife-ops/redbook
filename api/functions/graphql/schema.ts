@@ -7,10 +7,13 @@ const JudgeType = builder
   .objectRef<JudgeEntityType>("Judge")
   .implement({
     fields: t => ({
-      judgeId: t.exposeID("judgeId"),
       predictionId: t.exposeString("predictionId"),
-      username: t.exposeString("username", { nullable: true }),
-      discriminator: t.exposeString("discriminator", { nullable: true }),
+
+      judgeId: t.exposeID("judgeId"),
+      avatar: t.exposeString("username"),
+      username: t.exposeString("username"),
+      discriminator: t.exposeString("discriminator"),
+
       verdict: t.exposeBoolean("verdict", { nullable: true })
     })
   })
@@ -20,13 +23,15 @@ const PredictionType = builder
   .implement({
     fields: t => ({
       predictionId: t.exposeID("predictionId"),
+
       prognosticatorId: t.exposeString("prognosticatorId"),
-      username: t.exposeString("username"),
-      discriminator: t.exposeString("discriminator"),
       avatar: t.exposeString("avatar"),
+      discriminator: t.exposeString("discriminator"),
+      username: t.exposeString("username"),
+
       conditions: t.exposeString("conditions"),
-      verdict: t.exposeBoolean("verdict", { nullable: true }),
       created_at: t.exposeString("created_at"),
+      verdict: t.exposeBoolean("verdict", { nullable: true }),
 
       judges: t.field({
         type: [JudgeType],
@@ -36,7 +41,8 @@ const PredictionType = builder
             .collections
             .predictionJudge({
               predictionId: parent.predictionId,
-            }).go()
+            })
+            .go()
           return JudgeEntity;
         }
       })
@@ -70,7 +76,8 @@ builder.queryFields(t => ({
         .query
         .prediction({
           predictionId: args.predictionId
-        }).go()
+        })
+        .go()
 
       // todo: lodash
       if (predictions.length < 1) {

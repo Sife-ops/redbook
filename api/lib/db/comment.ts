@@ -95,4 +95,3 @@ export const CommentEntity = new Entity(
 
 export type CommentEntityType = EntityItem<typeof CommentEntity>;
 
-

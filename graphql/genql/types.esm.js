@@ -7,6 +7,9 @@ export default {
     ],
     "types": {
         "Judge": {
+            "avatar": [
+                1
+            ],
             "discriminator": [
                 1
             ],
