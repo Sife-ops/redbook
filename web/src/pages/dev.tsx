@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Comment as CommentType } from '../../../graphql/genql/schema';
+import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
 import { useParams, Navigate } from 'react-router-dom'
 import { usePredictionQuery } from '../hook/urql'
 
-export const Comment: React.FC<{ comment: CommentType }> = (props) => {
-  const [replyMode, setReplyMode] = useState<boolean>(false);
-
-  const ratings = props.comment.ratings.reduce(
+export const Ratings: React.FC<{ ratings: RatingType[] }> = (props) => {
+  const ratings = props.ratings.reduce(
     (a, c): { likes: number; dislikes: number } => {
       if (c.like) {
         return {
@@ -27,6 +25,19 @@ export const Comment: React.FC<{ comment: CommentType }> = (props) => {
   );
 
   return (
+    <div>
+      <button>like</button> {' '}
+      {ratings.likes} {' '}
+      <button>dislike</button> {' '}
+      {ratings.dislikes}
+    </div>
+  );
+}
+
+export const Comment: React.FC<{ comment: CommentType }> = (props) => {
+  const [replyMode, setReplyMode] = useState<boolean>(false);
+
+  return (
     <div
       style={{
         border: '1px solid red'
@@ -35,13 +46,7 @@ export const Comment: React.FC<{ comment: CommentType }> = (props) => {
       <div>{props.comment.username}</div>
       <div>{props.comment.comment}</div>
 
-      {/*component*/}
-      <div>
-        <button>like</button> {' '}
-        {ratings.likes} {' '}
-        <button>dislike</button> {' '}
-        {ratings.dislikes}
-      </div>
+      <Ratings ratings={props.comment.ratings} />
 
       <button onClick={() => setReplyMode(true)}>reply</button>
       {replyMode && (
@@ -164,6 +169,11 @@ export function Dev() {
       </div>
 
       <div>
+        <h3>Ratings:</h3>
+        <Ratings ratings={prediction.ratings} />
+      </div>
+
+      <div>
         <h3>Judges:</h3>
         {prediction.judges.map(e => (
           <div key={e.judgeId}>
@@ -174,6 +184,7 @@ export function Dev() {
       </div>
 
       <div>
+        <h3>Comments:</h3>
         <Comments comments={prediction.comments!} />
       </div>
 

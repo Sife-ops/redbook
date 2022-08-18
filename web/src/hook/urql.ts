@@ -31,6 +31,9 @@ export const usePredictionQuery = (predictionId: string) => {
           },
 
           ratings: {
+            __typename: true,
+            commentId: true,
+
             predictionId: true,
 
             criticId: true,
