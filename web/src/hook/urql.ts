@@ -9,8 +9,8 @@ export const usePredictionQuery = (predictionId: string) => {
         },
         {
           predictionId: true,
-          prognosticatorId: true,
 
+          prognosticatorId: true,
           avatar: true,
           discriminator: true,
           username: true,
@@ -42,6 +42,8 @@ export const usePredictionQuery = (predictionId: string) => {
           },
 
           comments: {
+            __typename: true,
+
             predictionId: true,
             commentId: true,
 
@@ -55,6 +57,9 @@ export const usePredictionQuery = (predictionId: string) => {
             created_at: true,
 
             ratings: {
+              __typename: true,
+              predictionId: true,
+
               commentId: true,
 
               criticId: true,

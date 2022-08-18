@@ -1,6 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Comment as CommentType } from '../../../graphql/genql/schema';
 import { useParams, Navigate } from 'react-router-dom'
 import { usePredictionQuery } from '../hook/urql'
+
+export const Comment: React.FC<{ comment: CommentType }> = (props) => {
+  const [replyMode, setReplyMode] = useState<boolean>(false);
+
+  const ratings = props.comment.ratings.reduce(
+    (a, c): { likes: number; dislikes: number } => {
+      if (c.like) {
+        return {
+          ...a,
+          likes: a.likes + 1
+        }
+      } else {
+        return {
+          ...a,
+          dislikes: a.dislikes + 1
+        }
+      }
+    },
+    {
+      likes: 0,
+      dislikes: 0,
+    }
+  );
+
+  return (
+    <div
+      style={{
+        border: '1px solid red'
+      }}
+    >
+      <div>{props.comment.username}</div>
+      <div>{props.comment.comment}</div>
+
+      {/*component*/}
+      <div>
+        <button>like</button> {' '}
+        {ratings.likes} {' '}
+        <button>dislike</button> {' '}
+        {ratings.dislikes}
+      </div>
+
+      <button onClick={() => setReplyMode(true)}>reply</button>
+      {replyMode && (
+        <div>
+          <input />
+          <button>post</button>
+          <button onClick={() => setReplyMode(false)}>cancel</button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
+  if (props.comments.length < 1) {
+    return <div>No comments.</div>
+  } else {
+    return (
+      <div>
+        {props.comments.map(e => (
+          <Comment key={e.commentId} comment={e} />
+        ))}
+      </div>
+    )
+  }
+}
 
 export function Dev() {
   const params = useParams();
@@ -70,10 +137,12 @@ export function Dev() {
 
   return (
     <div>
+
       <div>
         <h1>Prediction:</h1>
         <p>{prediction.conditions}</p>
       </div>
+
       {/*
       <div>
         {likes}
@@ -88,10 +157,12 @@ export function Dev() {
         {dislikes}
       </div>
       */}
+
       <div>
         <h3>Prediction ID:</h3>
         <p>{prediction.predictionId}</p>
       </div>
+
       <div>
         <h3>Judges:</h3>
         {prediction.judges.map(e => (
@@ -101,6 +172,11 @@ export function Dev() {
           </div>
         ))}
       </div>
+
+      <div>
+        <Comments comments={prediction.comments!} />
+      </div>
+
     </div>
   );
 }
