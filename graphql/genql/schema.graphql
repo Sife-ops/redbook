@@ -1,3 +1,16 @@
+type Comment {
+  avatar: String!
+  comment: String!
+  commentId: ID!
+  commenterId: String!
+  created_at: String!
+  discriminator: String!
+  predictionId: ID!
+  ratings: [Rating!]!
+  replyTo: String
+  username: String!
+}
+
 type Judge {
   avatar: String!
   discriminator: String!
@@ -14,12 +27,14 @@ type Mutation {
 
 type Prediction {
   avatar: String!
+  comments: [Comment!]!
   conditions: String!
   created_at: String!
   discriminator: String!
   judges: [Judge!]!
   predictionId: ID!
   prognosticatorId: String!
+  ratings: [Rating!]!
   username: String!
   verdict: Boolean
 }
@@ -30,6 +45,11 @@ type Query {
 }
 
 type Rating {
-  dislikes: Int!
-  likes: Int!
+  avatar: String!
+  commentId: ID!
+  criticId: String!
+  discriminator: String!
+  like: Boolean!
+  predictionId: ID!
+  username: String!
 }

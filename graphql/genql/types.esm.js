@@ -2,10 +2,46 @@ export default {
     "scalars": [
         1,
         2,
-        3,
-        8
+        4
     ],
     "types": {
+        "Comment": {
+            "avatar": [
+                1
+            ],
+            "comment": [
+                1
+            ],
+            "commentId": [
+                2
+            ],
+            "commenterId": [
+                1
+            ],
+            "created_at": [
+                1
+            ],
+            "discriminator": [
+                1
+            ],
+            "predictionId": [
+                2
+            ],
+            "ratings": [
+                8
+            ],
+            "replyTo": [
+                1
+            ],
+            "username": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "String": {},
+        "ID": {},
         "Judge": {
             "avatar": [
                 1
@@ -23,24 +59,22 @@ export default {
                 1
             ],
             "verdict": [
-                3
+                4
             ],
             "__typename": [
                 1
             ]
         },
-        "String": {},
-        "ID": {},
         "Boolean": {},
         "Mutation": {
             "mello": [
                 1
             ],
             "rate": [
-                7,
+                8,
                 {
                     "like": [
-                        3,
+                        4,
                         "Boolean!"
                     ],
                     "predictionId": [
@@ -57,6 +91,9 @@ export default {
             "avatar": [
                 1
             ],
+            "comments": [
+                0
+            ],
             "conditions": [
                 1
             ],
@@ -67,7 +104,7 @@ export default {
                 1
             ],
             "judges": [
-                0
+                3
             ],
             "predictionId": [
                 2
@@ -75,11 +112,14 @@ export default {
             "prognosticatorId": [
                 1
             ],
+            "ratings": [
+                8
+            ],
             "username": [
                 1
             ],
             "verdict": [
-                3
+                4
             ],
             "__typename": [
                 1
@@ -90,7 +130,7 @@ export default {
                 1
             ],
             "prediction": [
-                5,
+                6,
                 {
                     "predictionId": [
                         1,
@@ -103,16 +143,30 @@ export default {
             ]
         },
         "Rating": {
-            "dislikes": [
-                8
+            "avatar": [
+                1
             ],
-            "likes": [
-                8
+            "commentId": [
+                2
+            ],
+            "criticId": [
+                1
+            ],
+            "discriminator": [
+                1
+            ],
+            "like": [
+                4
+            ],
+            "predictionId": [
+                2
+            ],
+            "username": [
+                1
             ],
             "__typename": [
                 1
             ]
-        },
-        "Int": {}
+        }
     }
 }

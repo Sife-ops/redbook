@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom'
-import { usePredictionQuery, useRateMutation } from '../hook/urql'
+import { usePredictionQuery } from '../hook/urql'
 
 export function Dev() {
   const params = useParams();
@@ -46,6 +46,7 @@ export function Dev() {
   }
 
   const { prediction } = predictionQueryState.data;
+  console.log(prediction);
 
   // const handleRate = ({ like }: { like: boolean }) => {
   //   return (e: any) => {

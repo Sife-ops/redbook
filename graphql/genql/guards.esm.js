@@ -1,4 +1,12 @@
 
+var Comment_possibleTypes = ['Comment']
+export var isComment = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isComment"')
+  return Comment_possibleTypes.includes(obj.__typename)
+}
+
+
+
 var Judge_possibleTypes = ['Judge']
 export var isJudge = function(obj) {
   if (!obj || !obj.__typename) throw new Error('__typename is missing in "isJudge"')

@@ -1,5 +1,12 @@
 import { builder } from "./builder";
-import { PredictionEntityType, JudgeEntityType, redbookModel } from '@redbook/lib/db';
+
+import {
+  PredictionEntityType,
+  JudgeEntityType,
+  redbookModel,
+  RatingEntityType,
+  CommentEntityType,
+} from '@redbook/lib/db';
 
 // import "./types/article";
 
@@ -15,6 +22,53 @@ const JudgeType = builder
       discriminator: t.exposeString("discriminator"),
 
       verdict: t.exposeBoolean("verdict", { nullable: true })
+    })
+  })
+
+const RatingType = builder
+  .objectRef<RatingEntityType>("Rating")
+  .implement({
+    fields: t => ({
+      predictionId: t.exposeID("predictionId"),
+      commentId: t.exposeID("commentId"),
+
+      criticId: t.exposeString("criticId"),
+      avatar: t.exposeString("avatar"),
+      discriminator: t.exposeString("discriminator"),
+      username: t.exposeString("username"),
+
+      like: t.exposeBoolean("like"),
+    })
+  })
+
+const CommentType = builder
+  .objectRef<CommentEntityType>("Comment")
+  .implement({
+    fields: t => ({
+      predictionId: t.exposeID("predictionId"),
+      commentId: t.exposeID("commentId"),
+
+      commenterId: t.exposeString("commenterId"),
+      avatar: t.exposeString("avatar"),
+      discriminator: t.exposeString("discriminator"),
+      username: t.exposeString("username"),
+
+      replyTo: t.exposeString("replyTo", { nullable: true }),
+      comment: t.exposeString("comment"),
+      created_at: t.exposeString("created_at"),
+
+      ratings: t.field({
+        type: [RatingType],
+        resolve: async (parent) => {
+          const { RatingEntity } = await redbookModel
+            .collections
+            .commentRating({
+              commentId: parent.commentId,
+            })
+            .go();
+          return RatingEntity;
+        }
+      }),
     })
   })
 
@@ -42,19 +96,36 @@ const PredictionType = builder
             .predictionJudge({
               predictionId: parent.predictionId,
             })
-            .go()
+            .go();
           return JudgeEntity;
         }
-      })
-    })
-  })
+      }),
 
-const RatingType = builder
-  .objectRef<{ likes: number; dislikes: number }>("Rating")
-  .implement({
-    fields: t => ({
-      likes: t.exposeInt("likes"),
-      dislikes: t.exposeInt("dislikes"),
+      ratings: t.field({
+        type: [RatingType],
+        resolve: async (parent) => {
+          const { RatingEntity } = await redbookModel
+            .collections
+            .predictionRating({
+              predictionId: parent.predictionId,
+            })
+            .go();
+          return RatingEntity;
+        }
+      }),
+
+      comments: t.field({
+        type: [CommentType],
+        resolve: async (parent) => {
+          const { CommentEntity } = await redbookModel
+            .collections
+            .predictionComment({
+              predictionId: parent.predictionId,
+            })
+            .go();
+          return CommentEntity;
+        }
+      })
     })
   })
 
@@ -77,14 +148,14 @@ builder.queryFields(t => ({
         .prediction({
           predictionId: args.predictionId
         })
-        .go()
+        .go();
 
       // todo: lodash
       if (predictions.length < 1) {
         throw new Error('prediction not found')
       }
 
-      return predictions[0]
+      return predictions[0];
     }
   })
 }));
@@ -101,7 +172,7 @@ builder.mutationFields(t => ({
       predictionId: t.arg.string({ required: true }),
       like: t.arg.boolean({ required: true }),
     },
-    resolve: async (_, args) => {
+    resolve: async () => {
 
       // const [{
       //   predictionId,
@@ -138,8 +209,13 @@ builder.mutationFields(t => ({
       // return rating;
 
       return {
-        likes: 0,
-        dislikes: 0,
+        like: true,
+        criticId: 'a',
+        commentId: 'a',
+        predictionId: 'a',
+        avatar: 'a',
+        username: 'a',
+        discriminator: 'a',
       }
 
     }
