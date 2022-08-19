@@ -9,7 +9,7 @@ The best prediction record-keeping bot in the universe!
 - batteries-included
 - blazingly fast
 
-## usage
+## usage (outdated)
 
 - `/prediction`
   - `create <conditions> <judge>` - Create a prediction.
@@ -30,7 +30,7 @@ The best prediction record-keeping bot in the universe!
 - track mnemonic collisions
 - remove pg dependencies
 - integration tests
-- migrate to ElectroDB :heavy_check_mark
+- migrate to ElectroDB :heavy_check_mark:
 - Color scheme
 - Shell REDBOOK_ENV overwrites .env file, consider changing
 - update usage

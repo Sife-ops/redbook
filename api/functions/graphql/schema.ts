@@ -110,7 +110,8 @@ const PredictionType = builder
               predictionId: parent.predictionId,
             })
             .go();
-          return RatingEntity;
+          // todo: use 'where'
+          return RatingEntity.filter(e => e.commentId === '');
         }
       }),
 
@@ -173,9 +174,8 @@ builder.mutationFields(t => ({
     },
     // todo: no explicit any
     resolve: async (_, args, context: any) => {
-
-      const predictionId = args.commentId ? '' : context.predictionId as string;
-      const commentId = args.commentId || undefined;
+      const predictionId = context.predictionId as string;
+      const commentId = args.commentId || '';
 
       // look up previous rating
       const ratings = await redbookModel
@@ -184,9 +184,15 @@ builder.mutationFields(t => ({
         .query
         .criticRating({
           criticId: context.userId,
-          predictionId: context.predictionId
+          // predictionId: context.predictionId
+          predictionId,
+          commentId,
         })
+        .where(({ commentId: c }, { eq }) => eq(c, commentId))
         .go();
+
+      console.log(ratings)
+      // return 'stop'
 
       // create rating if no previous rating
       if (ratings.length < 1) {
@@ -194,8 +200,8 @@ builder.mutationFields(t => ({
           .entities
           .RatingEntity
           .create({
-            predictionId: context.predictionId,
-            commentId: '',
+            predictionId,
+            commentId,
 
             criticId: context.userId,
             avatar: '',
@@ -218,8 +224,8 @@ builder.mutationFields(t => ({
           .RatingEntity
           .remove({
             criticId: context.userId,
-            predictionId: context.predictionId,
-            commentId: ''
+            predictionId,
+            commentId,
           })
           .go()
 
@@ -232,8 +238,8 @@ builder.mutationFields(t => ({
         .RatingEntity
         .update({
           criticId: context.userId,
-          predictionId: context.predictionId,
-          commentId: ''
+          predictionId,
+          commentId,
         })
         .set({
           like: args.like
