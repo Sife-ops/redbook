@@ -109,9 +109,9 @@ const PredictionType = builder
             .predictionRating({
               predictionId: parent.predictionId,
             })
+            .where(({ commentId }, { eq }) => eq(commentId, ''))
             .go();
-          // todo: use 'where'
-          return RatingEntity.filter(e => e.commentId === '');
+          return RatingEntity;
         }
       }),
 
@@ -132,7 +132,6 @@ const PredictionType = builder
 
 builder.queryFields(t => ({
   hello: t.string({
-    // type: t.string({}),
     resolve: () => 'hello'
   }),
 
@@ -166,7 +165,6 @@ builder.mutationFields(t => ({
     resolve: () => 'mello'
   }),
 
-  // todo: comment-ratings
   rate: t.string({
     args: {
       commentId: t.arg.string(),
@@ -184,15 +182,10 @@ builder.mutationFields(t => ({
         .query
         .criticRating({
           criticId: context.userId,
-          // predictionId: context.predictionId
           predictionId,
-          commentId,
         })
         .where(({ commentId: c }, { eq }) => eq(c, commentId))
         .go();
-
-      console.log(ratings)
-      // return 'stop'
 
       // create rating if no previous rating
       if (ratings.length < 1) {
