@@ -6,8 +6,16 @@ import { Dev } from "./pages/dev"
 import { Error } from "./pages/error"
 import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get('userId');
+const predictionId = window.location.pathname.split('/')[1];
+
 const urql = createClient({
-  url: import.meta.env.VITE_GRAPHQL_URL,
+  url: import.meta.env.VITE_GRAPHQL_URL 
+    + '?userId=' 
+    + userId
+    + '&predictionId='
+    + predictionId,
   exchanges: defaultExchanges
 });
 

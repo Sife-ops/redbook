@@ -71,15 +71,14 @@ export default {
                 1
             ],
             "rate": [
-                8,
+                1,
                 {
+                    "commentId": [
+                        1
+                    ],
                     "like": [
                         4,
                         "Boolean!"
-                    ],
-                    "predictionId": [
-                        1,
-                        "String!"
                     ]
                 }
             ],

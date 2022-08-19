@@ -165,58 +165,74 @@ builder.mutationFields(t => ({
     resolve: () => 'mello'
   }),
 
-  // todo: unrate
-  rate: t.field({
-    type: RatingType,
+  // todo: comment-like
+  rate: t.string({
     args: {
-      predictionId: t.arg.string({ required: true }),
+      commentId: t.arg.string(),
       like: t.arg.boolean({ required: true }),
     },
-    resolve: async () => {
+    resolve: async (_, args, context: any) => {
 
-      // const [{
-      //   predictionId,
-      //   prognosticatorId,
-      // }] = await redbookModel
-      //   .entities
-      //   .PredictionEntity
-      //   .query
-      //   .prediction({
-      //     predictionId: args.predictionId
-      //   }).go()
+      const ratings = await redbookModel
+        .entities
+        .RatingEntity
+        .query
+        .criticRating({
+          criticId: context.userId,
+          predictionId: context.predictionId
+        })
+        .go();
 
-      // await redbookModel
-      //   .entities
-      //   .PredictionEntity
-      //   .update({
-      //     predictionId,
-      //     prognosticatorId,
-      //   }).add({
-      //     [args.like ? 'likes' : 'dislikes']: 1
-      //   }).go()
+      if (ratings.length < 1) {
+        await redbookModel
+          .entities
+          .RatingEntity
+          .create({
+            predictionId: context.predictionId,
+            commentId: '',
 
-      // const rating = {
-      //   likes: likes || 0,
-      //   dislikes: dislikes || 0,
-      // }
+            criticId: context.userId,
+            avatar: '',
+            username: '',
+            discriminator: '',
 
-      // if (args.like) {
-      //   rating.likes++
-      // } else {
-      //   rating.dislikes++
-      // }
+            like: args.like,
+          })
+          .go()
 
-      // return rating;
-
-      return {
-        like: true,
-        criticId: 'a',
-        commentId: 'a',
-        predictionId: 'a',
-        avatar: 'a',
-        username: 'a',
-        discriminator: 'a',
+        return `create: ${args.like}`
       }
+
+      const rating = ratings[0]
+
+      if (rating.like === args.like) {
+        await redbookModel
+          .entities
+          .RatingEntity
+          .remove({
+            criticId: context.userId,
+            predictionId: context.predictionId,
+            commentId: ''
+          })
+          .go()
+
+        return `remove: ${args.like}`
+      }
+
+      await redbookModel
+        .entities
+        .RatingEntity
+        .update({
+          criticId: context.userId,
+          predictionId: context.predictionId,
+          commentId: ''
+        })
+        .set({
+          like: args.like
+        })
+        .go();
+
+      return `update: ${args.like}`
 
     }
   })

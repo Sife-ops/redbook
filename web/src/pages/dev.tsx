@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
 import { useParams, Navigate } from 'react-router-dom'
-import { usePredictionQuery } from '../hook/urql'
+import { usePredictionQuery, useRateMutation } from '../hook/urql'
 
-export const Ratings: React.FC<{ ratings: RatingType[] }> = (props) => {
+export const Ratings: React.FC<{ ratings: RatingType[], commentId?: string }> = (props) => {
+
+  const [_, rateMutation] = useRateMutation();
+
   const ratings = props.ratings.reduce(
     (a, c): { likes: number; dislikes: number } => {
       if (c.like) {
@@ -26,16 +29,35 @@ export const Ratings: React.FC<{ ratings: RatingType[] }> = (props) => {
 
   return (
     <div>
-      <button>like</button> {' '}
+      <button
+        onClick={() => {
+          rateMutation({
+            like: true
+          });
+        }}
+      >
+        like
+      </button> {' '}
+
       {ratings.likes} {' '}
-      <button>dislike</button> {' '}
+
+      <button
+        onClick={() => {
+          rateMutation({
+            like: false
+          });
+        }}
+      >
+        dislike
+      </button> {' '}
+
       {ratings.dislikes}
     </div>
   );
 }
 
 export const Comment: React.FC<{ comment: CommentType }> = (props) => {
-  const [replyMode, setReplyMode] = useState<boolean>(false);
+  // const [replyMode, setReplyMode] = useState<boolean>(false);
 
   return (
     <div
@@ -46,7 +68,10 @@ export const Comment: React.FC<{ comment: CommentType }> = (props) => {
       <div>{props.comment.username}</div>
       <div>{props.comment.comment}</div>
 
-      <Ratings ratings={props.comment.ratings} />
+      <Ratings
+        ratings={props.comment.ratings}
+        commentId={props.comment.commentId}
+      />
 
       {/*
       <button onClick={() => setReplyMode(true)}>reply</button>
@@ -80,6 +105,10 @@ export function Dev() {
   const params = useParams();
 
   const [predictionQueryState] = usePredictionQuery(params.predictionId!)
+
+  // useEffect(() => {
+  //   // console.log(a)
+  // }, [a.fetching])
 
   // const [rateMutationState, rateMutation] = useRateMutation()
 
@@ -120,7 +149,7 @@ export function Dev() {
   }
 
   const { prediction } = predictionQueryState.data;
-  console.log(prediction);
+  // console.log(prediction);
 
   // const handleRate = ({ like }: { like: boolean }) => {
   //   return (e: any) => {

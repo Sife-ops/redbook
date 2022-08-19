@@ -79,18 +79,20 @@ export const usePredictionQuery = (predictionId: string) => {
   })
 }
 
-// export const useRateMutation = () => {
-//   return useTypedMutation((vars: {
-//     predictionId: string;
-//     like: boolean;
-//   }) => ({
-//     rate: [
-//       vars,
-//       {
-//         likes: true,
-//         dislikes: true,
-//       }
-//     ]
-//   }));
-// }
+export const useRateMutation = () => {
+  return useTypedMutation(
+    (
+      vars: {
+        commentId?: string;
+        like: boolean;
+      }
+    ) => {
+      return {
+        rate: [
+          vars,
+        ]
+      }
+    }
+  );
+}
 

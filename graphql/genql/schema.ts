@@ -32,7 +32,7 @@ export interface Judge {
 
 export interface Mutation {
     mello: Scalars['String']
-    rate: Rating
+    rate: Scalars['String']
     __typename: 'Mutation'
 }
 
@@ -96,7 +96,7 @@ export interface JudgeRequest{
 
 export interface MutationRequest{
     mello?: boolean | number
-    rate?: [{like: Scalars['Boolean'],predictionId: Scalars['String']},RatingRequest]
+    rate?: [{commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}]
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -230,12 +230,12 @@ export interface JudgeObservableChain{
 
 export interface MutationPromiseChain{
     mello: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
-    rate: ((args: {like: Scalars['Boolean'],predictionId: Scalars['String']}) => RatingPromiseChain & {get: <R extends RatingRequest>(request: R, defaultValue?: FieldsSelection<Rating, R>) => Promise<FieldsSelection<Rating, R>>})
+    rate: ((args: {commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
 
 export interface MutationObservableChain{
     mello: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
-    rate: ((args: {like: Scalars['Boolean'],predictionId: Scalars['String']}) => RatingObservableChain & {get: <R extends RatingRequest>(request: R, defaultValue?: FieldsSelection<Rating, R>) => Observable<FieldsSelection<Rating, R>>})
+    rate: ((args: {commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }
 
 export interface PredictionPromiseChain{
