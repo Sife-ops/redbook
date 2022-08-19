@@ -165,14 +165,19 @@ builder.mutationFields(t => ({
     resolve: () => 'mello'
   }),
 
-  // todo: comment-like
+  // todo: comment-ratings
   rate: t.string({
     args: {
       commentId: t.arg.string(),
       like: t.arg.boolean({ required: true }),
     },
+    // todo: no explicit any
     resolve: async (_, args, context: any) => {
 
+      const predictionId = args.commentId ? '' : context.predictionId as string;
+      const commentId = args.commentId || undefined;
+
+      // look up previous rating
       const ratings = await redbookModel
         .entities
         .RatingEntity
@@ -183,6 +188,7 @@ builder.mutationFields(t => ({
         })
         .go();
 
+      // create rating if no previous rating
       if (ratings.length < 1) {
         await redbookModel
           .entities
@@ -203,6 +209,7 @@ builder.mutationFields(t => ({
         return `create: ${args.like}`
       }
 
+      // remove if same rating
       const rating = ratings[0]
 
       if (rating.like === args.like) {
@@ -219,6 +226,7 @@ builder.mutationFields(t => ({
         return `remove: ${args.like}`
       }
 
+      // update if different rating
       await redbookModel
         .entities
         .RatingEntity

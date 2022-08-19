@@ -1,57 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
 import { useParams, Navigate } from 'react-router-dom'
-import { usePredictionQuery, useRateMutation } from '../hook/urql'
+import { usePredictionQuery } from '../hook/urql'
+import { useLike } from '../hook/like';
 
 export const Ratings: React.FC<{ ratings: RatingType[], commentId?: string }> = (props) => {
-
-  const [_, rateMutation] = useRateMutation();
-
-  const ratings = props.ratings.reduce(
-    (a, c): { likes: number; dislikes: number } => {
-      if (c.like) {
-        return {
-          ...a,
-          likes: a.likes + 1
-        }
-      } else {
-        return {
-          ...a,
-          dislikes: a.dislikes + 1
-        }
-      }
-    },
-    {
-      likes: 0,
-      dislikes: 0,
-    }
-  );
+  const { ratingsState, rate } = useLike(props.ratings, props.commentId);
 
   return (
     <div>
-      <button
-        onClick={() => {
-          rateMutation({
-            like: true
-          });
-        }}
-      >
+      <button onClick={() => rate('like')} >
         like
       </button> {' '}
 
-      {ratings.likes} {' '}
+      {ratingsState.likes} {' '}
 
-      <button
-        onClick={() => {
-          rateMutation({
-            like: false
-          });
-        }}
-      >
+      <button onClick={() => rate('dislike')} >
         dislike
       </button> {' '}
 
-      {ratings.dislikes}
+      {ratingsState.dislikes}
     </div>
   );
 }
@@ -105,10 +73,6 @@ export function Dev() {
   const params = useParams();
 
   const [predictionQueryState] = usePredictionQuery(params.predictionId!)
-
-  // useEffect(() => {
-  //   // console.log(a)
-  // }, [a.fetching])
 
   // const [rateMutationState, rateMutation] = useRateMutation()
 
