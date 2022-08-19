@@ -1,2 +1,2 @@
 export * from './summary';
-export * from './predictions';
+export * from './predictions'; // todo: delete subcommand

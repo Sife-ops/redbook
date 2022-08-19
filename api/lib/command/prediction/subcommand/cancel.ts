@@ -23,7 +23,7 @@ export const cancel = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const prognosticatorId = body.member.user.id;
+    const userId = body.member.user.id;
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
@@ -53,7 +53,7 @@ export const cancel = {
       return {
         type: 4,
         data: {
-          content: `<@${prognosticatorId}> Cancellation failed because the prediction does not exist or it is not your prediction.`,
+          content: `<@${userId}> Cancellation failed because the prediction does not exist or it is not your prediction.`,
         },
       };
     }

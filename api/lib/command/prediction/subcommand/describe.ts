@@ -72,6 +72,7 @@ export const describe = {
     return {
       type: 4,
       data: {
+        flags: 64,
         embeds: [
           {
             title: 'Prediction',
