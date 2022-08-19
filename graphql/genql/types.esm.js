@@ -67,6 +67,15 @@ export default {
         },
         "Boolean": {},
         "Mutation": {
+            "comment": [
+                1,
+                {
+                    "comment": [
+                        1,
+                        "String!"
+                    ]
+                }
+            ],
             "mello": [
                 1
             ],
@@ -129,13 +138,7 @@ export default {
                 1
             ],
             "prediction": [
-                6,
-                {
-                    "predictionId": [
-                        1,
-                        "String!"
-                    ]
-                }
+                6
             ],
             "__typename": [
                 1

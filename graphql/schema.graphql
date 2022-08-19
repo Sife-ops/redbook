@@ -21,6 +21,7 @@ type Judge {
 }
 
 type Mutation {
+  comment(comment: String!): String!
   mello: String!
   rate(commentId: String, like: Boolean!): String!
 }
@@ -41,7 +42,7 @@ type Prediction {
 
 type Query {
   hello: String!
-  prediction(predictionId: String!): Prediction!
+  prediction: Prediction!
 }
 
 type Rating {

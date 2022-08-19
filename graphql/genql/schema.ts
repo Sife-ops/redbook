@@ -31,6 +31,7 @@ export interface Judge {
 }
 
 export interface Mutation {
+    comment: Scalars['String']
     mello: Scalars['String']
     rate: Scalars['String']
     __typename: 'Mutation'
@@ -95,6 +96,7 @@ export interface JudgeRequest{
 }
 
 export interface MutationRequest{
+    comment?: [{comment: Scalars['String']}]
     mello?: boolean | number
     rate?: [{commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}]
     __typename?: boolean | number
@@ -119,7 +121,7 @@ export interface PredictionRequest{
 
 export interface QueryRequest{
     hello?: boolean | number
-    prediction?: [{predictionId: Scalars['String']},PredictionRequest]
+    prediction?: PredictionRequest
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -229,11 +231,13 @@ export interface JudgeObservableChain{
 }
 
 export interface MutationPromiseChain{
+    comment: ((args: {comment: Scalars['String']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     mello: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     rate: ((args: {commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
 
 export interface MutationObservableChain{
+    comment: ((args: {comment: Scalars['String']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     mello: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     rate: ((args: {commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }
@@ -268,12 +272,12 @@ export interface PredictionObservableChain{
 
 export interface QueryPromiseChain{
     hello: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
-    prediction: ((args: {predictionId: Scalars['String']}) => PredictionPromiseChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Promise<FieldsSelection<Prediction, R>>})
+    prediction: (PredictionPromiseChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Promise<FieldsSelection<Prediction, R>>})
 }
 
 export interface QueryObservableChain{
     hello: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
-    prediction: ((args: {predictionId: Scalars['String']}) => PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>})
+    prediction: (PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>})
 }
 
 export interface RatingPromiseChain{

@@ -1,40 +1,65 @@
 import { useTypedQuery, useTypedMutation } from "../urql";
 
-export const usePredictionQuery = (predictionId: string) => {
+export const usePredictionQuery = () => {
   return useTypedQuery({
     query: {
-      prediction: [
-        {
-          predictionId,
-        },
-        {
+      prediction: {
+        predictionId: true,
+
+        prognosticatorId: true,
+        avatar: true,
+        discriminator: true,
+        username: true,
+
+        conditions: true,
+        created_at: true,
+        verdict: true,
+
+        judges: {
           predictionId: true,
 
-          prognosticatorId: true,
+          judgeId: true,
           avatar: true,
           discriminator: true,
           username: true,
 
-          conditions: true,
-          created_at: true,
           verdict: true,
+        },
 
-          judges: {
-            predictionId: true,
+        ratings: {
+          __typename: true,
+          commentId: true,
 
-            judgeId: true,
-            avatar: true,
-            discriminator: true,
-            username: true,
+          predictionId: true,
 
-            verdict: true,
-          },
+          criticId: true,
+          avatar: true,
+          discriminator: true,
+          username: true,
+
+          like: true,
+        },
+
+        comments: {
+          __typename: true,
+
+          predictionId: true,
+          commentId: true,
+
+          commenterId: true,
+          avatar: true,
+          discriminator: true,
+          username: true,
+
+          comment: true,
+          replyTo: true,
+          created_at: true,
 
           ratings: {
             __typename: true,
-            commentId: true,
-
             predictionId: true,
+
+            commentId: true,
 
             criticId: true,
             avatar: true,
@@ -42,39 +67,9 @@ export const usePredictionQuery = (predictionId: string) => {
             username: true,
 
             like: true,
-          },
-
-          comments: {
-            __typename: true,
-
-            predictionId: true,
-            commentId: true,
-
-            commenterId: true,
-            avatar: true,
-            discriminator: true,
-            username: true,
-
-            comment: true,
-            replyTo: true,
-            created_at: true,
-
-            ratings: {
-              __typename: true,
-              predictionId: true,
-
-              commentId: true,
-
-              criticId: true,
-              avatar: true,
-              discriminator: true,
-              username: true,
-
-              like: true,
-            }
           }
         }
-      ]
+      }
     }
   })
 }
@@ -94,5 +89,21 @@ export const useRateMutation = () => {
       }
     }
   );
+}
+
+export const useCommentMutation = () => {
+  return useTypedMutation(
+    (
+      vars: {
+        comment: string
+      }
+    ) => {
+      return {
+        comment: [
+          vars,
+        ]
+      }
+    }
+  )
 }
 

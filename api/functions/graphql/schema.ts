@@ -1,4 +1,5 @@
 import { builder } from "./builder";
+import { ulid } from 'ulid';
 
 import {
   CommentEntityType,
@@ -137,16 +138,13 @@ builder.queryFields(t => ({
 
   prediction: t.field({
     type: PredictionType,
-    args: {
-      predictionId: t.arg.string({ required: true })
-    },
-    resolve: async (_, args) => {
+    resolve: async (_, __, context: any) => {
       const predictions = await redbookModel
         .entities
         .PredictionEntity
         .query
         .prediction({
-          predictionId: args.predictionId
+          predictionId: context.predictionId
         })
         .go();
 
@@ -163,6 +161,33 @@ builder.queryFields(t => ({
 builder.mutationFields(t => ({
   mello: t.string({
     resolve: () => 'mello'
+  }),
+
+  comment: t.string({
+    args: {
+      comment: t.arg.string({ required: true })
+    },
+    // todo: no explicit any
+    resolve: async (_, args, context: any) => {
+      await redbookModel
+        .entities
+        .CommentEntity
+        .create({
+          predictionId: context.predictionId,
+          commentId: ulid(),
+
+          commenterId: context.userId,
+          username: context.username,
+          discriminator: context.discriminator,
+          avatar: context.avatar,
+
+          comment: args.comment,
+          created_at: new Date().toISOString(),
+        })
+        .go();
+
+      return 'comment';
+    }
   }),
 
   rate: t.string({
@@ -204,13 +229,13 @@ builder.mutationFields(t => ({
 
             like: args.like,
           })
-          .go()
+          .go();
 
-        return `create: ${args.like}`
+        return `create: ${args.like}`;
       }
 
       // remove if same rating
-      const rating = ratings[0]
+      const rating = ratings[0];
 
       if (rating.like === args.like) {
         await redbookModel
@@ -221,9 +246,9 @@ builder.mutationFields(t => ({
             predictionId,
             commentId,
           })
-          .go()
+          .go();
 
-        return `remove: ${args.like}`
+        return `remove: ${args.like}`;
       }
 
       // update if different rating
@@ -240,11 +265,10 @@ builder.mutationFields(t => ({
         })
         .go();
 
-      return `update: ${args.like}`
-
+      return `update: ${args.like}`;
     }
   })
-}))
+}));
 
 export const schema = builder.toSchema({});
 

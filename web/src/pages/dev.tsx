@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
-import { useParams, Navigate } from 'react-router-dom'
-import { usePredictionQuery } from '../hook/urql'
+import { Navigate } from 'react-router-dom';
 import { useLike } from '../hook/like';
+import { usePredictionQuery, useCommentMutation } from '../hook/urql';
 
 export const Ratings: React.FC<{ ratings: RatingType[], commentId?: string }> = (props) => {
   const { ratingsState, rate } = useLike(props.ratings, props.commentId);
@@ -70,34 +70,10 @@ export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
 }
 
 export function Dev() {
-  const params = useParams();
+  const [comment, setComment] = useState('');
 
-  const [predictionQueryState] = usePredictionQuery(params.predictionId!)
-
-  // const [rateMutationState, rateMutation] = useRateMutation()
-
-  // todo: like button state hook
-  // const [likes, setLikes] = React.useState<number>(0)
-  // const [dislikes, setDisikes] = React.useState<number>(0)
-
-  // React.useEffect(() => {
-  //   const { data, error, fetching } = predictionQueryState
-  //   if (!fetching && !error && data) {
-  //     // const { likes, dislikes } = data.prediction
-  //     // setLikes(likes || 0)
-  //     // setDisikes(dislikes || 0)
-  //   }
-  // }, [predictionQueryState.fetching])
-
-  // React.useEffect(() => {
-  //   const { data, error, fetching } = rateMutationState
-  //   if (!fetching && !error && data) {
-  //     // const { likes, dislikes } = data.rate
-  //     // setLikes(likes)
-  //     // setDisikes(dislikes)
-  //     // localStorage.setItem(prediction.predictionId, '1')
-  //   }
-  // }, [rateMutationState.fetching])
+  const [predictionQueryState] = usePredictionQuery();
+  const [_, commentMutation] = useCommentMutation();
 
   if (predictionQueryState.fetching) {
     return (
@@ -113,17 +89,6 @@ export function Dev() {
   }
 
   const { prediction } = predictionQueryState.data;
-  // console.log(prediction);
-
-  // const handleRate = ({ like }: { like: boolean }) => {
-  //   return (e: any) => {
-  //     e.preventDefault();
-  //     rateMutation({
-  //       predictionId: prediction.predictionId,
-  //       like
-  //     });
-  //   }
-  // }
 
   const useVerdict = (i: boolean | undefined) => {
     if (i === true) {
@@ -143,21 +108,6 @@ export function Dev() {
         <p>{prediction.conditions}</p>
       </div>
 
-      {/*
-      <div>
-        {likes}
-        <button
-          disabled={!!localStorage.getItem(prediction.predictionId)}
-          onClick={handleRate({ like: true })}
-        >like</button>
-        <button
-          disabled={!!localStorage.getItem(prediction.predictionId)}
-          onClick={handleRate({ like: false })}
-        >dislike</button>
-        {dislikes}
-      </div>
-      */}
-
       <div>
         <h3>Prediction ID:</h3>
         <p>{prediction.predictionId}</p>
@@ -176,6 +126,30 @@ export function Dev() {
             <div>{useVerdict(e.verdict)}</div>
           </div>
         ))}
+      </div>
+
+      <div>
+        <h3>Add Comment:</h3>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            commentMutation({ comment });
+          }}
+        >
+          {/* 
+          <label>
+            Name: 
+            <input type="textarea" name="name" />
+          </label>
+          */}
+          <textarea
+            onChange={e => setComment(e.target.value)}
+            rows={2}
+            value={comment}
+          />
+          <br />
+          <input type="submit" value="Submit" />
+        </form>
       </div>
 
       <div>
