@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { optionValue } from '@redbook/lib/utility';
 import { redbookModel } from '@redbook/lib/db';
+import { sign } from 'jsonwebtoken';
 
 export const describe = {
   schema: Joi.object({
@@ -18,12 +19,21 @@ export const describe = {
     member: Joi.object({
       user: Joi.object({
         id: Joi.string(),
+        username: Joi.string(),
+        discriminator: Joi.string(),
+        avatar: Joi.string(),
       }),
     }),
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const prognosticatorId = body.member.user.id;
+    const {
+      id: userId,
+      username,
+      discriminator,
+      avatar
+    } = body.member.user;
+
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
@@ -37,13 +47,22 @@ export const describe = {
       return {
         type: 4,
         data: {
-          content: `<@${prognosticatorId}> Prediction does not exist.`,
+          content: `<@${userId}> Prediction does not exist.`,
         },
       };
     }
 
     const prediction = PredictionEntity[0];
 
+    const token = sign({
+      predictionId,
+      userId,
+      username,
+      discriminator,
+      avatar,
+    }, 'todo: token secret')
+
+    // todo: direct message
     return {
       type: 4,
       data: {
@@ -81,7 +100,7 @@ export const describe = {
               },
               {
                 name: 'Web',
-                value: `${process.env.SITE_URL}/${prediction.predictionId}`,
+                value: `${process.env.SITE_URL}/${prediction.predictionId}?token=${token}`,
                 inline: false,
               },
             ],

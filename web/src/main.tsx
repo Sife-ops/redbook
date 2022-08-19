@@ -7,15 +7,10 @@ import { Error } from "./pages/error"
 import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 
 const urlParams = new URLSearchParams(window.location.search);
-const userId = urlParams.get('userId');
-const predictionId = window.location.pathname.split('/')[1];
+const token = urlParams.get('token');
 
 const urql = createClient({
-  url: import.meta.env.VITE_GRAPHQL_URL 
-    + '?userId=' 
-    + userId
-    + '&predictionId='
-    + predictionId,
+  url: import.meta.env.VITE_GRAPHQL_URL + '?token=' + token,
   exchanges: defaultExchanges
 });
 

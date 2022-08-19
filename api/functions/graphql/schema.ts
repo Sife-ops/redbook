@@ -1,11 +1,11 @@
 import { builder } from "./builder";
 
 import {
-  PredictionEntityType,
-  JudgeEntityType,
-  redbookModel,
-  RatingEntityType,
   CommentEntityType,
+  JudgeEntityType,
+  PredictionEntityType,
+  RatingEntityType,
+  redbookModel,
 } from '@redbook/lib/db';
 
 // import "./types/article";
@@ -171,6 +171,7 @@ builder.mutationFields(t => ({
       like: t.arg.boolean({ required: true }),
     },
     // todo: no explicit any
+    // todo: destructure context
     resolve: async (_, args, context: any) => {
       const predictionId = context.predictionId as string;
       const commentId = args.commentId || '';
@@ -197,9 +198,9 @@ builder.mutationFields(t => ({
             commentId,
 
             criticId: context.userId,
-            avatar: '',
-            username: '',
-            discriminator: '',
+            avatar: context.avatar,
+            username: context.username,
+            discriminator: context.discriminator,
 
             like: args.like,
           })

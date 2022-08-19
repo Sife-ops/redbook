@@ -1,7 +1,7 @@
 // import AWS from "aws-sdk";
 import Joi from 'joi';
 import { optionValue, mnemonic } from '@redbook/lib/utility';
-import { redbookModel } from '@redbook/lib/db'
+import { redbookModel } from '@redbook/lib/db';
 
 // const sqs = new AWS.SQS();
 
