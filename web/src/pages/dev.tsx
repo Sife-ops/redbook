@@ -48,6 +48,7 @@ export const Comment: React.FC<{ comment: CommentType }> = (props) => {
 
       <Ratings ratings={props.comment.ratings} />
 
+      {/*
       <button onClick={() => setReplyMode(true)}>reply</button>
       {replyMode && (
         <div>
@@ -56,6 +57,7 @@ export const Comment: React.FC<{ comment: CommentType }> = (props) => {
           <button onClick={() => setReplyMode(false)}>cancel</button>
         </div>
       )}
+      */}
     </div>
   )
 }
