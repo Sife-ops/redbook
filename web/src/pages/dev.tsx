@@ -59,13 +59,18 @@ export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
   if (props.comments.length < 1) {
     return <div>No comments.</div>
   } else {
+    const comments = props.comments;
+    comments.sort((a, b) => {
+      return Date.parse(b.created_at) - Date.parse(a.created_at)
+    });
+
     return (
       <div>
-        {props.comments.map(e => (
+        {comments.map(e => (
           <Comment key={e.commentId} comment={e} />
         ))}
       </div>
-    )
+    );
   }
 }
 
