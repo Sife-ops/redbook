@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
 import { Navigate } from 'react-router-dom';
 import { useLike } from '../hook/like';
@@ -75,10 +75,28 @@ export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
 }
 
 export const Dev = () => {
+
+  const [avatar, setAvatar] = useState<string | undefined>();
+  const fetchAvatar = async (user: { userId: string, avatar: string }) => {
+    const res = await fetch(`https://cdn.discordapp.com/avatars/${user.userId}/${user.avatar}.png`);
+    const imageBlob = await res.blob();
+    const imageObjectURL = URL.createObjectURL(imageBlob);
+    setAvatar(imageObjectURL);
+  };
+
   const [comment, setComment] = useState('');
 
   const [predictionQueryState] = usePredictionQuery();
+
   const [_, commentMutation] = useCommentMutation();
+
+  useEffect(() => {
+    const { data, error } = predictionQueryState
+    if (data && !error) {
+      const { prediction: { avatar, prognosticatorId } } = data;
+      fetchAvatar({ avatar, userId: prognosticatorId });
+    }
+  }, [predictionQueryState.fetching])
 
   if (predictionQueryState.fetching) {
     return (
@@ -95,7 +113,7 @@ export const Dev = () => {
 
   const { prediction } = predictionQueryState.data;
 
-  const useVerdict = (i: boolean | undefined) => {
+  const verdict = (i: boolean | undefined) => {
     if (i === true) {
       return 'in favor'
     } else if (i === false) {
@@ -114,6 +132,14 @@ export const Dev = () => {
       </div>
 
       <div>
+        <h1>Prognosticator:</h1>
+        <div>
+          {avatar && <img src={avatar} alt="icons" />}
+          {prediction.username}#{prediction.discriminator}
+        </div>
+      </div>
+
+      <div>
         <h3>Prediction ID:</h3>
         <p>{prediction.predictionId}</p>
       </div>
@@ -128,7 +154,7 @@ export const Dev = () => {
         {prediction.judges.map(e => (
           <div key={e.judgeId}>
             <div>{`${e.username}#${e.discriminator}`}</div>
-            <div>{useVerdict(e.verdict)}</div>
+            <div>{verdict(e.verdict)}</div>
           </div>
         ))}
       </div>

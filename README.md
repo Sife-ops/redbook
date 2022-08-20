@@ -31,8 +31,10 @@ The best prediction record-keeping bot in the universe!
   - Shell REDBOOK_ENV overwrites .env file, consider changing
   - update packages
   - io-ts validation
-  - fetch avatars
+  - user predictions page
+  - separate components in dev.tsx
 2.
+  - finish fixing judges in dynamodb
   - track mnemonic collisions
   - banned list
   - integration tests
@@ -42,6 +44,7 @@ The best prediction record-keeping bot in the universe!
 
 ## done
 
+- fetch avatars
 - link text
 - delete kysely model
 - token secret
