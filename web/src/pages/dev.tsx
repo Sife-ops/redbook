@@ -1,81 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
+import React, { useState } from 'react';
+import { Comments } from '../component/comments'
 import { Navigate } from 'react-router-dom';
+import { Ratings } from '../component/ratings';
 import { User } from '../component/user';
-import { useLike } from '../hook/like';
 import { usePredictionQuery, useCommentMutation } from '../hook/urql';
 
-export const Ratings: React.FC<{ ratings: RatingType[], commentId?: string }> = (props) => {
-  const { ratingsState, rate } = useLike(props.ratings, props.commentId);
-
-  return (
-    <div>
-      <button onClick={() => rate('like')} >
-        like
-      </button> {' '}
-
-      {ratingsState.likes} {' '}
-
-      <button onClick={() => rate('dislike')} >
-        dislike
-      </button> {' '}
-
-      {ratingsState.dislikes}
-    </div>
-  );
-}
-
-export const Comment: React.FC<{ comment: CommentType }> = (props) => {
-  // const [replyMode, setReplyMode] = useState<boolean>(false);
-
-  return (
-    <div
-      style={{
-        border: '1px solid red'
-      }}
-    >
-      <div>{props.comment.username}</div>
-      <div>{props.comment.comment}</div>
-
-      <Ratings
-        ratings={props.comment.ratings}
-        commentId={props.comment.commentId}
-      />
-
-      {/*
-      <button onClick={() => setReplyMode(true)}>reply</button>
-      {replyMode && (
-        <div>
-          <input />
-          <button>post</button>
-          <button onClick={() => setReplyMode(false)}>cancel</button>
-        </div>
-      )}
-      */}
-    </div>
-  )
-}
-
-export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
-  if (props.comments.length < 1) {
-    return <div>No comments.</div>
-  } else {
-    const comments = props.comments;
-    comments.sort((a, b) => {
-      return Date.parse(b.created_at) - Date.parse(a.created_at)
-    });
-
-    return (
-      <div>
-        {comments.map(e => (
-          <Comment key={e.commentId} comment={e} />
-        ))}
-      </div>
-    );
-  }
-}
-
-export const Dev = () => {
+export const Dev: React.FC = () => {
 
   const [comment, setComment] = useState('');
 
@@ -98,16 +28,6 @@ export const Dev = () => {
 
   const { prediction } = predictionQueryState.data;
 
-  const verdict = (i: boolean | undefined) => {
-    if (i === true) {
-      return 'in favor'
-    } else if (i === false) {
-      return 'against'
-    } else {
-      return 'undecided'
-    }
-  }
-
   return (
     <div>
 
@@ -117,7 +37,7 @@ export const Dev = () => {
       </div>
 
       <div>
-        <h1>Prognosticator:</h1>
+        <h3>Prognosticator:</h3>
         <User
           user={{
             avatar: prediction.avatar,
@@ -148,6 +68,7 @@ export const Dev = () => {
               userId: e.judgeId,
               username: e.username,
               discriminator: e.discriminator,
+              verdict: e.verdict || null,
             }}
           />
         ))}

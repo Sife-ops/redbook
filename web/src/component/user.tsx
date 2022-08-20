@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAvatar } from '../hook/avatar';
 
 interface props {
-  userId: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
+  user: {
+    userId: string;
+    username: string;
+    discriminator: string;
+    avatar: string;
+    verdict?: boolean | null;
+  }
 }
 
-export const User: React.FC<{ user: props }> = (props) => {
+const verdict = (i: boolean | null) => {
+  if (i === true) {
+    return 'in favor'
+  } else if (i === false) {
+    return 'against'
+  } else {
+    return 'undecided'
+  }
+}
+
+export const User: React.FC<props> = (props) => {
   const {
     avatar,
     discriminator,
@@ -26,6 +39,7 @@ export const User: React.FC<{ user: props }> = (props) => {
     <div>
       {avatarImg && <img src={avatarImg} alt="icons" />}
       {username}#{discriminator}
+      {props.user.verdict !== undefined && verdict(props.user.verdict)}
     </div>
   )
 }
