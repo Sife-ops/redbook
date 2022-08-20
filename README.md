@@ -32,9 +32,9 @@ The best prediction record-keeping bot in the universe!
   - update packages
   - io-ts validation
   - fetch avatars
-  - link text
 2.
   - track mnemonic collisions
+  - banned list
   - integration tests
   - Color scheme
   - update usage
@@ -42,6 +42,7 @@ The best prediction record-keeping bot in the universe!
 
 ## done
 
+- link text
 - delete kysely model
 - token secret
 - prediction sub-commands

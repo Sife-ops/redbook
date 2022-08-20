@@ -108,12 +108,13 @@ export const describe = {
                 value: prediction.predictionId,
                 inline: false,
               },
-              {
-                name: 'Web',
-                value: `${url}/${prediction.predictionId}?token=${token}`,
-                inline: false,
-              },
             ],
+          },
+          {
+            title: 'Redbook Web Link',
+            description: `don't share links`,
+            url: `${url}/${prediction.predictionId}?token=${token}`,
+            color: 0xff0000,
           },
         ],
       },

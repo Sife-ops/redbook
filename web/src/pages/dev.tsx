@@ -74,7 +74,7 @@ export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
   }
 }
 
-export function Dev() {
+export const Dev = () => {
   const [comment, setComment] = useState('');
 
   const [predictionQueryState] = usePredictionQuery();
