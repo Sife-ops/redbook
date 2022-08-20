@@ -30,9 +30,9 @@ The best prediction record-keeping bot in the universe!
   - secrets manager
   - Shell REDBOOK_ENV overwrites .env file, consider changing
   - update packages
-  - token secret
-  - delete kysely model
   - io-ts validation
+  - fetch avatars
+  - link text
 2.
   - track mnemonic collisions
   - integration tests
@@ -42,6 +42,8 @@ The best prediction record-keeping bot in the universe!
 
 ## done
 
+- delete kysely model
+- token secret
 - prediction sub-commands
   - create :heavy_check_mark:
   - cancel :heavy_check_mark:
