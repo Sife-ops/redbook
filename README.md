@@ -27,6 +27,7 @@ The best prediction record-keeping bot in the universe!
 ## todo
 
 1.
+  - bug can't /prediction judge add user with no avatar!!!
   - secrets manager
   - Shell REDBOOK_ENV overwrites .env file, consider changing
   - update packages

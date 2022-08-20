@@ -9,7 +9,7 @@ export const JudgeType = builder
       predictionId: t.exposeString("predictionId"),
 
       judgeId: t.exposeID("judgeId"),
-      avatar: t.exposeString("username"),
+      avatar: t.exposeString("avatar"),
       username: t.exposeString("username"),
       discriminator: t.exposeString("discriminator"),
 

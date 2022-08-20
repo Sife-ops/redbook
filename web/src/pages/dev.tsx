@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
 import { Navigate } from 'react-router-dom';
+import { useAvatar } from '../hook/avatar';
 import { useLike } from '../hook/like';
 import { usePredictionQuery, useCommentMutation } from '../hook/urql';
 
@@ -74,29 +75,42 @@ export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
   }
 }
 
-export const Dev = () => {
+interface UserProps {
+  userId: string;
+  username: string;
+  discriminator: string;
+  avatar: string;
+}
 
-  const [avatar, setAvatar] = useState<string | undefined>();
-  const fetchAvatar = async (user: { userId: string, avatar: string }) => {
-    const res = await fetch(`https://cdn.discordapp.com/avatars/${user.userId}/${user.avatar}.png`);
-    const imageBlob = await res.blob();
-    const imageObjectURL = URL.createObjectURL(imageBlob);
-    setAvatar(imageObjectURL);
-  };
+export const User: React.FC<{ user: UserProps }> = (props) => {
+  const {
+    avatar,
+    discriminator,
+    username,
+    userId,
+  } = props.user;
+
+  const { avatarImg, fetchAvatar } = useAvatar();
+
+  useEffect(() => {
+    fetchAvatar({ userId, avatar });
+  }, [])
+
+  return (
+    <div>
+      {avatarImg && <img src={avatarImg} alt="icons" />}
+      {username}#{discriminator}
+    </div>
+  )
+}
+
+export const Dev = () => {
 
   const [comment, setComment] = useState('');
 
   const [predictionQueryState] = usePredictionQuery();
 
   const [_, commentMutation] = useCommentMutation();
-
-  useEffect(() => {
-    const { data, error } = predictionQueryState
-    if (data && !error) {
-      const { prediction: { avatar, prognosticatorId } } = data;
-      fetchAvatar({ avatar, userId: prognosticatorId });
-    }
-  }, [predictionQueryState.fetching])
 
   if (predictionQueryState.fetching) {
     return (
@@ -133,10 +147,20 @@ export const Dev = () => {
 
       <div>
         <h1>Prognosticator:</h1>
+        <User
+          user={{
+            avatar: prediction.avatar,
+            userId: prediction.prognosticatorId,
+            username: prediction.username,
+            discriminator: prediction.discriminator,
+          }}
+        />
+        {/*
         <div>
           {avatar && <img src={avatar} alt="icons" />}
           {prediction.username}#{prediction.discriminator}
         </div>
+        */}
       </div>
 
       <div>
@@ -152,10 +176,15 @@ export const Dev = () => {
       <div>
         <h3>Judges:</h3>
         {prediction.judges.map(e => (
-          <div key={e.judgeId}>
-            <div>{`${e.username}#${e.discriminator}`}</div>
-            <div>{verdict(e.verdict)}</div>
-          </div>
+          <User
+            key={e.judgeId}
+            user={{
+              avatar: e.avatar,
+              userId: e.judgeId,
+              username: e.username,
+              discriminator: e.discriminator,
+            }}
+          />
         ))}
       </div>
 
