@@ -1,6 +1,6 @@
-import { schema } from "./schema";
 import { createGQLHandler } from "@serverless-stack/node/graphql";
-import { verify, JwtPayload } from 'jsonwebtoken'
+import { schema } from "./schema";
+import { verify, JwtPayload } from 'jsonwebtoken';
 
 interface ContextPayload extends JwtPayload {
   predictionId: string

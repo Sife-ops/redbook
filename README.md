@@ -26,26 +26,29 @@ The best prediction record-keeping bot in the universe!
 
 ## todo
 
-- secrets manager
-- track mnemonic collisions
-- remove pg dependencies
-- integration tests
-- migrate to ElectroDB :heavy_check_mark:
-- Color scheme
-- Shell REDBOOK_ENV overwrites .env file, consider changing
-- update usage
-- user commands
-  - summary :heavy_check_mark:
-  - predictions :heavy_check_mark:
+1.
+  - secrets manager
+  - Shell REDBOOK_ENV overwrites .env file, consider changing
+2.
+  - track mnemonic collisions
+  - integration tests
+  - Color scheme
+  - update usage
+  - betting?
+
+## done
+
 - prediction sub-commands
   - create :heavy_check_mark:
   - cancel :heavy_check_mark:
   - add judge :heavy_check_mark:
 - created-at column for records :heavy_check_mark:
-- POSTGRES_PORT :heavy_check_mark:
-- support AWS RDS
 - support TypeOrm
   - `bundle: { nodeModules: ['pg-native'] }` :x:
     - will not work due to 'import-metadata' and esbuild
+- POSTGRES_PORT :heavy_check_mark:
 - delete unused commands :heavy_check_mark:
-- betting?
+- migrate to ElectroDB :heavy_check_mark:
+- user commands
+  - summary :heavy_check_mark:
+  - predictions :heavy_check_mark:

@@ -76,9 +76,6 @@ export default {
                     ]
                 }
             ],
-            "mello": [
-                1
-            ],
             "rate": [
                 1,
                 {
@@ -134,9 +131,6 @@ export default {
             ]
         },
         "Query": {
-            "hello": [
-                1
-            ],
             "prediction": [
                 6
             ],
