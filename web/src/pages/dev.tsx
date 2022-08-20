@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Comment as CommentType, Rating as RatingType } from '../../../graphql/genql/schema';
 import { Navigate } from 'react-router-dom';
-import { useAvatar } from '../hook/avatar';
+import { User } from '../component/user';
 import { useLike } from '../hook/like';
 import { usePredictionQuery, useCommentMutation } from '../hook/urql';
 
@@ -75,35 +75,6 @@ export const Comments: React.FC<{ comments: CommentType[] }> = (props) => {
   }
 }
 
-interface UserProps {
-  userId: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
-}
-
-export const User: React.FC<{ user: UserProps }> = (props) => {
-  const {
-    avatar,
-    discriminator,
-    username,
-    userId,
-  } = props.user;
-
-  const { avatarImg, fetchAvatar } = useAvatar();
-
-  useEffect(() => {
-    fetchAvatar({ userId, avatar });
-  }, [])
-
-  return (
-    <div>
-      {avatarImg && <img src={avatarImg} alt="icons" />}
-      {username}#{discriminator}
-    </div>
-  )
-}
-
 export const Dev = () => {
 
   const [comment, setComment] = useState('');
@@ -155,12 +126,6 @@ export const Dev = () => {
             discriminator: prediction.discriminator,
           }}
         />
-        {/*
-        <div>
-          {avatar && <img src={avatar} alt="icons" />}
-          {prediction.username}#{prediction.discriminator}
-        </div>
-        */}
       </div>
 
       <div>
@@ -196,12 +161,6 @@ export const Dev = () => {
             commentMutation({ comment });
           }}
         >
-          {/* 
-          <label>
-            Name: 
-            <input type="textarea" name="name" />
-          </label>
-          */}
           <textarea
             onChange={e => setComment(e.target.value)}
             rows={2}
