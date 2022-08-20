@@ -3,7 +3,7 @@ import { optionValue } from '@redbook/lib/utility';
 import { redbookModel } from '@redbook/lib/db';
 import { sign } from 'jsonwebtoken';
 
-const { SITE_URL, REDBOOK_ENV } = process.env;
+const { SITE_URL, REDBOOK_ENV, TOKEN_SECRET } = process.env;
 
 export const describe = {
   schema: Joi.object({
@@ -61,13 +61,16 @@ export const describe = {
       ? 'http://localhost:5173'
       : SITE_URL;
 
-    const token = sign({
-      predictionId,
-      userId,
-      username,
-      discriminator,
-      avatar,
-    }, 'todo: token secret')
+    const token = sign(
+      {
+        predictionId,
+        userId,
+        username,
+        discriminator,
+        avatar,
+      },
+      TOKEN_SECRET
+    );
 
     return {
       type: 4,

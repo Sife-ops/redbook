@@ -2,6 +2,8 @@ import { createGQLHandler } from "@serverless-stack/node/graphql";
 import { schema } from "./schema";
 import { verify, JwtPayload } from 'jsonwebtoken';
 
+const { TOKEN_SECRET } = process.env
+
 interface ContextPayload extends JwtPayload {
   predictionId: string
   userId: string
@@ -20,7 +22,7 @@ export const handler = createGQLHandler({
       discriminator,
       userId,
       username
-    } = verify(c.event.queryStringParameters!.token!, 'todo: token secret') as ContextPayload
+    } = verify(c.event.queryStringParameters!.token!, TOKEN_SECRET) as ContextPayload
 
     return {
       predictionId,

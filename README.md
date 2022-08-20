@@ -29,6 +29,10 @@ The best prediction record-keeping bot in the universe!
 1.
   - secrets manager
   - Shell REDBOOK_ENV overwrites .env file, consider changing
+  - update packages
+  - token secret
+  - delete kysely model
+  - io-ts validation
 2.
   - track mnemonic collisions
   - integration tests

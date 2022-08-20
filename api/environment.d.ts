@@ -4,6 +4,7 @@ declare global {
       PUBLIC_KEY: string;
       REDBOOK_ENV: string;
       SITE_URL: string;
+      TOKEN_SECRET: string;
     }
   }
 }

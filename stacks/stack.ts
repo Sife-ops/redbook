@@ -8,7 +8,7 @@ import {
   ViteStaticSite,
 } from '@serverless-stack/resources';
 
-const { PUBLIC_KEY, REDBOOK_ENV } = process.env;
+const { PUBLIC_KEY, REDBOOK_ENV, TOKEN_SECRET } = process.env;
 
 export function stack({ stack }: StackContext) {
   const table = new Table(stack, "table", {
@@ -48,6 +48,7 @@ export function stack({ stack }: StackContext) {
         permissions: [table],
         environment: {
           TABLE: table.tableName,
+          TOKEN_SECRET,
         },
       },
     },
@@ -87,6 +88,7 @@ export function stack({ stack }: StackContext) {
           REDBOOK_ENV,
           SITE_URL: site.url,
           TABLE: table.tableName,
+          TOKEN_SECRET,
         },
       },
     },
