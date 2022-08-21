@@ -28,19 +28,21 @@ The best prediction record-keeping bot in the universe!
 
 1.
   - bug can't /prediction judge add user with no avatar!!!
-  - secrets manager
-  - Shell REDBOOK_ENV overwrites .env file, consider changing
+  - user predictions page
   - update packages
   - io-ts validation
-  - user predictions page
-  - separate components in dev.tsx
+  - banner
+  - secrets manager
 2.
-  - finish fixing judges in dynamodb
+  - responsive comment
+  - finish migrating judges in dynamodb
+  - edit comment
   - track mnemonic collisions
   - banned list
   - integration tests
   - Color scheme
   - update usage
+  - Shell REDBOOK_ENV overwrites .env file, consider changing
   - betting?
 
 ## done

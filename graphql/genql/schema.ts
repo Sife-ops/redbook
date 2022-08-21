@@ -31,7 +31,7 @@ export interface Judge {
 }
 
 export interface Mutation {
-    comment: Scalars['String']
+    comment: Comment
     rate: Scalars['String']
     __typename: 'Mutation'
 }
@@ -94,7 +94,7 @@ export interface JudgeRequest{
 }
 
 export interface MutationRequest{
-    comment?: [{comment: Scalars['String']}]
+    comment?: [{comment: Scalars['String']},CommentRequest]
     rate?: [{commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}]
     __typename?: boolean | number
     __scalar?: boolean | number
@@ -227,12 +227,12 @@ export interface JudgeObservableChain{
 }
 
 export interface MutationPromiseChain{
-    comment: ((args: {comment: Scalars['String']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
+    comment: ((args: {comment: Scalars['String']}) => CommentPromiseChain & {get: <R extends CommentRequest>(request: R, defaultValue?: FieldsSelection<Comment, R>) => Promise<FieldsSelection<Comment, R>>}),
     rate: ((args: {commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
 
 export interface MutationObservableChain{
-    comment: ((args: {comment: Scalars['String']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
+    comment: ((args: {comment: Scalars['String']}) => CommentObservableChain & {get: <R extends CommentRequest>(request: R, defaultValue?: FieldsSelection<Comment, R>) => Observable<FieldsSelection<Comment, R>>}),
     rate: ((args: {commentId?: (Scalars['String'] | null),like: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }
 

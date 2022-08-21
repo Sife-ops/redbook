@@ -21,7 +21,7 @@ type Judge {
 }
 
 type Mutation {
-  comment(comment: String!): String!
+  comment(comment: String!): Comment!
   rate(commentId: String, like: Boolean!): String!
 }
 

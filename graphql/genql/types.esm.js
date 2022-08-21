@@ -68,7 +68,7 @@ export default {
         "Boolean": {},
         "Mutation": {
             "comment": [
-                1,
+                0,
                 {
                     "comment": [
                         1,

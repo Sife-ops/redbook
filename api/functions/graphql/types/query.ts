@@ -1,6 +1,6 @@
 import { builder } from "../builder";
 import { redbookModel, } from '@redbook/lib/db';
-import {PredictionType} from './prediction'
+import { PredictionType } from './prediction'
 
 builder.queryFields(t => ({
   prediction: t.field({

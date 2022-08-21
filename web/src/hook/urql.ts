@@ -101,6 +101,35 @@ export const useCommentMutation = () => {
       return {
         comment: [
           vars,
+          {
+            __typename: true,
+
+            predictionId: true,
+            commentId: true,
+
+            commenterId: true,
+            avatar: true,
+            discriminator: true,
+            username: true,
+
+            comment: true,
+            replyTo: true,
+            created_at: true,
+
+            ratings: {
+              __typename: true,
+              predictionId: true,
+
+              commentId: true,
+
+              criticId: true,
+              avatar: true,
+              discriminator: true,
+              username: true,
+
+              like: true,
+            }
+          }
         ]
       }
     }

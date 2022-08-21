@@ -1,15 +1,17 @@
 import { builder } from "../builder";
 import { redbookModel } from '@redbook/lib/db';
 import { ulid } from 'ulid';
+import { CommentType } from './comment';
 
 builder.mutationFields(t => ({
-  comment: t.string({
+  comment: t.field({
+    type: CommentType,
     args: {
       comment: t.arg.string({ required: true })
     },
     // todo: no explicit any
     resolve: async (_, args, context: any) => {
-      await redbookModel
+      const comment = await redbookModel
         .entities
         .CommentEntity
         .create({
@@ -26,7 +28,7 @@ builder.mutationFields(t => ({
         })
         .go();
 
-      return 'comment';
+      return comment;
     }
   }),
 

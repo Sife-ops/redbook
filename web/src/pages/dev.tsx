@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
-import { Comments } from '../component/comments'
+import { CommentsSection } from '../component/comments'
 import { Navigate } from 'react-router-dom';
 import { Ratings } from '../component/ratings';
 import { User } from '../component/user';
-import { usePredictionQuery, useCommentMutation } from '../hook/urql';
+import { usePredictionQuery } from '../hook/urql';
 
 export const Dev: React.FC = () => {
 
-  const [comment, setComment] = useState('');
-
   const [predictionQueryState] = usePredictionQuery();
-
-  const [_, commentMutation] = useCommentMutation();
 
   if (predictionQueryState.fetching) {
     return (
@@ -36,8 +32,16 @@ export const Dev: React.FC = () => {
         <p>{prediction.conditions}</p>
       </div>
 
+      {/*
       <div>
-        <h3>Prognosticator:</h3>
+        <h3>Ratings:</h3>
+        <Ratings ratings={prediction.ratings} />
+      </div>
+      */}
+      <Ratings ratings={prediction.ratings} />
+
+      <div>
+        <h3>By:</h3>
         <User
           user={{
             avatar: prediction.avatar,
@@ -49,13 +53,13 @@ export const Dev: React.FC = () => {
       </div>
 
       <div>
-        <h3>Prediction ID:</h3>
-        <p>{prediction.predictionId}</p>
+        <h3>Made On:</h3>
+        <div>{prediction.created_at}</div>
       </div>
 
       <div>
-        <h3>Ratings:</h3>
-        <Ratings ratings={prediction.ratings} />
+        <h3>Prediction ID:</h3>
+        <p>{prediction.predictionId}</p>
       </div>
 
       <div>
@@ -75,26 +79,8 @@ export const Dev: React.FC = () => {
       </div>
 
       <div>
-        <h3>Add Comment:</h3>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            commentMutation({ comment });
-          }}
-        >
-          <textarea
-            onChange={e => setComment(e.target.value)}
-            rows={2}
-            value={comment}
-          />
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-
-      <div>
         <h3>Comments:</h3>
-        <Comments comments={prediction.comments!} />
+        <CommentsSection comments={prediction.comments!} />
       </div>
 
     </div>
