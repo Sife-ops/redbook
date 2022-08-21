@@ -1,4 +1,4 @@
-import "./index.css";
+// import "./index.css";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Error } from "./pages/error"
@@ -29,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 function App() {
   return (
     <BrowserRouter>
+      <h1>REDBOOK</h1>
       <Routes>
         <Route path="/prediction/:predictionId" element={<Prediction />} />
         <Route path="/user/:userId" element={<Predictions />} />

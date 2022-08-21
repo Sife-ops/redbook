@@ -13,6 +13,7 @@ export const usePredictionsQuery = (userId: string) => {
           userId
         },
         {
+          __typename: true,
           predictionId: true,
 
           prognosticatorId: true,
@@ -25,6 +26,7 @@ export const usePredictionsQuery = (userId: string) => {
           verdict: true,
 
           judges: {
+            __typename: true,
             predictionId: true,
 
             judgeId: true,
@@ -92,6 +94,7 @@ export const usePredictionQuery = (predictionId: string) => {
           predictionId
         },
         {
+          __typename: true,
           predictionId: true,
 
           prognosticatorId: true,
@@ -104,6 +107,7 @@ export const usePredictionQuery = (predictionId: string) => {
           verdict: true,
 
           judges: {
+            __typename: true,
             predictionId: true,
 
             judgeId: true,

@@ -32,7 +32,7 @@ export const Prediction: React.FC = () => {
     <div>
 
       <div>
-        <h1>Prediction:</h1>
+        <h2>Prediction:</h2>
         <p>{prediction.conditions}</p>
       </div>
 
