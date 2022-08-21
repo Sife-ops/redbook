@@ -4,7 +4,7 @@ import { redbookModel } from '@redbook/lib/db';
 
 const { SITE_URL, REDBOOK_ENV } = process.env;
 
-export const summary = {
+export const user = {
   schema: Joi.object({
     data: Joi.object({
       options: Joi.array().has(
@@ -20,7 +20,7 @@ export const summary = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const { options } = body.data.options[0];
+    const { options } = body.data;
     const prognosticatorId = optionValue(options, 'user');
 
     const predictions = await redbookModel

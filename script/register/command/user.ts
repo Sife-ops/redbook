@@ -1,19 +1,14 @@
 export const user = {
   name: 'user',
-  description: 'User information.',
+  type: 1,
+  description: 'User Summary.',
   options: [
     {
-      name: 'summary',
-      description: 'User summary.',
-      type: 1,
-      options: [
-        {
-          type: 6,
-          name: 'user',
-          description: 'user',
-          required: true,
-        },
-      ],
+      type: 6,
+      name: 'user',
+      description: 'user',
+      required: true,
     },
   ],
 };
+
