@@ -50,6 +50,7 @@ export const Prediction: React.FC = () => {
           user={{
             ...prediction,
             userId: prediction.prognosticatorId,
+            verdict: undefined,
           }}
         />
       </div>
@@ -70,8 +71,8 @@ export const Prediction: React.FC = () => {
           <User
             key={e.judgeId}
             user={{
-              ...prediction,
-              userId: prediction.prognosticatorId,
+              ...e,
+              userId: e.judgeId,
               verdict: e.verdict || null,
             }}
           />

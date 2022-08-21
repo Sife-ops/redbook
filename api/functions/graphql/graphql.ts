@@ -14,9 +14,8 @@ interface ContextPayload extends JwtPayload {
 export const handler = createGQLHandler({
   schema,
   context: async (c) => {
-    // todo: non null assertions
-    const token = c.event.queryStringParameters!.token!
-    if (token !== 'null') {
+    const token = c.event.queryStringParameters?.token
+    if (token) {
       const {
         avatar,
         discriminator,

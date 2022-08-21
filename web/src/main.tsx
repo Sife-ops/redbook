@@ -9,8 +9,12 @@ import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
 
+const { VITE_GRAPHQL_URL } = import.meta.env;
+
 const urql = createClient({
-  url: import.meta.env.VITE_GRAPHQL_URL + '?token=' + token,
+  url: token
+    ? VITE_GRAPHQL_URL + '?token=' + token
+    : VITE_GRAPHQL_URL,
   exchanges: defaultExchanges
 });
 
