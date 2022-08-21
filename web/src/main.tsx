@@ -1,9 +1,10 @@
 // import "./index.css";
+import GlobalStyles from './styles/global-styles';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Error } from "./pages/error"
-import { Prediction } from './pages/prediction'
-import { Predictions } from './pages/predictions'
+import { Error } from "./pages/error";
+import { Prediction } from './pages/prediction';
+import { Predictions } from './pages/predictions';
 import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -21,6 +22,7 @@ const urql = createClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   /*<React.StrictMode>*/
   <UrqlProvider value={urql}>
+    <GlobalStyles />
     <App />
   </UrqlProvider>
   /*</React.StrictMode>*/
