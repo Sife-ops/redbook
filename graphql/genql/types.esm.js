@@ -140,6 +140,15 @@ export default {
                     ]
                 }
             ],
+            "predictions": [
+                6,
+                {
+                    "userId": [
+                        1,
+                        "String!"
+                    ]
+                }
+            ],
             "__typename": [
                 1
             ]

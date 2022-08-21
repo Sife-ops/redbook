@@ -63,7 +63,6 @@ export const describe = {
 
     const token = sign(
       {
-        predictionId,
         userId,
         username,
         discriminator,
@@ -113,7 +112,7 @@ export const describe = {
           {
             title: 'Redbook Web Link',
             description: `don't share links`,
-            url: `${url}/${prediction.predictionId}?token=${token}`,
+            url: `${url}/prediction/${prediction.predictionId}?token=${token}`,
             color: 0xff0000,
           },
         ],

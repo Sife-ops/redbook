@@ -5,7 +5,6 @@ import { verify, JwtPayload } from 'jsonwebtoken';
 const { TOKEN_SECRET } = process.env
 
 interface ContextPayload extends JwtPayload {
-  predictionId: string
   userId: string
   username: string
   avatar: string
@@ -16,20 +15,23 @@ export const handler = createGQLHandler({
   schema,
   context: async (c) => {
     // todo: non null assertions
-    const {
-      predictionId,
-      avatar,
-      discriminator,
-      userId,
-      username
-    } = verify(c.event.queryStringParameters!.token!, TOKEN_SECRET) as ContextPayload
+    const token = c.event.queryStringParameters!.token!
+    if (token !== 'null') {
+      const {
+        avatar,
+        discriminator,
+        userId,
+        username
+      } = verify(token, TOKEN_SECRET) as ContextPayload
 
-    return {
-      predictionId,
-      userId,
-      username,
-      discriminator,
-      avatar,
+      return {
+        userId,
+        username,
+        discriminator,
+        avatar,
+      }
+    } else {
+      return {}
     }
   }
 });

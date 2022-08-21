@@ -53,6 +53,7 @@ export interface Prediction {
 
 export interface Query {
     prediction: Prediction
+    predictions: Prediction[]
     __typename: 'Query'
 }
 
@@ -118,6 +119,7 @@ export interface PredictionRequest{
 
 export interface QueryRequest{
     prediction?: [{predictionId: Scalars['String']},PredictionRequest]
+    predictions?: [{userId: Scalars['String']},PredictionRequest]
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -265,11 +267,13 @@ export interface PredictionObservableChain{
 }
 
 export interface QueryPromiseChain{
-    prediction: ((args: {predictionId: Scalars['String']}) => PredictionPromiseChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Promise<FieldsSelection<Prediction, R>>})
+    prediction: ((args: {predictionId: Scalars['String']}) => PredictionPromiseChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Promise<FieldsSelection<Prediction, R>>}),
+    predictions: ((args: {userId: Scalars['String']}) => {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>[]) => Promise<FieldsSelection<Prediction, R>[]>})
 }
 
 export interface QueryObservableChain{
-    prediction: ((args: {predictionId: Scalars['String']}) => PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>})
+    prediction: ((args: {predictionId: Scalars['String']}) => PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>}),
+    predictions: ((args: {userId: Scalars['String']}) => {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>[]) => Observable<FieldsSelection<Prediction, R>[]>})
 }
 
 export interface RatingPromiseChain{

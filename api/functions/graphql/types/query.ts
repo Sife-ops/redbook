@@ -25,6 +25,23 @@ builder.queryFields(t => ({
 
       return predictions[0];
     }
+  }),
+
+  predictions: t.field({
+    args: {
+      userId: t.arg.string({ required: true })
+    },
+    type: [PredictionType],
+    resolve: async (_, args) => {
+      return await redbookModel
+        .entities
+        .PredictionEntity
+        .query
+        .prognosticatorPrediction({
+          prognosticatorId: args.userId
+        })
+        .go()
+    }
   })
 }));
 

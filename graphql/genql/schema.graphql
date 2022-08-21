@@ -41,6 +41,7 @@ type Prediction {
 
 type Query {
   prediction(predictionId: String!): Prediction!
+  predictions(userId: String!): [Prediction!]!
 }
 
 type Rating {

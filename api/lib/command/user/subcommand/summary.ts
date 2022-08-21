@@ -2,6 +2,8 @@ import Joi from 'joi';
 import { optionValue } from '@redbook/lib/utility';
 import { redbookModel } from '@redbook/lib/db';
 
+const { SITE_URL, REDBOOK_ENV } = process.env;
+
 export const summary = {
   schema: Joi.object({
     data: Joi.object({
@@ -64,9 +66,14 @@ export const summary = {
       }
     );
 
+    const url = REDBOOK_ENV === 'dev'
+      ? 'http://localhost:5173'
+      : SITE_URL;
+
     return {
       type: 4,
       data: {
+        flags: 64,
         embeds: [
           {
             title: 'Summary',
@@ -99,6 +106,12 @@ export const summary = {
                 inline: false,
               },
             ],
+          },
+          {
+            title: 'Redbook Web Link',
+            description: `don't share links`,
+            url: `${url}/user/${prognosticatorId}`,
+            color: 0xff0000,
           },
         ],
       },

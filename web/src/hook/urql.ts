@@ -1,4 +1,88 @@
+/*
+ * todo: move to files
+ */
+
 import { useTypedQuery, useTypedMutation } from "../urql";
+
+// todo: not very dry
+export const usePredictionsQuery = (userId: string) => {
+  return useTypedQuery({
+    query: {
+      predictions: [
+        {
+          userId
+        },
+        {
+          predictionId: true,
+
+          prognosticatorId: true,
+          avatar: true,
+          discriminator: true,
+          username: true,
+
+          conditions: true,
+          created_at: true,
+          verdict: true,
+
+          judges: {
+            predictionId: true,
+
+            judgeId: true,
+            avatar: true,
+            discriminator: true,
+            username: true,
+
+            verdict: true,
+          },
+
+          ratings: {
+            __typename: true,
+            commentId: true,
+
+            predictionId: true,
+
+            criticId: true,
+            avatar: true,
+            discriminator: true,
+            username: true,
+
+            like: true,
+          },
+
+          comments: {
+            __typename: true,
+
+            predictionId: true,
+            commentId: true,
+
+            commenterId: true,
+            avatar: true,
+            discriminator: true,
+            username: true,
+
+            comment: true,
+            replyTo: true,
+            created_at: true,
+
+            ratings: {
+              __typename: true,
+              predictionId: true,
+
+              commentId: true,
+
+              criticId: true,
+              avatar: true,
+              discriminator: true,
+              username: true,
+
+              like: true,
+            }
+          }
+        }
+      ]
+    }
+  })
+}
 
 export const usePredictionQuery = (predictionId: string) => {
   return useTypedQuery({

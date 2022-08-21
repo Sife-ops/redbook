@@ -49,10 +49,8 @@ export const Dev: React.FC = () => {
         <h3>By:</h3>
         <User
           user={{
-            avatar: prediction.avatar,
+            ...prediction,
             userId: prediction.prognosticatorId,
-            username: prediction.username,
-            discriminator: prediction.discriminator,
           }}
         />
       </div>
@@ -73,10 +71,8 @@ export const Dev: React.FC = () => {
           <User
             key={e.judgeId}
             user={{
-              avatar: e.avatar,
-              userId: e.judgeId,
-              username: e.username,
-              discriminator: e.discriminator,
+              ...prediction,
+              userId: prediction.prognosticatorId,
               verdict: e.verdict || null,
             }}
           />
