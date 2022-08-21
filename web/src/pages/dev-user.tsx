@@ -19,8 +19,23 @@ export const DevUser: React.FC = () => {
     return <Navigate to='/error' />
   }
 
-  console.log(predictionsQueryState.data)
+  const { predictions } = predictionsQueryState.data;
 
-  return <div>lol</div>
+  return (
+    <div>
+      {predictions.map(e => (
+        <div 
+          key={e.predictionId}
+          style={{
+            border: '1px solid red'
+          }}
+        >
+          <h3>{e.predictionId}</h3>
+          <div>{e.conditions}</div>
+          <div>{e.created_at}</div>
+        </div>
+      ))}
+    </div>
+  )
 }
 
