@@ -4,26 +4,22 @@
   "type": "module",
   "scripts": {},
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.137.0",
-    "@faker-js/faker": "^7.3.0",
-    "@pothos/core": "^3.13.0",
-    "@serverless-stack/node": "^1.6.6",
-    "aws-sdk": "^2.1159.0",
+    "@aws-sdk/client-dynamodb": "^3.154.0",
+    "@faker-js/faker": "^7.4.0",
+    "@pothos/core": "^3.16.0",
+    "@serverless-stack/node": "^1.8.2",
+    "aws-sdk": "^2.1199.0",
     "discord-api-types": "^0.34.0",
-    "dynamoose": "^2.8.5",
+    "dynamoose": "^2.8.7",
     "electrodb": "^1.11.1",
-    "graphql": "^16.5.0",
+    "graphql": "^16.6.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
-    "kysely": "^0.19.3",
-    "pg": "^8.7.3",
-    "pg-native": "^3.0.0",
     "tweetnacl": "^1.0.3",
     "ulid": "^2.3.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.101",
-    "@types/jsonwebtoken": "^8.5.8",
-    "@types/pg": "^8.6.5"
+    "@types/aws-lambda": "^8.10.102",
+    "@types/jsonwebtoken": "^8.5.8"
   }
 }
