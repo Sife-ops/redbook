@@ -2,7 +2,6 @@
   "name": "@redbook/api",
   "version": "0.0.0",
   "type": "module",
-  "scripts": {},
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.154.0",
     "@faker-js/faker": "^7.4.0",
