@@ -1,9 +1,9 @@
 import "./index.css";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Dev } from "./pages/dev"
-import { DevUser } from './pages/dev-user'
 import { Error } from "./pages/error"
+import { Prediction } from './pages/prediction'
+import { Predictions } from './pages/predictions'
 import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -26,8 +26,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/prediction/:predictionId" element={<Dev />} />
-        <Route path="/user/:userId" element={<DevUser />} />
+        <Route path="/prediction/:predictionId" element={<Prediction />} />
+        <Route path="/user/:userId" element={<Predictions />} />
         <Route path="/error" element={<Error />} />
         <Route path="*" element={<Navigate to="/error" />} />
       </Routes>

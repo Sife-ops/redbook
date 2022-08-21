@@ -1,6 +1,5 @@
 /*
  * todo: vote on predictions
- * todo: summary
  */
 
 import React from 'react';
@@ -10,7 +9,7 @@ import { Ratings } from '../component/ratings';
 import { User } from '../component/user';
 import { usePredictionQuery } from '../hook/urql';
 
-export const Dev: React.FC = () => {
+export const Prediction: React.FC = () => {
   const params = useParams();
   const [predictionQueryState] = usePredictionQuery(params.predictionId!);
 

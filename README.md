@@ -28,10 +28,6 @@ The best prediction record-keeping bot in the universe!
 
 1.
   - vote on predictions in web
-  - user summary in web
-    - remove user prediction subcommands
-    - move /user summary to /user
-    - /help command
   - bug can't /prediction judge add user with no avatar!!!
   - user predictions page
   - update packages

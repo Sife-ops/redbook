@@ -129,12 +129,6 @@ export const create = {
                 value: predictionId,
                 inline: false,
               },
-              // // todo: public version???
-              // {
-              //   name: 'Web',
-              //   value: `${process.env.SITE_URL}/${predictionId}`,
-              //   inline: false,
-              // },
             ],
           },
         ],

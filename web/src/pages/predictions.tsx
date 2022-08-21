@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { usePredictionsQuery } from '../hook/urql';
 
-export const DevUser: React.FC = () => {
+export const Predictions: React.FC = () => {
   const params = useParams();
   const [predictionsQueryState] = usePredictionsQuery(params.userId!);
 
@@ -21,10 +21,17 @@ export const DevUser: React.FC = () => {
 
   const { predictions } = predictionsQueryState.data;
 
+  if (predictions.length < 1) {
+    return (
+      <div>no predictos</div>
+    )
+  }
+
   return (
     <div>
+      <h1>{predictions[0].username}'s Predictions:</h1>
       {predictions.map(e => (
-        <div 
+        <div
           key={e.predictionId}
           style={{
             border: '1px solid red'
