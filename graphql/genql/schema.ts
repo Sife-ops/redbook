@@ -117,7 +117,7 @@ export interface PredictionRequest{
 }
 
 export interface QueryRequest{
-    prediction?: PredictionRequest
+    prediction?: [{predictionId: Scalars['String']},PredictionRequest]
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -265,11 +265,11 @@ export interface PredictionObservableChain{
 }
 
 export interface QueryPromiseChain{
-    prediction: (PredictionPromiseChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Promise<FieldsSelection<Prediction, R>>})
+    prediction: ((args: {predictionId: Scalars['String']}) => PredictionPromiseChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Promise<FieldsSelection<Prediction, R>>})
 }
 
 export interface QueryObservableChain{
-    prediction: (PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>})
+    prediction: ((args: {predictionId: Scalars['String']}) => PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>})
 }
 
 export interface RatingPromiseChain{

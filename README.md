@@ -27,6 +27,8 @@ The best prediction record-keeping bot in the universe!
 ## todo
 
 1.
+  - vote on predictions in web
+  - user summary in web
   - bug can't /prediction judge add user with no avatar!!!
   - user predictions page
   - update packages
@@ -34,6 +36,7 @@ The best prediction record-keeping bot in the universe!
   - banner
   - secrets manager
 2.
+  - update exportJsonLambda
   - responsive comment
   - finish migrating judges in dynamodb
   - edit comment

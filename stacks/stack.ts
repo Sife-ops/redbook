@@ -97,8 +97,10 @@ export function stack({ stack }: StackContext) {
     },
   });
 
+  /*
+   * todo: update exportJsonLambda for new data model
+   */
   const exportJsonBucket = new Bucket(stack, 'exportJsonBucket');
-
   const exportJsonLambda = new Function(stack, 'exportJsonLambda', {
     handler: 'functions/export-json.handler',
     environment: {
@@ -109,8 +111,9 @@ export function stack({ stack }: StackContext) {
   });
 
   stack.addOutputs({
-    BotEndpoint: bot.url,
     ExportJsonBucket: exportJsonBucket.bucketName,
+    ExportJsonLambda: exportJsonLambda.functionArn,
+    BotEndpoint: bot.url,
     GraphqlApi: graphqlApi.url,
     MnemonicDlq: mnemonicDlq.queueUrl,
     SiteUrl: site.url,

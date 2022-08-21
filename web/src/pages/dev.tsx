@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+/*
+ * todo: vote on predictions
+ * todo: summary
+ */
+
+import React from 'react';
 import { CommentsSection } from '../component/comments'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { Ratings } from '../component/ratings';
 import { User } from '../component/user';
 import { usePredictionQuery } from '../hook/urql';
 
 export const Dev: React.FC = () => {
-
-  const [predictionQueryState] = usePredictionQuery();
+  const params = useParams();
+  const [predictionQueryState] = usePredictionQuery(params.predictionId!);
 
   if (predictionQueryState.fetching) {
     return (

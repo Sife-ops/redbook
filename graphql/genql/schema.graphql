@@ -40,7 +40,7 @@ type Prediction {
 }
 
 type Query {
-  prediction: Prediction!
+  prediction(predictionId: String!): Prediction!
 }
 
 type Rating {

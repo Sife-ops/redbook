@@ -132,7 +132,13 @@ export default {
         },
         "Query": {
             "prediction": [
-                6
+                6,
+                {
+                    "predictionId": [
+                        1,
+                        "String!"
+                    ]
+                }
             ],
             "__typename": [
                 1

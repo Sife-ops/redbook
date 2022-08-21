@@ -4,14 +4,17 @@ import { PredictionType } from './prediction'
 
 builder.queryFields(t => ({
   prediction: t.field({
+    args: {
+      predictionId: t.arg.string({ required: true })
+    },
     type: PredictionType,
-    resolve: async (_, __, context: any) => {
+    resolve: async (_, args) => {
       const predictions = await redbookModel
         .entities
         .PredictionEntity
         .query
         .prediction({
-          predictionId: context.predictionId
+          predictionId: args.predictionId
         })
         .go();
 

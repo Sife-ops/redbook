@@ -1,5 +1,5 @@
 /*
- * move components
+ * todo: move components
  */
 
 import React, { useState, useEffect } from 'react';
