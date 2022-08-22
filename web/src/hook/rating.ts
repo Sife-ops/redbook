@@ -1,4 +1,4 @@
-import { Rating as RatingType } from '../../../graphql/genql/schema';
+import { Rating as RatingType } from '@redbook/graphql/genql/schema';
 import { useRateMutation } from './urql';
 import { useState } from 'react';
 
@@ -7,7 +7,7 @@ interface Rating {
   dislikes: number;
 }
 
-export const useLike = (
+export const useRating = (
   r: RatingType[],
   predictionId: string,
   commentId?: string
@@ -17,7 +17,7 @@ export const useLike = (
   // todo: fetch initial 'rated' state
   const [rated, setRated] = useState<'liked' | 'disliked' | null>(null);
 
-  const [ratingsState, setRatingsState] = useState<Rating>(
+  const [ratingState, setRatingsState] = useState<Rating>(
     r.reduce(
       (a, c) => {
         if (c.like) {
@@ -77,7 +77,7 @@ export const useLike = (
   };
 
   const percentage = () => {
-    const { dislikes, likes } = ratingsState;
+    const { dislikes, likes } = ratingState;
     if (likes + dislikes === 0) {
       return 100;
     } else {
@@ -88,7 +88,7 @@ export const useLike = (
 
   return {
     percentage,
-    ratingsState,
+    ratingState,
     rate
   };
 };
