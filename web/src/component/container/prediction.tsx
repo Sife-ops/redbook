@@ -1,8 +1,7 @@
+import 'twin.macro';
 import React from 'react';
-import tw from 'twin.macro';
 import { Prediction as PredictionType } from '../../../../graphql/genql/schema';
 import { User } from '../element/user';
-import { Ratings } from '../element/ratings';
 
 interface Props {
   type: 'summary' | 'full';

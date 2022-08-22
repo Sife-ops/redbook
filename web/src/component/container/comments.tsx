@@ -83,10 +83,10 @@ export const Comment: React.FC<{ comment: CommentType }> = (props) => {
       <div>{props.comment.username}</div>
       <div>{props.comment.comment}</div>
 
-      <Ratings
+      {/* <Ratings
         ratings={props.comment.ratings}
         commentId={props.comment.commentId}
-      />
+      /> */}
     </div>
   )
 }
