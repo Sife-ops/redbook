@@ -4,11 +4,6 @@ import { Prediction } from '../container/prediction';
 import { useParams, Navigate } from 'react-router-dom';
 import { usePredictionsQuery } from '../../hook/urql';
 
-// const Container2 = styled.div(({ hasBg }) => [
-//   tw`flex w-full`, // Add base styles first
-//   hasBg && tw`bg-black`, // Then add conditional styles
-// ])
-
 export const Predictions: React.FC = () => {
   const params = useParams();
   const [predictionsQueryState] = usePredictionsQuery(params.userId!);

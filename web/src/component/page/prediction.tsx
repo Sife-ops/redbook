@@ -67,7 +67,7 @@ export const Prediction: React.FC = () => {
 
       <div>
         <h3>Judges:</h3>
-        {prediction.judges.map(e => (
+        {/* {prediction.judges.map(e => (
           <User
             key={e.judgeId}
             user={{
@@ -76,7 +76,7 @@ export const Prediction: React.FC = () => {
               verdict: e.verdict || null,
             }}
           />
-        ))}
+        ))} */}
       </div>
 
       <div>
