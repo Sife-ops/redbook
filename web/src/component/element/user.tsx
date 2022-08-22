@@ -37,13 +37,13 @@ export const User: React.FC<props> = props => {
         }
       ]}
     >
-      <div>
+      <div tw='flex flex-col justify-center min-w-[48px] max-w-[48px]'>
         {avatarImg && (
-          <img tw="rounded-full w-12" src={avatarImg} alt="icons" />
+          <img tw="rounded-full" src={avatarImg} alt="icons" />
         )}
       </div>
       <div tw="flex flex-col justify-center">
-        <div>{username}</div>
+        <p tw="break-all">{username}</p>
         <div tw="text-gray-400">#{discriminator}</div>
       </div>
     </div>

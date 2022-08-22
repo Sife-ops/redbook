@@ -3,7 +3,12 @@ import tw from 'twin.macro';
 import { Prediction as PredictionType } from '../../../../graphql/genql/schema';
 import { User } from '../element/user';
 
-export const Prediction: React.FC<{ prediction: PredictionType }> = props => {
+interface Props {
+  type?: 'summary';
+  prediction: PredictionType;
+}
+
+export const Prediction: React.FC<Props> = props => {
   const date = new Date(props.prediction.created_at);
 
   return (
@@ -23,16 +28,19 @@ export const Prediction: React.FC<{ prediction: PredictionType }> = props => {
       <div tw="flex flex-row gap-4">
         <div tw="flex flex-col flex-grow">
           <div tw="flex-grow">
-            <span tw="text-xs">Conditions:</span>
+            <span tw="italic text-xs text-gray-400">Conditions:</span>
             <p>{props.prediction.conditions}</p>
           </div>
           <div>
-            <p tw="text-xs">{date.toLocaleDateString()}</p>
+            <p tw="italic text-xs text-gray-400">{date.toLocaleDateString()}</p>
+          </div>
+          <div>
+            <i className='hand-thumbs-up' />
           </div>
         </div>
         <div>
-          <span tw="text-xs">Judges:</span>
-          <div tw="flex flex-col gap-2">
+          <span tw="italic text-xs text-gray-400">Judges:</span>
+          <div tw="flex flex-col gap-2 w-[150px]">
             {props.prediction.judges.map(e => (
               <User
                 key={e.judgeId}

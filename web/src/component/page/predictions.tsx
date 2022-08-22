@@ -28,7 +28,7 @@ export const Predictions: React.FC = () => {
       <h2 tw="text-center">{predictions[0].username}'s Predictos:</h2>
       <div>
         {predictions.map(e => (
-          <Prediction prediction={e} />
+          <Prediction prediction={e} type="summary" />
         ))}
       </div>
     </div>
