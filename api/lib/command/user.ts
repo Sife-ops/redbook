@@ -102,7 +102,14 @@ export const user = {
               },
               {
                 name: 'Accuracy',
-                value: `${(stats.correct / (stats.total - stats.undecided)) * 100}%`,
+                value: (() => {
+                  const decided = stats.correct + stats.incorrect;
+                  if (decided === 0) {
+                    return 'unavailable';
+                  } else {
+                    return `${(stats.correct / decided) * 100}%`
+                  }
+                })(),
                 inline: false,
               },
             ],
