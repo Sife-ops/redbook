@@ -34,13 +34,14 @@ builder.mutationFields(t => ({
 
   rate: t.string({
     args: {
+      predictionId: t.arg.string({ required: true }),
       commentId: t.arg.string(),
       like: t.arg.boolean({ required: true }),
     },
     // todo: no explicit any
     // todo: destructure context
     resolve: async (_, args, context: any) => {
-      const predictionId = context.predictionId as string;
+      const predictionId = args.predictionId;
       const commentId = args.commentId || '';
 
       // look up previous rating
