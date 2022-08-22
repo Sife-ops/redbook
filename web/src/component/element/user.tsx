@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAvatar } from '../hook/avatar';
+import { useAvatar } from '../../hook/avatar';
 
 interface props {
   user: {

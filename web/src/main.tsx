@@ -1,10 +1,10 @@
-// import "./index.css";
+import 'twin.macro';
 import GlobalStyles from './styles/global-styles';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Error } from "./pages/error";
-import { Prediction } from './pages/prediction';
-import { Predictions } from './pages/predictions';
+import { Error } from "./component/page/error";
+import { Prediction } from './component/page/prediction';
+import { Predictions } from './component/page/predictions';
 import { Provider as UrqlProvider, createClient, defaultExchanges } from "urql";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -31,7 +31,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 function App() {
   return (
     <BrowserRouter>
-      <h1>REDBOOK</h1>
+      <div>
+        <h1 tw='text-center text-4xl'>REDBOOK</h1>
+      </div>
       <Routes>
         <Route path="/prediction/:predictionId" element={<Prediction />} />
         <Route path="/user/:userId" element={<Predictions />} />

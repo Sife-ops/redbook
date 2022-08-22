@@ -3,11 +3,11 @@
  */
 
 import React from 'react';
-import { CommentsSection } from '../component/comments'
+import { CommentsSection } from '../container/comments'
 import { Navigate, useParams } from 'react-router-dom';
-import { Ratings } from '../component/ratings';
-import { User } from '../component/user';
-import { usePredictionQuery } from '../hook/urql';
+import { Ratings } from '../element/ratings';
+import { User } from '../element/user';
+import { usePredictionQuery } from '../../hook/urql';
 
 export const Prediction: React.FC = () => {
   const params = useParams();

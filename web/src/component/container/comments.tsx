@@ -3,10 +3,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Comment as CommentType } from '../../../graphql/genql/schema';
-import { Ratings } from '../component/ratings';
-import { useCommentMutation } from '../hook/urql';
-import { useComments } from '../hook/comments';
+import { Comment as CommentType } from '../../../../graphql/genql/schema';
+import { Ratings } from '../element/ratings';
+import { useCommentMutation } from '../../hook/urql';
+import { useComments } from '../../hook/comments';
 
 export const CommentsSection: React.FC<{ comments: CommentType[] }> = (props) => {
   const { comments, pushComment } = useComments(props.comments);
