@@ -85,6 +85,10 @@ export default {
                     "like": [
                         4,
                         "Boolean!"
+                    ],
+                    "predictionId": [
+                        1,
+                        "String!"
                     ]
                 }
             ],

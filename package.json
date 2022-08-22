@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "sst start",
+    "start": "sst start --increase-timeout",
     "build": "sst build",
     "deploy": "sst deploy --stage=prod",
     "remove": "sst remove",
