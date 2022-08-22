@@ -24,7 +24,7 @@ export const User: React.FC<props> = props => {
   return (
     <div
       css={[
-        tw`flex gap-2 text-sm p-2 rounded-md bg-gray-800`,
+        tw`flex gap-2 text-sm p-2 rounded-md bg-gray-800 w-[150px]`,
         () => {
           if (props.type === 'judge') {
             // todo: fix verdict type

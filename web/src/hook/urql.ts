@@ -171,6 +171,7 @@ export const useRateMutation = () => {
   return useTypedMutation(
     (
       vars: {
+        predictionId: string;
         commentId?: string;
         like: boolean;
       }

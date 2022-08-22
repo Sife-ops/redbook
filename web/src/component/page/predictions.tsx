@@ -1,5 +1,5 @@
-import 'twin.macro';
 import React from 'react';
+import tw from 'twin.macro';
 import { Prediction } from '../container/prediction';
 import { useParams, Navigate } from 'react-router-dom';
 import { usePredictionsQuery } from '../../hook/urql';
@@ -28,7 +28,21 @@ export const Predictions: React.FC = () => {
       <h2 tw="text-center">{predictions[0].username}'s Predictos:</h2>
       <div>
         {predictions.map(e => (
-          <Prediction prediction={e} type="summary" />
+          <div
+            key={e.predictionId}
+            css={[
+              tw`mb-2 p-2 rounded-md bg-gray-700`,
+              () => {
+                if (e.verdict === true) {
+                  return tw`bg-green-900 border-2 border-solid border-green-500`;
+                } else if (e.verdict === false) {
+                  return tw`bg-red-900 border-2 border-solid border-red-500`;
+                }
+              }
+            ]}
+          >
+            <Prediction prediction={e} type="summary" />
+          </div>
         ))}
       </div>
     </div>
