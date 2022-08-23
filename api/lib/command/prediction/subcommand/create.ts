@@ -45,8 +45,7 @@ export const create = {
      */
 
     // 1) create prediction
-    const { avatar, discriminator, username } = body.member.user;
-    const prognosticatorId = body.member.user.id;
+    const { avatar, discriminator, username, id: prognosticatorId } = body.member.user;
     const { options } = body.data.options[0];
     const conditions = optionValue(options, 'conditions');
     const judgeId = optionValue(options, 'judge');
@@ -85,24 +84,31 @@ export const create = {
     //     }
     //   })
 
-    await redbookModel.entities.PredictionEntity.create({
-      avatar,
-      conditions,
-      created_at: new Date().toISOString(),
-      discriminator,
-      predictionId,
-      prognosticatorId,
-      username,
-    }).go()
+    await redbookModel
+      .entities
+      .PredictionEntity
+      .create({
+        avatar,
+        conditions,
+        discriminator,
+        predictionId,
+        prognosticatorId,
+        username,
+      })
+      .go()
 
     // 2) create judge
-    await redbookModel.entities.JudgeEntity.create({
-      avatar: judge.avatar,
-      judgeId,
-      username: judge.username,
-      predictionId,
-      discriminator: judge.discriminator,
-    }).go()
+    await redbookModel
+      .entities
+      .JudgeEntity
+      .create({
+        avatar: judge.avatar,
+        judgeId,
+        username: judge.username,
+        predictionId,
+        discriminator: judge.discriminator,
+      })
+      .go()
 
     // 3) format message
     return {
