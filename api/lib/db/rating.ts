@@ -37,47 +37,31 @@ export const RatingEntity = new Entity(
         required: true,
       },
 
-      like: {
-        type: "boolean",
+      rating: {
+        type: ['like', 'dislike', 'none'],
         required: true,
       },
     },
     indexes: {
-      criticRating: {
+      predictionRating: {
         pk: {
           field: "pk",
           composite: ["criticId"],
         },
         sk: {
           field: "sk",
-          composite: ['predictionId', 'commentId'],
-        },
-      },
-      predictionRating: {
-        collection: [
-          'predictionJudge',
-          'predictionRating'
-        ] as const,
-        index: 'gsi1',
-        pk: {
-          field: "gsi1pk",
-          composite: ["predictionId"],
-        },
-        sk: {
-          field: "gsi1sk",
-          composite: ["criticId"],
+          composite: ['predictionId'],
         },
       },
       commentRating: {
-        collection: 'commentRating',
-        index: 'gsi2',
+        index: 'gsi1',
         pk: {
-          field: "gsi2pk",
-          composite: ["commentId"],
+          field: "gsi1pk",
+          composite: ["criticId"],
         },
         sk: {
-          field: "gsi2sk",
-          composite: ["criticId"],
+          field: "gsi1sk",
+          composite: ['commentId'],
         },
       },
     },

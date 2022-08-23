@@ -34,7 +34,9 @@ export const JudgeEntity = new Entity(
       },
 
       verdict: {
-        type: "boolean",
+        type: ["correct", "incorrect", "none"],
+        required: true,
+        default: 'none'
       },
     },
     indexes: {

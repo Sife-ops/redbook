@@ -37,16 +37,28 @@ export const CommentEntity = new Entity(
         required: true,
       },
 
-      replyTo: {
-        type: "string",
-      },
       comment: {
         type: "string",
         required: true,
       },
       created_at: {
-        type: "string",
+        type: "number",
         required: true,
+        default: () => Date.now()
+      },
+      replyTo: {
+        type: "string",
+      },
+
+      likes: {
+        type: "number",
+        required: true,
+        default: 0,
+      },
+      dislikes: {
+        type: "number",
+        required: true,
+        default: 0,
       },
     },
     indexes: {
@@ -63,7 +75,6 @@ export const CommentEntity = new Entity(
       predictionComment: {
         collection: [
           'predictionJudge',
-          'predictionRating',
           'predictionComment'
         ] as const,
         index: 'gsi1',
@@ -74,18 +85,6 @@ export const CommentEntity = new Entity(
         sk: {
           field: "gsi1sk",
           composite: ["commenterId"],
-        },
-      },
-      comment: {
-        collection: 'commentRating',
-        index: 'gsi2',
-        pk: {
-          field: "gsi2pk",
-          composite: ["commentId"],
-        },
-        sk: {
-          field: "gsi2sk",
-          composite: [],
         },
       },
     },

@@ -38,11 +38,25 @@ export const PredictionEntity = new Entity(
         required: true,
       },
       verdict: {
-        type: "boolean",
+        type: ["correct", "incorrect", "none"],
+        required: true,
+        default: 'none'
       },
       created_at: {
-        type: "string",
+        type: "number",
         required: true,
+        default: () => Date.now()
+      },
+
+      likes: {
+        type: "number",
+        required: true,
+        default: 0,
+      },
+      dislikes: {
+        type: "number",
+        required: true,
+        default: 0,
       },
     },
     indexes: {
@@ -59,7 +73,7 @@ export const PredictionEntity = new Entity(
       prediction: {
         collection: [
           'predictionJudge',
-          'predictionRating',
+          // 'predictionRating',
           'predictionComment'
         ] as const,
         index: 'gsi1',
