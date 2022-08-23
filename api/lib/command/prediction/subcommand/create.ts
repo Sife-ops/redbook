@@ -88,12 +88,14 @@ export const create = {
       .entities
       .PredictionEntity
       .create({
-        avatar,
-        conditions,
-        discriminator,
         predictionId,
+
         prognosticatorId,
         username,
+        discriminator,
+        avatar,
+
+        conditions,
       })
       .go()
 
@@ -102,11 +104,12 @@ export const create = {
       .entities
       .JudgeEntity
       .create({
-        avatar: judge.avatar,
+        predictionId,
+
         judgeId,
         username: judge.username,
-        predictionId,
         discriminator: judge.discriminator,
+        avatar: judge.avatar,
       })
       .go()
 
