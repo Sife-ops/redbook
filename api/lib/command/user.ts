@@ -41,12 +41,12 @@ export const user = {
     // todo: test after refactoring vote command
     const stats = predictions.reduce(
       (a: Stats, c) => {
-        if (c.verdict === undefined) {
+        if (c.verdict === 'none') {
           return {
             ...a,
             undecided: a.undecided + 1,
           };
-        } else if (c.verdict) {
+        } else if (c.verdict === 'correct') {
           return {
             ...a,
             correct: a.correct + 1,
