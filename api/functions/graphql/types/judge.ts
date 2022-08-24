@@ -1,6 +1,5 @@
-import { builder } from "../builder";
-
 import { JudgeEntityType, } from '@redbook/lib/db';
+import { builder } from "../builder";
 
 export const JudgeType = builder
   .objectRef<JudgeEntityType>("Judge")
@@ -13,7 +12,7 @@ export const JudgeType = builder
       username: t.exposeString("username"),
       discriminator: t.exposeString("discriminator"),
 
-      verdict: t.exposeBoolean("verdict", { nullable: true })
+      verdict: t.exposeString("verdict"),
     })
   })
 

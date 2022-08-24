@@ -2,6 +2,7 @@ export * as Comment from "./comment";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
+import { ulid } from 'ulid';
 
 export const CommentEntity = new Entity(
   {
@@ -11,6 +12,10 @@ export const CommentEntity = new Entity(
       service: "redbook",
     },
     attributes: {
+      userId: {
+        type: "string",
+        required: true,
+      },
       predictionId: {
         type: "string",
         required: true,
@@ -18,23 +23,7 @@ export const CommentEntity = new Entity(
       commentId: {
         type: "string",
         required: true,
-      },
-
-      commenterId: {
-        type: "string",
-        required: true,
-      },
-      username: {
-        type: "string",
-        required: true,
-      },
-      discriminator: {
-        type: "string",
-        required: true,
-      },
-      avatar: {
-        type: "string",
-        required: true,
+        default: () => ulid()
       },
 
       comment: {
@@ -62,31 +51,64 @@ export const CommentEntity = new Entity(
       },
     },
     indexes: {
-      commenterComment: {
+
+      comment: {
         pk: {
           field: "pk",
-          composite: ['commenterId'],
+          composite: ['commentId'],
         },
         sk: {
           field: "sk",
-          composite: ['commentId'],
+          composite: ['commenterId'],
         },
       },
-      predictionComment: {
+
+      collection: {
         collection: [
-          'predictionJudge',
-          'predictionComment'
-        ] as const,
+            'prognosticator',
+            'judge',
+            'commenter',
+        ],
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["predictionId"],
+          composite: ["userId"],
         },
         sk: {
           field: "gsi1sk",
-          composite: ["commenterId"],
+          composite: ["predictionId"],
         },
-      },
+      }
+
+      // predictionComment: {
+      //   collection: [
+      //     'predictionJudge',
+      //     'predictionComment'
+      //   ] as const,
+      //   index: 'gsi1',
+      //   pk: {
+      //     field: "gsi1pk",
+      //     composite: ["predictionId"],
+      //   },
+      //   sk: {
+      //     field: "gsi1sk",
+      //     composite: ["commentId"],
+      //   },
+      // },
+
+      // comment: {
+      //   collection: 'commentRating',
+      //   index: 'gsi2',
+      //   pk: {
+      //     field: "gsi2pk",
+      //     composite: ["commentId"],
+      //   },
+      //   sk: {
+      //     field: "gsi2sk",
+      //     composite: [],
+      //   },
+      // },
+
     },
   },
   Dynamo.Configuration

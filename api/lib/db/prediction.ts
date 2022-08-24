@@ -11,24 +11,11 @@ export const PredictionEntity = new Entity(
       service: "redbook",
     },
     attributes: {
+      userId: {
+        type: "string",
+        required: true,
+      },
       predictionId: {
-        type: "string",
-        required: true,
-      },
-
-      prognosticatorId: {
-        type: "string",
-        required: true,
-      },
-      username: {
-        type: "string",
-        required: true,
-      },
-      discriminator: {
-        type: "string",
-        required: true,
-      },
-      avatar: {
         type: "string",
         required: true,
       },
@@ -60,36 +47,67 @@ export const PredictionEntity = new Entity(
       },
     },
     indexes: {
-      prognosticatorPrediction: {
+
+      prediction: {
         pk: {
           field: "pk",
-          composite: ["prognosticatorId"],
+          composite: ["predictionId"],
         },
         sk: {
           field: "sk",
-          composite: ["predictionId"],
+          composite: ["created_at"],
         },
       },
-      prediction: {
+
+      collection: {
         collection: [
-          'predictionJudge',
-          // 'predictionRating',
-          'predictionComment'
-        ] as const,
+            'prognosticator',
+            'judge',
+            'commenter',
+        ],
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["predictionId"],
+          composite: ["userId"],
         },
         sk: {
           field: "gsi1sk",
-          composite: [],
+          composite: ["predictionId"],
         },
-      },
+      }
+
+      // prognosticatorPrediction: {
+      //   index: 'gsi2',
+      //   pk: {
+      //     field: "gsi2pk",
+      //     composite: ["prognosticatorId"],
+      //   },
+      //   sk: {
+      //     field: "gsi2sk",
+      //     composite: ["predictionId"],
+      //   },
+      // },
+
+      // prediction: {
+      //   collection: [
+      //     'predictionJudge',
+      //     'predictionComment',
+      //     // 'predictionRating'
+      //   ] as const,
+      //   index: 'gsi1',
+      //   pk: {
+      //     field: "gsi1pk",
+      //     composite: ["predictionId"],
+      //   },
+      //   sk: {
+      //     field: "gsi1sk",
+      //     composite: [],
+      //   },
+      // },
+
     },
   },
   Dynamo.Configuration
 );
 
 export type PredictionEntityType = EntityItem<typeof PredictionEntity>;
-

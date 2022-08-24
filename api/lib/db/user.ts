@@ -1,22 +1,17 @@
-export * as Judge from "./judge";
+export * as User from "./user";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
 
-export const JudgeEntity = new Entity(
+export const UserEntity = new Entity(
   {
     model: {
       version: "1",
-      entity: "Judge",
+      entity: "User",
       service: "redbook",
     },
     attributes: {
-      predictionId: {
-        type: "string",
-        required: true,
-      },
-
-      judgeId: {
+      userId: {
         type: "string",
         required: true,
       },
@@ -33,39 +28,45 @@ export const JudgeEntity = new Entity(
         required: true,
       },
 
-      verdict: {
-        type: ["correct", "incorrect", "none"],
+      created_at: {
+        type: "number",
         required: true,
-        default: 'none'
+        default: () => Date.now()
       },
     },
     indexes: {
-      judgePrediction: {
+
+      user: {
         pk: {
           field: "pk",
-          composite: ["judgeId"],
+          composite: ["userId"],
         },
         sk: {
           field: "sk",
-          composite: ["predictionId"],
+          composite: ["created_at"],
         },
       },
-      predictionJudge: {
-        collection: 'predictionJudge',
+
+      collection: {
+        collection: [
+            'prognosticator',
+            'judge',
+            'commenter',
+        ],
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["predictionId"],
+          composite: ["userId"],
         },
         sk: {
           field: "gsi1sk",
-          composite: ["judgeId"],
+          composite: ["created_at"],
         },
-      }
+      },
+
     },
   },
   Dynamo.Configuration
 );
 
-export type JudgeEntityType = EntityItem<typeof JudgeEntity>;
-
+export type UserEntityType = EntityItem<typeof UserEntity>;

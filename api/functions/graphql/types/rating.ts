@@ -13,7 +13,7 @@ export const RatingType = builder
       discriminator: t.exposeString("discriminator"),
       username: t.exposeString("username"),
 
-      like: t.exposeBoolean("like"),
+      // like: t.exposeBoolean("like"),
     })
   })
 

@@ -1,13 +1,14 @@
-export * as Rating from "./rating";
+export * as Verdict from "./verdict";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
+import { ulid } from 'ulid';
 
-export const RatingEntity = new Entity(
+export const VerdictEntity = new Entity(
   {
     model: {
       version: "1",
-      entity: "Rating",
+      entity: "Verdict",
       service: "redbook",
     },
     attributes: {
@@ -19,26 +20,23 @@ export const RatingEntity = new Entity(
         type: "string",
         required: true,
       },
-      commentId: {
-        type: "string",
-        required: true,
-      },
 
-      rating: {
-        type: ['like', 'dislike', 'none'],
+      verdict: {
+        type: ["correct", "incorrect", "none"],
         required: true,
+        default: 'none'
       },
     },
     indexes: {
 
-      rating: {
+      verdict: {
         pk: {
           field: "pk",
-          composite: ["userId"],
+          composite: ["predictionId"],
         },
         sk: {
           field: "sk",
-          composite: ['predictionId', 'commentId'],
+          composite: ["userId"],
         },
       },
 
@@ -57,14 +55,10 @@ export const RatingEntity = new Entity(
           field: "gsi1sk",
           composite: ["predictionId"],
         },
-      },
+      }
 
-      // predictionRating: {
-      //   collection: [
-      //     'predictionJudge',
-      //     'predictionComment',
-      //     'predictionRating',
-      //   ] as const,
+      // predictionVerdict: {
+      //   collection: 'predictionVerdict',
       //   index: 'gsi1',
       //   pk: {
       //     field: "gsi1pk",
@@ -72,26 +66,14 @@ export const RatingEntity = new Entity(
       //   },
       //   sk: {
       //     field: "gsi1sk",
-      //     composite: ["criticId"],
+      //     composite: ["verdictId"],
       //   },
-      // },
-      // commentRating: {
-      //   collection: 'commentRating',
-      //   index: 'gsi2',
-      //   pk: {
-      //     field: "gsi2pk",
-      //     composite: ["commentId"],
-      //   },
-      //   sk: {
-      //     field: "gsi2sk",
-      //     composite: ['criticId'],
-      //   },
-      // },
+      // }
 
     },
   },
   Dynamo.Configuration
 );
 
-export type RatingEntityType = EntityItem<typeof RatingEntity>;
+export type VerdictEntityType = EntityItem<typeof VerdictEntity>;
 

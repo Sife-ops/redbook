@@ -1,7 +1,6 @@
 import { CommentType } from './comment';
 import { JudgeType } from './judge';
 import { PredictionEntityType, redbookModel } from '@redbook/lib/db';
-import { RatingType } from './rating';
 import { builder } from "../builder";
 
 export const PredictionType = builder
@@ -16,8 +15,11 @@ export const PredictionType = builder
       username: t.exposeString("username"),
 
       conditions: t.exposeString("conditions"),
-      created_at: t.exposeString("created_at"),
-      verdict: t.exposeBoolean("verdict", { nullable: true }),
+      verdict: t.exposeString("verdict"),
+      created_at: t.exposeInt("created_at"),
+
+      likes: t.exposeInt('likes'),
+      dislikes: t.exposeInt('dislikes'),
 
       judges: t.field({
         type: [JudgeType],
@@ -30,20 +32,6 @@ export const PredictionType = builder
             })
             .go();
           return JudgeEntity;
-        }
-      }),
-
-      ratings: t.field({
-        type: [RatingType],
-        resolve: async (parent) => {
-          const { RatingEntity } = await redbookModel
-            .collections
-            .predictionRating({
-              predictionId: parent.predictionId,
-            })
-            .where(({ commentId }, { eq }) => eq(commentId, ''))
-            .go();
-          return RatingEntity;
         }
       }),
 

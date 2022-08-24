@@ -3,10 +3,11 @@ type Comment {
   comment: String!
   commentId: ID!
   commenterId: String!
-  created_at: String!
+  created_at: Int!
   discriminator: String!
+  dislikes: Int!
+  likes: Int!
   predictionId: ID!
-  ratings: [Rating!]!
   replyTo: String
   username: String!
 }
@@ -17,39 +18,30 @@ type Judge {
   judgeId: ID!
   predictionId: String!
   username: String!
-  verdict: Boolean
+  verdict: String!
 }
 
 type Mutation {
-  comment(comment: String!): Comment!
-  rate(commentId: String, like: Boolean!, predictionId: String!): String!
+  comment(comment: String!, predictionId: String!): Comment!
+  rate(commentId: String, predictionId: String!, rating: Boolean!): String!
 }
 
 type Prediction {
   avatar: String!
   comments: [Comment!]!
   conditions: String!
-  created_at: String!
+  created_at: Int!
   discriminator: String!
+  dislikes: Int!
   judges: [Judge!]!
+  likes: Int!
   predictionId: ID!
   prognosticatorId: String!
-  ratings: [Rating!]!
   username: String!
-  verdict: Boolean
+  verdict: String!
 }
 
 type Query {
   prediction(predictionId: String!): Prediction!
   predictions(userId: String!): [Prediction!]!
-}
-
-type Rating {
-  avatar: String!
-  commentId: ID!
-  criticId: String!
-  discriminator: String!
-  like: Boolean!
-  predictionId: ID!
-  username: String!
 }

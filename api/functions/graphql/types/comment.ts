@@ -1,5 +1,4 @@
-import { CommentEntityType, redbookModel } from '@redbook/lib/db';
-import { RatingType } from './rating';
+import { CommentEntityType } from '@redbook/lib/db';
 import { builder } from "../builder";
 
 export const CommentType = builder
@@ -14,22 +13,12 @@ export const CommentType = builder
       discriminator: t.exposeString("discriminator"),
       username: t.exposeString("username"),
 
-      replyTo: t.exposeString("replyTo", { nullable: true }),
       comment: t.exposeString("comment"),
-      created_at: t.exposeString("created_at"),
+      created_at: t.exposeInt("created_at"),
+      replyTo: t.exposeString("replyTo", { nullable: true }),
 
-      ratings: t.field({
-        type: [RatingType],
-        resolve: async (parent) => {
-          const { RatingEntity } = await redbookModel
-            .collections
-            .commentRating({
-              commentId: parent.commentId,
-            })
-            .go();
-          return RatingEntity;
-        }
-      }),
+      likes: t.exposeInt('likes'),
+      dislikes: t.exposeInt('dislikes'),
     })
   })
 
