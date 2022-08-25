@@ -22,6 +22,7 @@ export const RatingEntity = new Entity(
       commentId: {
         type: "string",
         required: true,
+        default: '',
       },
 
       rating: {
@@ -32,6 +33,7 @@ export const RatingEntity = new Entity(
     indexes: {
 
       rating: {
+        collection: 'user',
         pk: {
           field: "pk",
           composite: ["userId"],
@@ -50,7 +52,7 @@ export const RatingEntity = new Entity(
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["predictionId", 'commentId'],
+          composite: ["predictionId"],
         },
         sk: {
           field: "gsi1sk",

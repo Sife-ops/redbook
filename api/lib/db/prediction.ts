@@ -56,6 +56,7 @@ export const PredictionEntity = new Entity(
     indexes: {
 
       prediction: {
+        collection: 'user',
         pk: {
           field: "pk",
           composite: ["userId"],

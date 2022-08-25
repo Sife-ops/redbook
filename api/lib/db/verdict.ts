@@ -29,6 +29,7 @@ export const VerdictEntity = new Entity(
     indexes: {
 
       verdict: {
+        collection: 'user',
         pk: {
           field: "pk",
           composite: ["userId"],

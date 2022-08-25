@@ -53,6 +53,7 @@ export const CommentEntity = new Entity(
     indexes: {
 
       comment: {
+        collection: 'user',
         pk: {
           field: "pk",
           composite: ['userId'],

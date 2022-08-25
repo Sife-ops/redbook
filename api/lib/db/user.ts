@@ -37,6 +37,7 @@ export const UserEntity = new Entity(
     indexes: {
 
       user: {
+        collection: 'user',
         pk: {
           field: "pk",
           composite: ["userId"],
