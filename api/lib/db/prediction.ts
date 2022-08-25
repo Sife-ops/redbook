@@ -2,6 +2,7 @@ export * as Prediction from "./prediction";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
+import { faker } from '@faker-js/faker';
 
 export const PredictionEntity = new Entity(
   {
@@ -18,6 +19,12 @@ export const PredictionEntity = new Entity(
       predictionId: {
         type: "string",
         required: true,
+        default: () => {
+          const a = faker.word.adjective();
+          const b = faker.word.adjective();
+          const c = faker.word.noun();
+          return `${a}-${b}-${c}`;
+        }
       },
 
       conditions: {
@@ -51,59 +58,26 @@ export const PredictionEntity = new Entity(
       prediction: {
         pk: {
           field: "pk",
-          composite: ["predictionId"],
+          composite: ["userId"],
         },
         sk: {
           field: "sk",
-          composite: ["created_at"],
+          composite: ["predictionId"],
         },
       },
 
       collection: {
-        collection: [
-            'prognosticator',
-            'judge',
-            'commenter',
-        ],
+        collection: 'prediction',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userId"],
+          composite: ["predictionId"],
         },
         sk: {
           field: "gsi1sk",
-          composite: ["predictionId"],
+          composite: ['userId'],
         },
-      }
-
-      // prognosticatorPrediction: {
-      //   index: 'gsi2',
-      //   pk: {
-      //     field: "gsi2pk",
-      //     composite: ["prognosticatorId"],
-      //   },
-      //   sk: {
-      //     field: "gsi2sk",
-      //     composite: ["predictionId"],
-      //   },
-      // },
-
-      // prediction: {
-      //   collection: [
-      //     'predictionJudge',
-      //     'predictionComment',
-      //     // 'predictionRating'
-      //   ] as const,
-      //   index: 'gsi1',
-      //   pk: {
-      //     field: "gsi1pk",
-      //     composite: ["predictionId"],
-      //   },
-      //   sk: {
-      //     field: "gsi1sk",
-      //     composite: [],
-      //   },
-      // },
+      },
 
     },
   },

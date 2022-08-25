@@ -55,59 +55,29 @@ export const CommentEntity = new Entity(
       comment: {
         pk: {
           field: "pk",
-          composite: ['commentId'],
+          composite: ['userId'],
         },
         sk: {
           field: "sk",
-          composite: ['commenterId'],
+          composite: ['commentId'],
         },
       },
 
       collection: {
         collection: [
-            'prognosticator',
-            'judge',
-            'commenter',
-        ],
+          'prediction',
+          'comment',
+        ] as const,
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userId"],
+          composite: ["predictionId"],
         },
         sk: {
           field: "gsi1sk",
-          composite: ["predictionId"],
+          composite: ['commentId'],
         },
-      }
-
-      // predictionComment: {
-      //   collection: [
-      //     'predictionJudge',
-      //     'predictionComment'
-      //   ] as const,
-      //   index: 'gsi1',
-      //   pk: {
-      //     field: "gsi1pk",
-      //     composite: ["predictionId"],
-      //   },
-      //   sk: {
-      //     field: "gsi1sk",
-      //     composite: ["commentId"],
-      //   },
-      // },
-
-      // comment: {
-      //   collection: 'commentRating',
-      //   index: 'gsi2',
-      //   pk: {
-      //     field: "gsi2pk",
-      //     composite: ["commentId"],
-      //   },
-      //   sk: {
-      //     field: "gsi2sk",
-      //     composite: [],
-      //   },
-      // },
+      },
 
     },
   },

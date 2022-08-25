@@ -44,49 +44,19 @@ export const RatingEntity = new Entity(
 
       collection: {
         collection: [
-            'prognosticator',
-            'judge',
-            'commenter',
-        ],
+          'prediction',
+          'comment',
+        ] as const,
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userId"],
+          composite: ["predictionId", 'commentId'],
         },
         sk: {
           field: "gsi1sk",
-          composite: ["predictionId"],
+          composite: ['userId'],
         },
       },
-
-      // predictionRating: {
-      //   collection: [
-      //     'predictionJudge',
-      //     'predictionComment',
-      //     'predictionRating',
-      //   ] as const,
-      //   index: 'gsi1',
-      //   pk: {
-      //     field: "gsi1pk",
-      //     composite: ["predictionId"],
-      //   },
-      //   sk: {
-      //     field: "gsi1sk",
-      //     composite: ["criticId"],
-      //   },
-      // },
-      // commentRating: {
-      //   collection: 'commentRating',
-      //   index: 'gsi2',
-      //   pk: {
-      //     field: "gsi2pk",
-      //     composite: ["commentId"],
-      //   },
-      //   sk: {
-      //     field: "gsi2sk",
-      //     composite: ['criticId'],
-      //   },
-      // },
 
     },
   },

@@ -47,23 +47,6 @@ export const UserEntity = new Entity(
         },
       },
 
-      collection: {
-        collection: [
-            'prognosticator',
-            'judge',
-            'commenter',
-        ],
-        index: 'gsi1',
-        pk: {
-          field: "gsi1pk",
-          composite: ["userId"],
-        },
-        sk: {
-          field: "gsi1sk",
-          composite: ["created_at"],
-        },
-      },
-
     },
   },
   Dynamo.Configuration

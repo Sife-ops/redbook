@@ -2,7 +2,6 @@ export * as Verdict from "./verdict";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
-import { ulid } from 'ulid';
 
 export const VerdictEntity = new Entity(
   {
@@ -32,43 +31,26 @@ export const VerdictEntity = new Entity(
       verdict: {
         pk: {
           field: "pk",
-          composite: ["predictionId"],
+          composite: ["userId"],
         },
         sk: {
           field: "sk",
-          composite: ["userId"],
+          composite: ["predictionId"],
         },
       },
 
       collection: {
-        collection: [
-            'prognosticator',
-            'judge',
-            'commenter',
-        ],
+        collection: 'prediction',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
-          composite: ["userId"],
+          composite: ["predictionId"],
         },
         sk: {
           field: "gsi1sk",
-          composite: ["predictionId"],
+          composite: ['userId'],
         },
-      }
-
-      // predictionVerdict: {
-      //   collection: 'predictionVerdict',
-      //   index: 'gsi1',
-      //   pk: {
-      //     field: "gsi1pk",
-      //     composite: ["predictionId"],
-      //   },
-      //   sk: {
-      //     field: "gsi1sk",
-      //     composite: ["verdictId"],
-      //   },
-      // }
+      },
 
     },
   },
