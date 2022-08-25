@@ -44,7 +44,7 @@ export const UserEntity = new Entity(
         },
         sk: {
           field: "sk",
-          composite: ["created_at"],
+          composite: [],
         },
       },
 
