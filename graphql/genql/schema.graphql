@@ -41,7 +41,7 @@ type Query {
 type User {
   avatar: String!
   created_at: Int!
-  discriminitor: String!
+  discriminator: String!
   userId: String!
   username: String!
 }

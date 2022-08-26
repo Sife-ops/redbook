@@ -27,7 +27,10 @@ export const Prediction: React.FC = () => {
         <PredictionContainer prediction={prediction} type="full" />
       </div>
       <Ratings
-        ratings={prediction.ratings}
+        ratings={{
+          likes: prediction.likes,
+          dislikes: prediction.dislikes
+        }}
         predictionId={prediction.predictionId}
       />
       {/* <CommentsSection comments={prediction.comments!} /> */}

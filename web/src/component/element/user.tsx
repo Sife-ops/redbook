@@ -9,12 +9,12 @@ interface props {
     username: string;
     discriminator: string;
     avatar: string;
-    verdict?: boolean;
   };
+  verdict?: string;
 }
 
 export const User: React.FC<props> = props => {
-  const { avatar, discriminator, username, userId, verdict } = props.user;
+  const { avatar, discriminator, username, userId } = props.user;
   const { avatarImg, fetchAvatar } = useAvatar();
 
   useEffect(() => {
@@ -28,19 +28,17 @@ export const User: React.FC<props> = props => {
         () => {
           if (props.type === 'judge') {
             // todo: fix verdict type
-            if (verdict === true) {
+            if (props.verdict === 'correct') {
               return tw`bg-green-900 border-2 border-solid border-green-500`;
-            } else if (verdict === false) {
+            } else if (props.verdict === 'incorrect') {
               return tw`bg-red-900 border-2 border-solid border-red-500`;
             }
           }
         }
       ]}
     >
-      <div tw='flex flex-col justify-center min-w-[48px] max-w-[48px]'>
-        {avatarImg && (
-          <img tw="rounded-full" src={avatarImg} alt="icons" />
-        )}
+      <div tw="flex flex-col justify-center min-w-[48px] max-w-[48px]">
+        {avatarImg && <img tw="rounded-full" src={avatarImg} alt="icons" />}
       </div>
       <div tw="flex flex-col justify-center">
         <p tw="break-all">{username}</p>

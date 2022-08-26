@@ -1,11 +1,13 @@
 import 'twin.macro';
 import React from 'react';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
-import { Rating as RatingType } from '../../../../graphql/genql/schema';
 import { useRating } from '../../hook/rating';
 
 export const Ratings: React.FC<{
-  ratings: RatingType[];
+  ratings: {
+    likes: number;
+    dislikes: number;
+  };
   predictionId: string;
   commentId?: string;
 }> = props => {

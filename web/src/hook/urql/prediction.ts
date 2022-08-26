@@ -20,7 +20,7 @@ export const usePredictionQuery = (predictionId: string) => {
             __typename: true,
             userId: true,
             username: true,
-            discriminitor: true,
+            discriminator: true,
             avatar: true,
             created_at: true
           },
@@ -34,7 +34,7 @@ export const usePredictionQuery = (predictionId: string) => {
               __typename: true,
               userId: true,
               username: true,
-              discriminitor: true,
+              discriminator: true,
               avatar: true,
               created_at: true
             }
@@ -54,7 +54,7 @@ export const usePredictionQuery = (predictionId: string) => {
               __typename: true,
               userId: true,
               username: true,
-              discriminitor: true,
+              discriminator: true,
               avatar: true,
               created_at: true
             }

@@ -25,7 +25,7 @@ export const Predictions: React.FC = () => {
 
   return (
     <div>
-      <h2 tw="text-center">{predictions[0].username}'s Predictos:</h2>
+      <h2 tw="text-center">{predictions[0].user.username}'s Predictos:</h2>
       <div>
         {predictions.map(e => (
           <div
@@ -33,9 +33,9 @@ export const Predictions: React.FC = () => {
             css={[
               tw`mb-2 p-2 rounded-md bg-gray-700`,
               () => {
-                if (e.verdict === true) {
+                if (e.verdict === 'correct') {
                   return tw`bg-green-900 border-2 border-solid border-green-500`;
-                } else if (e.verdict === false) {
+                } else if (e.verdict === 'incorrect') {
                   return tw`bg-red-900 border-2 border-solid border-red-500`;
                 }
               }

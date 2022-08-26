@@ -7,7 +7,7 @@ export const UserType = builder
     fields: t => ({
       userId: t.exposeString("userId"),
       username: t.exposeString("username"),
-      discriminitor: t.exposeString("discriminator"),
+      discriminator: t.exposeString("discriminator"),
       avatar: t.exposeString("avatar"),
       created_at: t.exposeInt("created_at"),
     })

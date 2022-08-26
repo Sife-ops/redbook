@@ -19,7 +19,7 @@ export const useCommentMutation = () => {
             __typename: true,
             userId: true,
             username: true,
-            discriminitor: true,
+            discriminator: true,
             avatar: true,
             created_at: true
           }

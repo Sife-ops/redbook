@@ -55,7 +55,7 @@ export interface Query {
 export interface User {
     avatar: Scalars['String']
     created_at: Scalars['Int']
-    discriminitor: Scalars['String']
+    discriminator: Scalars['String']
     userId: Scalars['String']
     username: Scalars['String']
     __typename: 'User'
@@ -114,7 +114,7 @@ export interface QueryRequest{
 export interface UserRequest{
     avatar?: boolean | number
     created_at?: boolean | number
-    discriminitor?: boolean | number
+    discriminator?: boolean | number
     userId?: boolean | number
     username?: boolean | number
     __typename?: boolean | number
@@ -252,7 +252,7 @@ export interface QueryObservableChain{
 export interface UserPromiseChain{
     avatar: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     created_at: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
-    discriminitor: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
+    discriminator: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     userId: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     username: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
@@ -260,7 +260,7 @@ export interface UserPromiseChain{
 export interface UserObservableChain{
     avatar: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     created_at: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
-    discriminitor: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
+    discriminator: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     userId: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     username: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }

@@ -163,7 +163,7 @@ export default {
             "created_at": [
                 3
             ],
-            "discriminitor": [
+            "discriminator": [
                 1
             ],
             "userId": [
