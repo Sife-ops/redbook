@@ -29,6 +29,7 @@ builder.mutationFields(t => ({
     },
     resolve: async (_, args, context: any) => {
       // todo: move logic to sqs???
+      // todo: refactor
       const ratings = await redbookModel
         .entities
         .RatingEntity

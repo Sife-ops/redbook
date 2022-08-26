@@ -7,23 +7,14 @@ export default {
     ],
     "types": {
         "Comment": {
-            "avatar": [
-                1
-            ],
             "comment": [
                 1
             ],
             "commentId": [
                 2
             ],
-            "commenterId": [
-                1
-            ],
             "created_at": [
                 3
-            ],
-            "discriminator": [
-                1
             ],
             "dislikes": [
                 3
@@ -37,8 +28,8 @@ export default {
             "replyTo": [
                 1
             ],
-            "username": [
-                1
+            "user": [
+                9
             ],
             "__typename": [
                 1
@@ -48,20 +39,11 @@ export default {
         "ID": {},
         "Int": {},
         "Judge": {
-            "avatar": [
-                1
-            ],
-            "discriminator": [
-                1
-            ],
-            "judgeId": [
-                2
-            ],
             "predictionId": [
                 1
             ],
-            "username": [
-                1
+            "user": [
+                9
             ],
             "verdict": [
                 1
@@ -84,12 +66,26 @@ export default {
                     ]
                 }
             ],
-            "rate": [
+            "rateComment": [
                 1,
                 {
                     "commentId": [
-                        1
+                        1,
+                        "String!"
                     ],
+                    "predictionId": [
+                        1,
+                        "String!"
+                    ],
+                    "rating": [
+                        6,
+                        "Boolean!"
+                    ]
+                }
+            ],
+            "ratePrediction": [
+                1,
+                {
                     "predictionId": [
                         1,
                         "String!"
@@ -106,6 +102,9 @@ export default {
         },
         "Boolean": {},
         "Prediction": {
+            "comments": [
+                0
+            ],
             "conditions": [
                 1
             ],

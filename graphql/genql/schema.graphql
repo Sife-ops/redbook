@@ -1,32 +1,28 @@
 type Comment {
-  avatar: String!
   comment: String!
   commentId: ID!
-  commenterId: String!
   created_at: Int!
-  discriminator: String!
   dislikes: Int!
   likes: Int!
   predictionId: ID!
   replyTo: String
-  username: String!
+  user: User!
 }
 
 type Judge {
-  avatar: String!
-  discriminator: String!
-  judgeId: ID!
   predictionId: String!
-  username: String!
+  user: User!
   verdict: String!
 }
 
 type Mutation {
   comment(comment: String!, predictionId: String!): Comment!
-  rate(commentId: String, predictionId: String!, rating: Boolean!): String!
+  rateComment(commentId: String!, predictionId: String!, rating: Boolean!): String!
+  ratePrediction(predictionId: String!, rating: Boolean!): String!
 }
 
 type Prediction {
+  comments: [Comment!]!
   conditions: String!
   created_at: Int!
   dislikes: Int!
