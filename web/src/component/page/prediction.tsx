@@ -1,6 +1,6 @@
 import 'twin.macro';
 import React from 'react';
-// import { CommentsSection } from '../container/comments';
+import { CommentsSection } from '../container/comments';
 import { Navigate, useParams } from 'react-router-dom';
 import { Prediction as PredictionContainer } from '../container/prediction';
 import { Ratings } from '../element/ratings';
@@ -26,14 +26,19 @@ export const Prediction: React.FC = () => {
       <div tw="mb-4">
         <PredictionContainer prediction={prediction} type="full" />
       </div>
-      <Ratings
-        ratings={{
-          likes: prediction.likes,
-          dislikes: prediction.dislikes
-        }}
+      <div tw="mb-4">
+        <Ratings
+          ratings={{
+            likes: prediction.likes,
+            dislikes: prediction.dislikes
+          }}
+          predictionId={prediction.predictionId}
+        />
+      </div>
+      <CommentsSection
         predictionId={prediction.predictionId}
+        comments={prediction.comments!}
       />
-      {/* <CommentsSection comments={prediction.comments!} /> */}
     </div>
   );
 };
