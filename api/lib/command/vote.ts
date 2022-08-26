@@ -36,16 +36,15 @@ export const vote = {
     const { options } = body.data;
     const predictionId = optionValue(options, 'id');
 
-    const { PredictionEntity, JudgeEntity } = await redbookModel
+    const { PredictionEntity, VerdictEntity } = await redbookModel
       .collections
-      .predictionJudge({
+      .prediction({
         predictionId
-      })
-      .go();
+      }).go();
 
     if (
       PredictionEntity.length < 1 ||
-      !JudgeEntity.find(e => e.judgeId === judgeId)
+      !VerdictEntity.find(e => e.userId === judgeId)
     ) {
       return {
         type: 4,
@@ -75,18 +74,17 @@ export const vote = {
 
     await redbookModel
       .entities
-      .JudgeEntity
+      .VerdictEntity
       .update({
-        judgeId,
+        userId: judgeId,
         predictionId
       })
       .set({
         verdict
-      })
-      .go()
+      }).go()
 
-    const judges = JudgeEntity.map(e => {
-      if (e.judgeId === judgeId) {
+    const judges = VerdictEntity.map(e => {
+      if (e.userId === judgeId) {
         return {
           ...e,
           verdict
@@ -166,13 +164,13 @@ export const vote = {
                 },
                 {
                   name: 'By',
-                  value: `<@${prediction.prognosticatorId}>`,
+                  value: `<@${prediction.userId}>`,
                   inline: false,
                 },
                 {
                   name: 'Judge(s)',
-                  value: JudgeEntity.reduce((a, c) => {
-                    return `${a}<@${c.judgeId}>`;
+                  value: VerdictEntity.reduce((a, c) => {
+                    return `${a}<@${c.userId}>`;
                   }, ''),
                   inline: false,
                 },
@@ -199,14 +197,14 @@ export const vote = {
                 },
                 {
                   name: 'By',
-                  value: `<@${prediction.prognosticatorId}>`,
+                  value: `<@${prediction.userId}>`,
                   inline: false,
                 },
                 {
                   name: 'Undecided',
                   value: judges.reduce((a, c) => {
                     if (c.verdict === 'none') {
-                      return `${a}<@${c.judgeId}>`;
+                      return `${a}<@${c.userId}>`;
                     }
                     return a;
                   }, ''),
@@ -225,3 +223,4 @@ export const vote = {
     }
   },
 };
+
