@@ -1,11 +1,14 @@
-// import AWS from "aws-sdk";
+import AWS from "aws-sdk";
 import Joi from 'joi';
-import { optionValue, mnemonic } from '@redbook/lib/utility';
+import { optionValue } from '@redbook/lib/utility';
 import { redbookModel } from '@redbook/lib/db';
 
-// const sqs = new AWS.SQS();
+const sqs = new AWS.SQS();
+
+const { ONBOARD_SQS } = process.env;
 
 export const create = {
+  // todo: better validation library
   schema: Joi.object({
     data: Joi.object({
       options: Joi.array().has(
@@ -40,12 +43,12 @@ export const create = {
   handler: async (body: any) => {
     /*
      * 1) create prediction
-     * 2) create judge
+     * 2) create judge (verdict)
      * 3) format message
      */
 
     // 1) create prediction
-    const { avatar, discriminator, username, id: prognosticatorId } = body.member.user;
+    const prognosticatorId = body.member.user.id;
     const { options } = body.data.options[0];
     const conditions = optionValue(options, 'conditions');
     const judgeId = optionValue(options, 'judge');
@@ -54,7 +57,7 @@ export const create = {
     // cannot make self default judge (prod only)
     if (
       process.env.REDBOOK_ENV === 'prod' &&
-      judgeId === prognosticatorId
+      judge.id === prognosticatorId
     ) {
       return {
         type: 4,
@@ -64,52 +67,29 @@ export const create = {
       };
     }
 
-    let predictionId = mnemonic();
-
-    // // todo: automation service to detect collisions
-    // // report mnemonic predictionId collisions
-    // redbookModel.entities.PredictionEntity.query.prediction({ predictionId })
-    //   .go()
-    //   .then(e => {
-    //     if (e.length > 1) {
-    //       console.log('WARNING');
-    //       console.log('mnemonic predictionId conflict:', predictionId);
-    //       // todo: test duplicate mnemonic dlq
-    //       sqs.sendMessage({
-    //         QueueUrl: process.env.MNEMONIC_DLQ!,
-    //         MessageBody: JSON.stringify({
-    //           mnemonic: predictionId
-    //         })
-    //       });
-    //     }
-    //   })
-
-    await redbookModel
+    const prediction = await redbookModel
       .entities
       .PredictionEntity
       .create({
-        predictionId,
-
-        prognosticatorId,
-        username,
-        discriminator,
-        avatar,
-
+        userId: prognosticatorId,
         conditions,
       })
       .go()
 
-    // 2) create judge
+    // 2) create judge (verdict)
+    await sqs
+      .sendMessage({
+        QueueUrl: ONBOARD_SQS!,
+        MessageBody: JSON.stringify(judge),
+      })
+      .promise();
+
     await redbookModel
       .entities
-      .JudgeEntity
+      .VerdictEntity
       .create({
-        predictionId,
-
-        judgeId,
-        username: judge.username,
-        discriminator: judge.discriminator,
-        avatar: judge.avatar,
+        userId: judge.id,
+        predictionId: prediction.predictionId,
       })
       .go()
 
@@ -135,7 +115,7 @@ export const create = {
               },
               {
                 name: 'ID',
-                value: predictionId,
+                value: prediction.predictionId,
                 inline: false,
               },
             ],

@@ -1,6 +1,6 @@
 import { redbookModel } from '@redbook/lib/db';
 
-// todo: no implicit any
+// todo: implicit any
 export const handler = async (event: any) => {
 
   const onboardUser = JSON.parse(event.Records[0].body)
