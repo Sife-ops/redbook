@@ -1,7 +1,7 @@
 type Comment {
   comment: String!
   commentId: ID!
-  created_at: Int!
+  created_at: String!
   dislikes: Int!
   likes: Int!
   predictionId: ID!
@@ -24,7 +24,7 @@ type Mutation {
 type Prediction {
   comments: [Comment!]!
   conditions: String!
-  created_at: Int!
+  created_at: String!
   dislikes: Int!
   judges: [Judge!]!
   likes: Int!
@@ -40,7 +40,7 @@ type Query {
 
 type User {
   avatar: String!
-  created_at: Int!
+  created_at: String!
   discriminator: String!
   userId: String!
   username: String!

@@ -98,7 +98,7 @@ export const describe = {
               },
               {
                 name: 'Made On',
-                value: new Date(prediction.created_at).toDateString(),
+                value: prediction.created_at,
                 inline: false,
               },
               {

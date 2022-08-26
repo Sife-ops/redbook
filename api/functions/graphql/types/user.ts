@@ -9,7 +9,7 @@ export const UserType = builder
       username: t.exposeString("username"),
       discriminator: t.exposeString("discriminator"),
       avatar: t.exposeString("avatar"),
-      created_at: t.exposeInt("created_at"),
+      created_at: t.exposeString("created_at"),
     })
   })
 

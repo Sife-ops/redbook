@@ -12,7 +12,7 @@ export const PredictionType = builder
 
       conditions: t.exposeString("conditions"),
       verdict: t.exposeString("verdict"),
-      created_at: t.exposeInt("created_at"),
+      created_at: t.exposeString("created_at"),
 
       likes: t.exposeInt('likes'),
       dislikes: t.exposeInt('dislikes'),
@@ -36,7 +36,7 @@ export const PredictionType = builder
         resolve: async (parent) => {
           return await redbookModel
             .entities
-            .PredictionEntity
+            .VerdictEntity
             .query
             .collection({
               predictionId: parent.predictionId,

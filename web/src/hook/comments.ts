@@ -4,7 +4,7 @@ import { Comment as CommentType } from '../../../graphql/genql/schema';
 const sortComments = (c: CommentType[]) => {
   const comments = c;
   comments.sort((a, b) => {
-    return b.created_at - a.created_at;
+    return parseInt(b.created_at) - parseInt(a.created_at);
   });
   return comments;
 };

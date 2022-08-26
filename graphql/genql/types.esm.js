@@ -14,7 +14,7 @@ export default {
                 2
             ],
             "created_at": [
-                3
+                1
             ],
             "dislikes": [
                 3
@@ -109,7 +109,7 @@ export default {
                 1
             ],
             "created_at": [
-                3
+                1
             ],
             "dislikes": [
                 3
@@ -161,7 +161,7 @@ export default {
                 1
             ],
             "created_at": [
-                3
+                1
             ],
             "discriminator": [
                 1

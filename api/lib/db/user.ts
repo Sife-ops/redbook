@@ -29,9 +29,9 @@ export const UserEntity = new Entity(
       },
 
       created_at: {
-        type: "number",
+        type: "string",
         required: true,
-        default: () => Date.now()
+        default: () => Date.now().toString()
       },
     },
     indexes: {

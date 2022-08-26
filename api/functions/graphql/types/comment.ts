@@ -10,7 +10,7 @@ export const CommentType = builder
       commentId: t.exposeID("commentId"),
 
       comment: t.exposeString("comment"),
-      created_at: t.exposeInt("created_at"),
+      created_at: t.exposeString("created_at"),
       replyTo: t.exposeString("replyTo", { nullable: true }),
 
       likes: t.exposeInt('likes'),

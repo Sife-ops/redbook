@@ -31,9 +31,9 @@ export const CommentEntity = new Entity(
         required: true,
       },
       created_at: {
-        type: "number",
+        type: "string",
         required: true,
-        default: () => Date.now()
+        default: () => Date.now().toString(),
       },
       replyTo: {
         type: "string",

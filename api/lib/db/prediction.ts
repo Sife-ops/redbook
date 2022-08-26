@@ -37,9 +37,9 @@ export const PredictionEntity = new Entity(
         default: 'none'
       },
       created_at: {
-        type: "number",
+        type: "string",
         required: true,
-        default: () => Date.now()
+        default: () => Date.now().toString()
       },
 
       likes: {
