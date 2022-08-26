@@ -15,7 +15,7 @@ builder.mutationFields(t => ({
         .entities
         .CommentEntity
         .create({
-          userId: context.userId,
+          userId: context.user.userId,
           predictionId: args.predictionId,
           comment: args.comment,
         }).go();
@@ -35,7 +35,7 @@ builder.mutationFields(t => ({
         .RatingEntity
         .query
         .rating({
-          userId: context.userId,
+          userId: context.user.userId,
           predictionId: args.predictionId,
           commentId: ''
         }).go()
@@ -55,7 +55,7 @@ builder.mutationFields(t => ({
           .entities
           .RatingEntity
           .create({
-            userId: context.userId,
+            userId: context.user.userId,
             predictionId: args.predictionId,
             rating: ratingInput,
           }).go();
@@ -80,7 +80,7 @@ builder.mutationFields(t => ({
           .entities
           .RatingEntity
           .update({
-            userId: context.userId,
+            userId: context.user.userId,
             predictionId: args.predictionId,
             commentId: '',
           }).set({
@@ -103,7 +103,7 @@ builder.mutationFields(t => ({
         .entities
         .RatingEntity
         .update({
-          userId: context.userId,
+          userId: context.user.userId,
           predictionId: args.predictionId,
           commentId: '',
         }).set({
@@ -136,7 +136,7 @@ builder.mutationFields(t => ({
         .RatingEntity
         .query
         .rating({
-          userId: context.userId,
+          userId: context.user.userId,
           predictionId: args.predictionId,
           commentId: args.commentId,
         }).go()
@@ -157,7 +157,7 @@ builder.mutationFields(t => ({
           .entities
           .RatingEntity
           .create({
-            userId: context.userId,
+            userId: context.user.userId,
             predictionId: args.predictionId,
             commentId: args.commentId,
             rating: ratingInput,
@@ -183,7 +183,7 @@ builder.mutationFields(t => ({
           .entities
           .RatingEntity
           .update({
-            userId: context.userId,
+            userId: context.user.userId,
             predictionId: args.predictionId,
             commentId: args.commentId,
           }).set({
@@ -206,7 +206,7 @@ builder.mutationFields(t => ({
         .entities
         .RatingEntity
         .update({
-          userId: context.userId,
+          userId: context.user.userId,
           predictionId: args.predictionId,
           commentId: args.commentId,
         }).set({

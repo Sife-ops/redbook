@@ -29,7 +29,7 @@ export const describe = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const { id: userId, } = body.member.user;
+    const { id: userId } = body.member.user;
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
@@ -54,28 +54,7 @@ export const describe = {
 
     const prediction = PredictionEntity[0];
 
-    const [{
-      avatar,
-      username,
-      discriminator
-    }] = await redbookModel
-      .entities
-      .UserEntity
-      .query
-      .user({
-        userId
-      })
-      .go()
-
-    const token = sign(
-      {
-        userId,
-        username,
-        discriminator,
-        avatar,
-      },
-      TOKEN_SECRET
-    );
+    const token = sign({ userId }, TOKEN_SECRET);
 
     const url = REDBOOK_ENV === 'dev'
       ? 'http://localhost:5173'
@@ -130,3 +109,4 @@ export const describe = {
     };
   },
 };
+
