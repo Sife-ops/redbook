@@ -20,7 +20,7 @@ export const handler = createGQLHandler({
     if (token) {
       const { userId } = verify(token, TOKEN_SECRET) as ContextPayload;
 
-      const user = await redbookModel
+      const [user] = await redbookModel
         .entities
         .UserEntity
         .query

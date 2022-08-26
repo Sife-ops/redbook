@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Prediction: React.FC<Props> = props => {
-  const date = new Date(props.prediction.created_at);
+  const date = new Date(parseInt(props.prediction.created_at));
 
   return (
     <div>
