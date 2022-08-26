@@ -1,6 +1,7 @@
 import 'twin.macro';
 import GlobalStyles from './styles/global-styles';
 import ReactDOM from 'react-dom/client';
+import dancingBaby from './assets/dancing-baby.gif';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Error } from './component/page/error';
 import { Prediction } from './component/page/prediction';
@@ -29,6 +30,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 function App() {
   return (
     <BrowserRouter>
+      <img
+        src={dancingBaby}
+        tw='absolute w-16'
+      />
+      <img
+        src={dancingBaby}
+        tw='absolute w-16 right-0'
+      />
       <h1 tw="text-center text-4xl mb-4">REDBOOK</h1>
       <Routes>
         <Route path="/prediction/:predictionId" element={<Prediction />} />
