@@ -106,20 +106,11 @@ export default {
         },
         "Boolean": {},
         "Prediction": {
-            "avatar": [
-                1
-            ],
-            "comments": [
-                0
-            ],
             "conditions": [
                 1
             ],
             "created_at": [
                 3
-            ],
-            "discriminator": [
-                1
             ],
             "dislikes": [
                 3
@@ -133,11 +124,8 @@ export default {
             "predictionId": [
                 2
             ],
-            "prognosticatorId": [
-                1
-            ],
-            "username": [
-                1
+            "user": [
+                9
             ],
             "verdict": [
                 1
@@ -164,6 +152,26 @@ export default {
                         "String!"
                     ]
                 }
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "User": {
+            "avatar": [
+                1
+            ],
+            "created_at": [
+                3
+            ],
+            "discriminitor": [
+                1
+            ],
+            "userId": [
+                1
+            ],
+            "username": [
+                1
             ],
             "__typename": [
                 1

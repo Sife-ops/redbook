@@ -27,21 +27,25 @@ type Mutation {
 }
 
 type Prediction {
-  avatar: String!
-  comments: [Comment!]!
   conditions: String!
   created_at: Int!
-  discriminator: String!
   dislikes: Int!
   judges: [Judge!]!
   likes: Int!
   predictionId: ID!
-  prognosticatorId: String!
-  username: String!
+  user: User!
   verdict: String!
 }
 
 type Query {
   prediction(predictionId: String!): Prediction!
   predictions(userId: String!): [Prediction!]!
+}
+
+type User {
+  avatar: String!
+  created_at: Int!
+  discriminitor: String!
+  userId: String!
+  username: String!
 }

@@ -9,21 +9,14 @@ builder.queryFields(t => ({
     },
     type: PredictionType,
     resolve: async (_, args) => {
-      const predictions = await redbookModel
+      const [prediction] = await redbookModel
         .entities
         .PredictionEntity
         .query
-        .prediction({
+        .collection({
           predictionId: args.predictionId
-        })
-        .go();
-
-      // todo: lodash
-      if (predictions.length < 1) {
-        throw new Error('prediction not found')
-      }
-
-      return predictions[0];
+        }).go();
+      return prediction;
     }
   }),
 
@@ -37,12 +30,10 @@ builder.queryFields(t => ({
         .entities
         .PredictionEntity
         .query
-        .prognosticatorPrediction({
-          prognosticatorId: args.userId
-        })
-        .go()
+        .prediction({
+          userId: args.userId
+        }).go()
     }
   })
 }));
-
 

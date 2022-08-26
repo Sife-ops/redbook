@@ -1,4 +1,5 @@
-import { CommentEntityType } from '@redbook/lib/db';
+import { CommentEntityType, redbookModel } from '@redbook/lib/db';
+import { UserType } from './user';
 import { builder } from "../builder";
 
 export const CommentType = builder
@@ -8,17 +9,26 @@ export const CommentType = builder
       predictionId: t.exposeID("predictionId"),
       commentId: t.exposeID("commentId"),
 
-      commenterId: t.exposeString("commenterId"),
-      avatar: t.exposeString("avatar"),
-      discriminator: t.exposeString("discriminator"),
-      username: t.exposeString("username"),
-
       comment: t.exposeString("comment"),
       created_at: t.exposeInt("created_at"),
       replyTo: t.exposeString("replyTo", { nullable: true }),
 
       likes: t.exposeInt('likes'),
       dislikes: t.exposeInt('dislikes'),
+
+      user: t.field({
+        type: UserType,
+        resolve: async (parent) => {
+          const [user] = await redbookModel
+            .entities
+            .UserEntity
+            .query
+            .user({
+              userId: parent.userId
+            }).go()
+          return user;
+        }
+      }),
     })
   })
 

@@ -41,6 +41,7 @@ export const handler = async (event: any) => {
     };
 
     for (const field in onboardUserFields) {
+      // todo: no feel like writing good code today
       // @ts-ignore
       if (onboardUserFields[field] !== user[field]) {
         await redbookModel

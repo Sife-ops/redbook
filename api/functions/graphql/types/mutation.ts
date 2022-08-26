@@ -11,186 +11,218 @@ builder.mutationFields(t => ({
     },
     // todo: no explicit any
     resolve: async (_, args, context: any) => {
-      const comment = await redbookModel
+      return await redbookModel
         .entities
         .CommentEntity
         .create({
+          userId: context.userId,
           predictionId: args.predictionId,
-
-          commenterId: context.userId,
-          username: context.username,
-          discriminator: context.discriminator,
-          avatar: context.avatar,
-
           comment: args.comment,
-        })
-        .go();
-
-      return comment;
+        }).go();
     }
   }),
 
-  rate: t.string({
+  ratePrediction: t.string({
     args: {
       predictionId: t.arg.string({ required: true }),
-      commentId: t.arg.string(),
       rating: t.arg.boolean({ required: true }),
     },
-    // todo: no explicit any
-    // todo: destructure context
     resolve: async (_, args, context: any) => {
-      const predictionId = args.predictionId;
-      const commentId = args.commentId || '';
-      const rating = args.rating ? 'like' : 'dislike';
-
-      // look up previous rating
-      const criticRatings = await redbookModel
+      // todo: move logic to sqs???
+      const ratings = await redbookModel
         .entities
         .RatingEntity
         .query
-        .criticRating({
-          criticId: context.userId,
-          predictionId,
-          // commentId, // todo: why no work?
-        })
-        .where(({ commentId: c }, { eq }) => eq(c, commentId))
-        .go();
+        .rating({
+          userId: context.userId,
+          predictionId: args.predictionId,
+          commentId: ''
+        }).go()
 
-      let operation: 'add' | 'subtract' | undefined = undefined;
+      const [prediction] = await redbookModel
+        .entities
+        .PredictionEntity
+        .query
+        .collection({
+          predictionId: args.predictionId
+        }).go()
 
-      // create rating if no previous rating
-      if (criticRatings.length < 1) {
+      const ratingInput = args.rating ? 'like' : 'dislike';
+
+      if (ratings.length < 1) {
         await redbookModel
           .entities
           .RatingEntity
           .create({
-            predictionId,
-            commentId,
-
-            criticId: context.userId,
-            avatar: context.avatar,
-            username: context.username,
-            discriminator: context.discriminator,
-
-            rating
-          })
-          .go();
-
-        operation = 'add';
-      } else {
-        // if already rated, change to 'none'
-        const [criticRating] = criticRatings;
-        if (criticRating.rating !== 'none') {
-          await redbookModel
-            .entities
-            .RatingEntity
-            .update({
-              criticId: context.userId,
-              predictionId,
-              commentId,
-            })
-            .set({
-              rating: 'none'
-            })
-            .go();
-
-          operation = 'subtract';
-        } else {
-          // if 'none', change to 'like'/'dislike'
-          await redbookModel
-            .entities
-            .RatingEntity
-            .update({
-              criticId: context.userId,
-              predictionId,
-              commentId,
-            })
-            .set({
-              rating
-            })
-            .go();
-
-          operation = 'add';
-        }
-      }
-
-      if (!operation) {
-        // todo: better error
-        throw new Error('ree!')
-      }
-
-      if (commentId.length < 1) {
-        // update prediction
-        const [prediction] = await redbookModel
-          .entities
-          .PredictionEntity
-          .query
-          .prediction({
-            predictionId
-          })
-          .go();
-
-        const updatedRating = calcRating({
-          rating,
-          operation,
-          current: prediction,
-        });
+            userId: context.userId,
+            predictionId: args.predictionId,
+            rating: ratingInput,
+          }).go();
 
         await redbookModel
           .entities
           .PredictionEntity
-          .update({ ...prediction })
-          .set({ ...updatedRating })
-          .go();
-
-        return 'update prediction rating';
-      } else {
-        // update comment
-        const [comment] = await redbookModel
-          .entities
-          .CommentEntity
-          .query
-          .predictionComment({
-            predictionId,
-            commentId
+          .update(prediction)
+          .set({
+            likes: args.rating ? prediction.likes + 1 : prediction.likes,
+            dislikes: args.rating ? prediction.dislikes : prediction.likes + 1,
           })
-          .go();
+          .go()
 
-        const updatedRating = calcRating({
-          rating,
-          operation,
-          current: comment,
-        });
+        return `create ${ratingInput}`;
+      }
+
+      const [{ rating }] = ratings;
+
+      if (rating !== 'none') {
+        await redbookModel
+          .entities
+          .RatingEntity
+          .update({
+            userId: context.userId,
+            predictionId: args.predictionId,
+            commentId: '',
+          }).set({
+            rating: 'none'
+          }).go();
 
         await redbookModel
           .entities
-          .CommentEntity
-          .update({ ...comment })
-          .set({ ...updatedRating })
-          .go();
+          .PredictionEntity
+          .update(prediction)
+          .set({
+            likes: rating === 'like' ? prediction.likes - 1 : prediction.likes,
+            dislikes: rating === 'dislike' ? prediction.dislikes - 1 : prediction.dislikes,
+          }).go()
 
-        return 'update comment rating';
+        return `remove ${ratingInput}`;
       }
+
+      await redbookModel
+        .entities
+        .RatingEntity
+        .update({
+          userId: context.userId,
+          predictionId: args.predictionId,
+          commentId: '',
+        }).set({
+          rating: ratingInput,
+        }).go();
+
+      await redbookModel
+        .entities
+        .PredictionEntity
+        .update(prediction)
+        .set({
+          likes: args.rating ? prediction.likes + 1 : prediction.likes,
+          dislikes: args.rating ? prediction.dislikes : prediction.dislikes + 1,
+        }).go()
+
+      return `update to ${ratingInput}`;
     }
-  })
-}));
+  }),
 
-// wtf
-const calcRating = (arg: {
-  rating: 'like' | 'dislike';
-  operation: 'add' | 'subtract';
-  current: {
-    likes: number;
-    dislikes: number;
-  }
-}) => {
-  const result = { ...arg.current }
-  const field: 'likes' | 'dislikes' = `${arg.rating}s`
-  if (arg.operation === 'add') {
-    result[field] = result[field] + 1
-  } else {
-    result[field] = result[field] - 1
-  }
-  return result;
-}
+  rateComment: t.string({
+    args: {
+      predictionId: t.arg.string({ required: true }),
+      commentId: t.arg.string({ required: true }),
+      rating: t.arg.boolean({ required: true }),
+    },
+    resolve: async (_, args, context: any) => {
+      // todo: move logic to sqs???
+      const ratings = await redbookModel
+        .entities
+        .RatingEntity
+        .query
+        .rating({
+          userId: context.userId,
+          predictionId: args.predictionId,
+          commentId: args.commentId,
+        }).go()
+
+      const [comment] = await redbookModel
+        .entities
+        .CommentEntity
+        .query
+        .collection({
+          predictionId: args.predictionId,
+          commentId: args.commentId,
+        }).go()
+
+      const ratingInput = args.rating ? 'like' : 'dislike';
+
+      if (ratings.length < 1) {
+        await redbookModel
+          .entities
+          .RatingEntity
+          .create({
+            userId: context.userId,
+            predictionId: args.predictionId,
+            commentId: args.commentId,
+            rating: ratingInput,
+          }).go();
+
+        await redbookModel
+          .entities
+          .CommentEntity
+          .update(comment)
+          .set({
+            likes: args.rating ? comment.likes + 1 : comment.likes,
+            dislikes: args.rating ? comment.dislikes : comment.likes + 1,
+          })
+          .go()
+
+        return `create ${ratingInput}`;
+      }
+
+      const [{ rating }] = ratings;
+
+      if (rating !== 'none') {
+        await redbookModel
+          .entities
+          .RatingEntity
+          .update({
+            userId: context.userId,
+            predictionId: args.predictionId,
+            commentId: args.commentId,
+          }).set({
+            rating: 'none'
+          }).go();
+
+        await redbookModel
+          .entities
+          .PredictionEntity
+          .update(comment)
+          .set({
+            likes: rating === 'like' ? comment.likes - 1 : comment.likes,
+            dislikes: rating === 'dislike' ? comment.dislikes - 1 : comment.dislikes,
+          }).go()
+
+        return `remove ${ratingInput}`;
+      }
+
+      await redbookModel
+        .entities
+        .RatingEntity
+        .update({
+          userId: context.userId,
+          predictionId: args.predictionId,
+          commentId: args.commentId,
+        }).set({
+          rating: ratingInput,
+        }).go();
+
+      await redbookModel
+        .entities
+        .PredictionEntity
+        .update(comment)
+        .set({
+          likes: args.rating ? comment.likes + 1 : comment.likes,
+          dislikes: args.rating ? comment.dislikes : comment.dislikes + 1,
+        }).go()
+
+      return `update to ${ratingInput}`;
+    }
+  }),
+}));
 
