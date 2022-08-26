@@ -27,8 +27,8 @@ export const user = {
       .entities
       .PredictionEntity
       .query
-      .prognosticatorPrediction({
-        prognosticatorId
+      .prediction({
+        userId: prognosticatorId,
       }).go()
 
     interface Stats {
