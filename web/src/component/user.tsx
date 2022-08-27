@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import tw from 'twin.macro';
-import { useAvatar } from '../../hook/avatar';
+import { useAvatar } from '../hook/avatar';
 
 interface props {
   type?: 'judge';

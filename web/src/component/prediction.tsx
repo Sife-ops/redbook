@@ -1,7 +1,7 @@
 import 'twin.macro';
 import React from 'react';
 import { Prediction as PredictionType } from '@redbook/graphql/genql/schema';
-import { User } from '../user/user';
+import { User } from './user';
 
 interface Props {
   type: 'summary' | 'full';

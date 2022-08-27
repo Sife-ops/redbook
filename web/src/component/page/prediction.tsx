@@ -2,8 +2,8 @@ import 'twin.macro';
 import React from 'react';
 import { CommentsSection } from '../comments-section/comments-section';
 import { Navigate, useParams } from 'react-router-dom';
-import { Prediction as PredictionContainer } from '../prediction/prediction';
-import { Ratings } from '../ratings/ratings';
+import { Prediction as PredictionContainer } from '../prediction';
+import { Ratings } from '../ratings';
 import { usePredictionQuery } from '../../hook/urql';
 
 export const Prediction: React.FC<{

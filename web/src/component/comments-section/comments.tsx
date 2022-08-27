@@ -1,7 +1,7 @@
 import 'twin.macro';
 import React, { useEffect } from 'react';
 import { Comment as CommentType } from '@redbook/graphql/genql/schema';
-import { Ratings } from '../ratings/ratings';
+import { Ratings } from '../ratings';
 import { useAvatar } from '../../hook/avatar';
 
 export const Comments: React.FC<{ comments: CommentType[] }> = props => {

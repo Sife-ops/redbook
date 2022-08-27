@@ -1,7 +1,7 @@
 import 'twin.macro';
 import React from 'react';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
-import { useRating } from '../../hook/rating';
+import { useRating } from '../hook/rating';
 
 export const Ratings: React.FC<{
   ratings: {
