@@ -29,7 +29,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 function App() {
-  const user = decode<{ userId: string; avatar: string }>(token!);
+  let user;
+  if (token) {
+    user = decode<{ userId: string; avatar: string }>(token!);
+  }
 
   return (
     <BrowserRouter>
@@ -41,6 +44,7 @@ function App() {
       <Routes>
         <Route
           path="/prediction/:predictionId"
+          // @ts-ignore
           element={<Prediction user={user} />}
         />
         <Route path="/user/:userId" element={<Predictions />} />

@@ -1,5 +1,6 @@
 import React from 'react';
 import tw from 'twin.macro';
+import { Loading } from '../loading';
 import { Prediction } from '../prediction';
 import { useParams, Navigate } from 'react-router-dom';
 import { usePredictionsQuery } from '../../hook/urql';
@@ -9,7 +10,7 @@ export const Predictions: React.FC = () => {
   const [predictionsQueryState] = usePredictionsQuery(params.userId!);
 
   if (predictionsQueryState.fetching) {
-    return <div style={{ padding: '1rem' }}>loading...</div>;
+    return <Loading />;
   }
 
   if (predictionsQueryState.error || !predictionsQueryState.data) {

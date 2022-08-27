@@ -1,6 +1,7 @@
 import 'twin.macro';
 import React from 'react';
 import { CommentsSection } from '../comments-section/comments-section';
+import { Loading } from '../loading';
 import { Navigate, useParams } from 'react-router-dom';
 import { Prediction as PredictionComponent } from '../prediction';
 import { Ratings } from '../ratings';
@@ -13,7 +14,7 @@ export const Prediction: React.FC<{
   const [predictionQueryState] = usePredictionQuery(params.predictionId!);
 
   if (predictionQueryState.fetching) {
-    return <div style={{ padding: '1rem' }}>loading...</div>;
+    return <Loading />
   }
 
   if (predictionQueryState.error || !predictionQueryState.data) {

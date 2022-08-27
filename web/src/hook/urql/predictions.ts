@@ -47,7 +47,7 @@ export const usePredictionsQuery = (userId: string) => {
             commentId: true,
             comment: true,
             created_at: true,
-            replyTo: true,
+            // replyTo: true,
             likes: true,
             dislikes: true,
 
@@ -66,7 +66,7 @@ export const usePredictionsQuery = (userId: string) => {
               commentId: true,
               comment: true,
               created_at: true,
-              replyTo: true,
+              // replyTo: true,
               likes: true,
               dislikes: true,
 
