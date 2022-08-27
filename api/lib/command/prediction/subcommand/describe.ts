@@ -54,7 +54,20 @@ export const describe = {
 
     const prediction = PredictionEntity[0];
 
-    const token = sign({ userId }, TOKEN_SECRET);
+    const [user] = await redbookModel
+      .entities
+      .UserEntity
+      .query
+      .user({
+        userId
+      }).go()
+
+    const token = sign({
+      userId,
+      username: user.username,
+      discriminator: user.discriminator,
+      avatar: user.avatar,
+    }, TOKEN_SECRET);
 
     const url = REDBOOK_ENV === 'dev'
       ? 'http://localhost:5173'
