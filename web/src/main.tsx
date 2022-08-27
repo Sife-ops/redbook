@@ -33,9 +33,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <img src={dancingBaby} tw="absolute w-16" />
-      <img src={dancingBaby} tw="absolute w-16 right-0" />
-      <h1 tw="text-center text-4xl mb-4">REDBOOK</h1>
+      <div>
+        <img src={dancingBaby} tw="absolute w-16" />
+        <img src={dancingBaby} tw="absolute w-16 right-0" />
+        <h1 tw="text-center text-4xl mb-4">REDBOOK</h1>
+      </div>
       <Routes>
         <Route
           path="/prediction/:predictionId"
