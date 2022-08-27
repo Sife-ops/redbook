@@ -1,12 +1,14 @@
 import 'twin.macro';
 import React from 'react';
-import { CommentsSection } from '../container/comments';
+import { CommentsSection } from '../comments-section/comments-section';
 import { Navigate, useParams } from 'react-router-dom';
-import { Prediction as PredictionContainer } from '../container/prediction';
-import { Ratings } from '../element/ratings';
+import { Prediction as PredictionContainer } from '../prediction/prediction';
+import { Ratings } from '../ratings/ratings';
 import { usePredictionQuery } from '../../hook/urql';
 
-export const Prediction: React.FC<{ user: {userId: string; avatar: string;} }> = props => {
+export const Prediction: React.FC<{
+  user: { userId: string; avatar: string };
+}> = props => {
   const params = useParams();
   const [predictionQueryState] = usePredictionQuery(params.predictionId!);
 

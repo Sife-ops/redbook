@@ -1,6 +1,6 @@
 import React from 'react';
 import tw from 'twin.macro';
-import { Prediction } from '../container/prediction';
+import { Prediction } from '../prediction/prediction';
 import { useParams, Navigate } from 'react-router-dom';
 import { usePredictionsQuery } from '../../hook/urql';
 
