@@ -1,7 +1,7 @@
 import 'twin.macro';
 import React from 'react';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
-import { useRating } from '../hook/rating';
+import { useRatings } from '../hook/ratings';
 
 export const Ratings: React.FC<{
   ratings: {
@@ -11,7 +11,7 @@ export const Ratings: React.FC<{
   predictionId: string;
   commentId?: string;
 }> = props => {
-  const { ratingState, rate, percentage } = useRating(
+  const { ratingState, rate, percentage } = useRatings(
     props.ratings,
     props.predictionId,
     props.commentId

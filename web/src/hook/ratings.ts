@@ -1,7 +1,7 @@
 import { useRateCommentMutation, useRatePredictionMutation } from './urql';
 import { useState } from 'react';
 
-export const useRating = (
+export const useRatings = (
   ratings: {
     likes: number;
     dislikes: number;
