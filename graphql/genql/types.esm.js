@@ -25,11 +25,11 @@ export default {
             "predictionId": [
                 2
             ],
-            "replyTo": [
-                1
+            "replies": [
+                9
             ],
             "user": [
-                9
+                10
             ],
             "__typename": [
                 1
@@ -43,7 +43,7 @@ export default {
                 1
             ],
             "user": [
-                9
+                10
             ],
             "verdict": [
                 1
@@ -59,6 +59,9 @@ export default {
                     "comment": [
                         1,
                         "String!"
+                    ],
+                    "commentId": [
+                        1
                     ],
                     "predictionId": [
                         1,
@@ -124,7 +127,7 @@ export default {
                 2
             ],
             "user": [
-                9
+                10
             ],
             "verdict": [
                 1
@@ -151,6 +154,32 @@ export default {
                         "String!"
                     ]
                 }
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "Reply": {
+            "comment": [
+                1
+            ],
+            "commentId": [
+                2
+            ],
+            "created_at": [
+                1
+            ],
+            "dislikes": [
+                3
+            ],
+            "likes": [
+                3
+            ],
+            "predictionId": [
+                2
+            ],
+            "user": [
+                10
             ],
             "__typename": [
                 1

@@ -2,7 +2,7 @@ import 'twin.macro';
 import React from 'react';
 import { CommentsSection } from '../comments-section/comments-section';
 import { Navigate, useParams } from 'react-router-dom';
-import { Prediction as PredictionContainer } from '../prediction';
+import { Prediction as PredictionComponent } from '../prediction';
 import { Ratings } from '../ratings';
 import { usePredictionQuery } from '../../hook/urql';
 
@@ -22,11 +22,12 @@ export const Prediction: React.FC<{
   }
 
   const { prediction } = predictionQueryState.data;
+  console.log(prediction);
 
   return (
     <div>
       <div tw="mb-4">
-        <PredictionContainer prediction={prediction} type="full" />
+        <PredictionComponent prediction={prediction} type="full" />
       </div>
       <div tw="mb-4">
         <Ratings

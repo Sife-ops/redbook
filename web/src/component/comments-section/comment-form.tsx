@@ -5,8 +5,10 @@ import { Comment as CommentType } from '@redbook/graphql/genql/schema';
 import { useCommentMutation } from '../../hook/urql';
 
 export const CommentForm: React.FC<{
+  commentId?: string;
   predictionId: string;
   pushComment: (c: CommentType) => void;
+  setReplyMode?: React.Dispatch<React.SetStateAction<boolean>>;
   user: {
     userId: string;
     avatar: string;
@@ -31,6 +33,7 @@ export const CommentForm: React.FC<{
           setComment('');
           commentMutation({
             comment,
+            commentId: props.commentId,
             predictionId: props.predictionId
           });
         }}
@@ -44,8 +47,18 @@ export const CommentForm: React.FC<{
             value={comment}
           />
         </div>
-        <div tw="flex justify-end gap-10 text-sm">
-          <button>CANCEL</button>
+        <div tw="flex justify-end gap-5 text-sm">
+          {props.setReplyMode && (
+            <button
+              onClick={e => {
+                e.preventDefault();
+                // @ts-ignore
+                props.setReplyMode(false);
+              }}
+            >
+              CANCEL
+            </button>
+          )}
           <button type="submit" value="Submit">
             COMMENT
           </button>

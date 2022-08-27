@@ -14,7 +14,7 @@ export interface Comment {
     dislikes: Scalars['Int']
     likes: Scalars['Int']
     predictionId: Scalars['ID']
-    replyTo?: Scalars['String']
+    replies: Reply[]
     user: User
     __typename: 'Comment'
 }
@@ -52,6 +52,17 @@ export interface Query {
     __typename: 'Query'
 }
 
+export interface Reply {
+    comment: Scalars['String']
+    commentId: Scalars['ID']
+    created_at: Scalars['String']
+    dislikes: Scalars['Int']
+    likes: Scalars['Int']
+    predictionId: Scalars['ID']
+    user: User
+    __typename: 'Reply'
+}
+
 export interface User {
     avatar: Scalars['String']
     created_at: Scalars['String']
@@ -68,7 +79,7 @@ export interface CommentRequest{
     dislikes?: boolean | number
     likes?: boolean | number
     predictionId?: boolean | number
-    replyTo?: boolean | number
+    replies?: ReplyRequest
     user?: UserRequest
     __typename?: boolean | number
     __scalar?: boolean | number
@@ -83,7 +94,7 @@ export interface JudgeRequest{
 }
 
 export interface MutationRequest{
-    comment?: [{comment: Scalars['String'],predictionId: Scalars['String']},CommentRequest]
+    comment?: [{comment: Scalars['String'],commentId?: (Scalars['String'] | null),predictionId: Scalars['String']},CommentRequest]
     rateComment?: [{commentId: Scalars['String'],predictionId: Scalars['String'],rating: Scalars['Boolean']}]
     ratePrediction?: [{predictionId: Scalars['String'],rating: Scalars['Boolean']}]
     __typename?: boolean | number
@@ -107,6 +118,18 @@ export interface PredictionRequest{
 export interface QueryRequest{
     prediction?: [{predictionId: Scalars['String']},PredictionRequest]
     predictions?: [{userId: Scalars['String']},PredictionRequest]
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ReplyRequest{
+    comment?: boolean | number
+    commentId?: boolean | number
+    created_at?: boolean | number
+    dislikes?: boolean | number
+    likes?: boolean | number
+    predictionId?: boolean | number
+    user?: UserRequest
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -162,6 +185,14 @@ export const isQuery = (obj?: { __typename?: any } | null): obj is Query => {
 
 
 
+const Reply_possibleTypes: string[] = ['Reply']
+export const isReply = (obj?: { __typename?: any } | null): obj is Reply => {
+  if (!obj?.__typename) throw new Error('__typename is missing in "isReply"')
+  return Reply_possibleTypes.includes(obj.__typename)
+}
+
+
+
 const User_possibleTypes: string[] = ['User']
 export const isUser = (obj?: { __typename?: any } | null): obj is User => {
   if (!obj?.__typename) throw new Error('__typename is missing in "isUser"')
@@ -176,7 +207,7 @@ export interface CommentPromiseChain{
     dislikes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
     likes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
     predictionId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Promise<Scalars['ID']>}),
-    replyTo: ({get: (request?: boolean|number, defaultValue?: (Scalars['String'] | undefined)) => Promise<(Scalars['String'] | undefined)>}),
+    replies: ({get: <R extends ReplyRequest>(request: R, defaultValue?: FieldsSelection<Reply, R>[]) => Promise<FieldsSelection<Reply, R>[]>}),
     user: (UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>})
 }
 
@@ -187,7 +218,7 @@ export interface CommentObservableChain{
     dislikes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
     likes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
     predictionId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Observable<Scalars['ID']>}),
-    replyTo: ({get: (request?: boolean|number, defaultValue?: (Scalars['String'] | undefined)) => Observable<(Scalars['String'] | undefined)>}),
+    replies: ({get: <R extends ReplyRequest>(request: R, defaultValue?: FieldsSelection<Reply, R>[]) => Observable<FieldsSelection<Reply, R>[]>}),
     user: (UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>})
 }
 
@@ -204,13 +235,13 @@ export interface JudgeObservableChain{
 }
 
 export interface MutationPromiseChain{
-    comment: ((args: {comment: Scalars['String'],predictionId: Scalars['String']}) => CommentPromiseChain & {get: <R extends CommentRequest>(request: R, defaultValue?: FieldsSelection<Comment, R>) => Promise<FieldsSelection<Comment, R>>}),
+    comment: ((args: {comment: Scalars['String'],commentId?: (Scalars['String'] | null),predictionId: Scalars['String']}) => CommentPromiseChain & {get: <R extends CommentRequest>(request: R, defaultValue?: FieldsSelection<Comment, R>) => Promise<FieldsSelection<Comment, R>>}),
     rateComment: ((args: {commentId: Scalars['String'],predictionId: Scalars['String'],rating: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     ratePrediction: ((args: {predictionId: Scalars['String'],rating: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>})
 }
 
 export interface MutationObservableChain{
-    comment: ((args: {comment: Scalars['String'],predictionId: Scalars['String']}) => CommentObservableChain & {get: <R extends CommentRequest>(request: R, defaultValue?: FieldsSelection<Comment, R>) => Observable<FieldsSelection<Comment, R>>}),
+    comment: ((args: {comment: Scalars['String'],commentId?: (Scalars['String'] | null),predictionId: Scalars['String']}) => CommentObservableChain & {get: <R extends CommentRequest>(request: R, defaultValue?: FieldsSelection<Comment, R>) => Observable<FieldsSelection<Comment, R>>}),
     rateComment: ((args: {commentId: Scalars['String'],predictionId: Scalars['String'],rating: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     ratePrediction: ((args: {predictionId: Scalars['String'],rating: Scalars['Boolean']}) => {get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>})
 }
@@ -247,6 +278,26 @@ export interface QueryPromiseChain{
 export interface QueryObservableChain{
     prediction: ((args: {predictionId: Scalars['String']}) => PredictionObservableChain & {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>) => Observable<FieldsSelection<Prediction, R>>}),
     predictions: ((args: {userId: Scalars['String']}) => {get: <R extends PredictionRequest>(request: R, defaultValue?: FieldsSelection<Prediction, R>[]) => Observable<FieldsSelection<Prediction, R>[]>})
+}
+
+export interface ReplyPromiseChain{
+    comment: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
+    commentId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Promise<Scalars['ID']>}),
+    created_at: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
+    dislikes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
+    likes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
+    predictionId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Promise<Scalars['ID']>}),
+    user: (UserPromiseChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Promise<FieldsSelection<User, R>>})
+}
+
+export interface ReplyObservableChain{
+    comment: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
+    commentId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Observable<Scalars['ID']>}),
+    created_at: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
+    dislikes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
+    likes: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
+    predictionId: ({get: (request?: boolean|number, defaultValue?: Scalars['ID']) => Observable<Scalars['ID']>}),
+    user: (UserObservableChain & {get: <R extends UserRequest>(request: R, defaultValue?: FieldsSelection<User, R>) => Observable<FieldsSelection<User, R>>})
 }
 
 export interface UserPromiseChain{

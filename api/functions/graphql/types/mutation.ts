@@ -7,6 +7,7 @@ builder.mutationFields(t => ({
     type: CommentType,
     args: {
       predictionId: t.arg.string({ required: true }),
+      commentId: t.arg.string(),
       comment: t.arg.string({ required: true })
     },
     // todo: no explicit any
@@ -18,6 +19,7 @@ builder.mutationFields(t => ({
           userId: context.user.userId,
           predictionId: args.predictionId,
           comment: args.comment,
+          replyTo: args.commentId || undefined,
         }).go();
     }
   }),

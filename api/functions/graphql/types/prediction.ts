@@ -24,9 +24,8 @@ export const PredictionType = builder
             .entities
             .UserEntity
             .query
-            .user({
-              userId: parent.userId
-            }).go()
+            .user({ userId: parent.userId })
+            .go();
           return user;
         }
       }),
@@ -38,9 +37,8 @@ export const PredictionType = builder
             .entities
             .VerdictEntity
             .query
-            .collection({
-              predictionId: parent.predictionId,
-            }).go();
+            .collection({ predictionId: parent.predictionId })
+            .go();
         }
       }),
 
@@ -51,9 +49,9 @@ export const PredictionType = builder
             .entities
             .CommentEntity
             .query
-            .collection({
-              predictionId: parent.predictionId
-            }).go()
+            .collection({ predictionId: parent.predictionId })
+            .where(({ replyTo }, { notExists }) => notExists(replyTo))
+            .go();
         }
       })
     })

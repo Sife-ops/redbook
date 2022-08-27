@@ -12,7 +12,7 @@ const sortComments = (c: CommentType[]) => {
 export const useComments = (c: CommentType[]) => {
   const [comments, setComments] = useState(sortComments(c));
 
-  const pushComment = (c: CommentType) => {
+  const pushComment = (c: any) => {
     setComments(s => {
       return [c, ...s];
     });

@@ -15,6 +15,7 @@ export const CommentsSection: React.FC<{
 }> = props => {
   const { comments, pushComment } = useComments(props.comments);
 
+  // todo: comment count
   return (
     <div>
       <div tw="mb-4">
@@ -24,7 +25,7 @@ export const CommentsSection: React.FC<{
           user={props.user}
         />
       </div>
-      <Comments comments={comments} />
+      <Comments type="comments" comments={comments} user={props.user} />
     </div>
   );
 };
