@@ -7,14 +7,14 @@ import { verify } from '../lib/verify';
 
 const sqs = new AWS.SQS();
 
-const { ONBOARD_SQS } = process.env;
+const { ONBOARD_SQS, REDBOOK_ENV } = process.env;
 
 type EventHandler<T = never> = Handler<Event, APIGatewayProxyResultV2<T>>;
 
 export const handler: EventHandler = async (event) => {
   const body = JSON.parse(event.body);
 
-  if (process.env.REDBOOK_ENV === 'dev') {
+  if (REDBOOK_ENV !== 'prod') {
     console.log('body', util.inspect(body, false, null, true));
   }
 
