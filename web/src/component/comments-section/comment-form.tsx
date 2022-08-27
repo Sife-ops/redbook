@@ -61,7 +61,7 @@ export const CommentForm: React.FC<{
               CANCEL
             </button>
           )}
-          <button type="submit" value="Submit">
+          <button type="submit" value="Submit" disabled={comment.length < 1}>
             COMMENT
           </button>
         </div>
