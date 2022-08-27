@@ -20,8 +20,11 @@ export const CommentForm: React.FC<{
   useEffect(() => {
     const { fetching, data } = commentMutationState;
     if (fetching === false && data) {
-      console.log(data);
       props.pushComment(data.comment);
+      if (props.setReplyMode) {
+        props.setReplyMode(false);
+      }
+      setComment('');
     }
   }, [commentMutationState.fetching]);
 
@@ -30,7 +33,6 @@ export const CommentForm: React.FC<{
       <form
         onSubmit={e => {
           e.preventDefault();
-          setComment('');
           commentMutation({
             comment,
             commentId: props.commentId,
