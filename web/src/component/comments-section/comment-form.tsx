@@ -1,7 +1,7 @@
 import 'twin.macro';
 import React, { useState, useEffect } from 'react';
+import { Avatar } from '../avatar';
 import { Comment as CommentType } from '@redbook/graphql/genql/schema';
-import { useAvatar } from '../../hook/avatar';
 import { useCommentMutation } from '../../hook/urql';
 
 export const CommentForm: React.FC<{
@@ -12,14 +12,8 @@ export const CommentForm: React.FC<{
     avatar: string;
   };
 }> = props => {
-  const { avatarImg, fetchAvatar } = useAvatar();
   const [comment, setComment] = useState('');
   const [commentMutationState, commentMutation] = useCommentMutation();
-
-  useEffect(() => {
-    const { avatar, userId } = props.user;
-    fetchAvatar({ userId, avatar });
-  }, []);
 
   useEffect(() => {
     const { fetching, data } = commentMutationState;
@@ -42,9 +36,7 @@ export const CommentForm: React.FC<{
         }}
       >
         <div tw="flex gap-2">
-          <div tw="min-w-[48px] max-w-[48px]">
-            {avatarImg && <img tw="rounded-full" src={avatarImg} alt="icons" />}
-          </div>
+          <Avatar user={props.user} />
           <textarea
             tw="bg-gray-500 text-white w-[100%]"
             onChange={e => setComment(e.target.value)}
@@ -62,4 +54,3 @@ export const CommentForm: React.FC<{
     </div>
   );
 };
-

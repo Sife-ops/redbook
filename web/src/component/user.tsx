@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import tw from 'twin.macro';
+import { Avatar } from './avatar';
 import { useAvatar } from '../hook/avatar';
 
 interface props {
@@ -14,13 +15,6 @@ interface props {
 }
 
 export const User: React.FC<props> = props => {
-  const { avatar, discriminator, username, userId } = props.user;
-  const { avatarImg, fetchAvatar } = useAvatar();
-
-  useEffect(() => {
-    fetchAvatar({ userId, avatar });
-  }, []);
-
   return (
     <div
       css={[
@@ -37,12 +31,12 @@ export const User: React.FC<props> = props => {
         }
       ]}
     >
-      <div tw="flex flex-col justify-center min-w-[48px] max-w-[48px]">
-        {avatarImg && <img tw="rounded-full" src={avatarImg} alt="icons" />}
+      <div tw="flex flex-col justify-center">
+        <Avatar user={props.user}/>
       </div>
       <div tw="flex flex-col justify-center">
-        <p tw="break-all">{username}</p>
-        <div tw="text-gray-400">#{discriminator}</div>
+        <p tw="break-all">{props.user.username}</p>
+        <div tw="text-gray-400">#{props.user.discriminator}</div>
       </div>
     </div>
   );

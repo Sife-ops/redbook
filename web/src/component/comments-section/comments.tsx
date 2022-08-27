@@ -1,8 +1,8 @@
 import 'twin.macro';
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Avatar } from '../avatar';
 import { Comment as CommentType } from '@redbook/graphql/genql/schema';
 import { Ratings } from '../ratings';
-import { useAvatar } from '../../hook/avatar';
 
 export const Comments: React.FC<{ comments: CommentType[] }> = props => {
   if (props.comments.length < 1) {
@@ -22,19 +22,10 @@ export const Comments: React.FC<{ comments: CommentType[] }> = props => {
  * todo: nested comments
  */
 const Comment: React.FC<{ comment: CommentType }> = props => {
-  const { avatarImg, fetchAvatar } = useAvatar();
-
-  useEffect(() => {
-    const { avatar, userId } = props.comment.user;
-    fetchAvatar({ userId, avatar });
-  }, []);
-
   return (
     <div tw="mb-6">
       <div tw="flex gap-2">
-        <div tw="min-w-[48px] max-w-[48px]">
-          {avatarImg && <img tw="rounded-full" src={avatarImg} alt="icons" />}
-        </div>
+        <Avatar user={props.comment.user} />
         <div>
           <div tw="font-bold text-sm">{props.comment.user.username}</div>
           <div tw="mb-2">{props.comment.comment}</div>
