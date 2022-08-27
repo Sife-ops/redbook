@@ -131,13 +131,6 @@ builder.mutationFields(t => ({
     },
     resolve: async (_, args, context: any) => {
       // todo: move logic to sqs???
-      console.log('=== input ===')
-      console.log(context.user.userId)
-      console.log(args.predictionId)
-      console.log(args.commentId)
-      console.log(args.rating)
-      console.log('=== data ===')
-
       const ratings = await redbookModel
         .entities
         .RatingEntity
@@ -148,8 +141,6 @@ builder.mutationFields(t => ({
           commentId: args.commentId,
         }).go()
 
-      console.log('ratings', ratings)
-
       const [comment] = await redbookModel
         .entities
         .CommentEntity
@@ -158,8 +149,6 @@ builder.mutationFields(t => ({
           predictionId: args.predictionId,
           commentId: args.commentId,
         }).go()
-
-      console.log('comment', comment)
 
       const ratingInput = args.rating ? 'like' : 'dislike';
 
@@ -189,8 +178,6 @@ builder.mutationFields(t => ({
 
       const [{ rating }] = ratings;
 
-      console.log('rating', rating)
-
       if (rating !== 'none') {
         const ratingUpdate = await redbookModel
           .entities
@@ -203,8 +190,6 @@ builder.mutationFields(t => ({
             rating: 'none'
           }).go();
 
-        console.log('ratingUpdate', ratingUpdate)
-
         const predictionUpdate = await redbookModel
           .entities
           .CommentEntity
@@ -213,8 +198,6 @@ builder.mutationFields(t => ({
             likes: rating === 'like' ? comment.likes - 1 : comment.likes,
             dislikes: rating === 'dislike' ? comment.dislikes - 1 : comment.dislikes,
           }).go()
-
-        console.log('predictionUpdate', predictionUpdate)
 
         return `remove ${ratingInput}`;
       }
