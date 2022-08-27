@@ -90,7 +90,7 @@ export const describe = {
               },
               {
                 name: 'Made On',
-                value: prediction.created_at,
+                value: new Date(parseInt(prediction.created_at)).toLocaleDateString(),
                 inline: false,
               },
               {
