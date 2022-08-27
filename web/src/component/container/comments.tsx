@@ -1,7 +1,7 @@
-// import { Ratings } from '../element/ratings';
 import 'twin.macro';
 import React, { useState, useEffect } from 'react';
 import { Comment as CommentType } from '../../../../graphql/genql/schema';
+import { Ratings } from '../element/ratings';
 import { useAvatar } from '../../hook/avatar';
 import { useCommentMutation } from '../../hook/urql';
 import { useComments } from '../../hook/comments';
@@ -9,6 +9,10 @@ import { useComments } from '../../hook/comments';
 export const CommentsSection: React.FC<{
   comments: CommentType[];
   predictionId: string;
+  user: {
+    userId: string;
+    avatar: string;
+  };
 }> = props => {
   const { comments, pushComment } = useComments(props.comments);
 
@@ -18,6 +22,7 @@ export const CommentsSection: React.FC<{
         <CommentForm
           predictionId={props.predictionId}
           pushComment={pushComment}
+          user={props.user}
         />
       </div>
       <Comments comments={comments} />
@@ -28,14 +33,19 @@ export const CommentsSection: React.FC<{
 export const CommentForm: React.FC<{
   predictionId: string;
   pushComment: (c: CommentType) => void;
+  user: {
+    userId: string;
+    avatar: string;
+  };
 }> = props => {
-  // const { avatarImg, fetchAvatar } = useAvatar();
+  const { avatarImg, fetchAvatar } = useAvatar();
   const [comment, setComment] = useState('');
   const [commentMutationState, commentMutation] = useCommentMutation();
 
-  // useEffect(() => {
-  //   fetchAvatar({ userId, avatar });
-  // }, []);
+  useEffect(() => {
+    const { avatar, userId } = props.user;
+    fetchAvatar({ userId, avatar });
+  }, []);
 
   useEffect(() => {
     const { fetching, data } = commentMutationState;
@@ -57,7 +67,10 @@ export const CommentForm: React.FC<{
           });
         }}
       >
-        <div>
+        <div tw="flex gap-2">
+          <div tw="min-w-[48px] max-w-[48px]">
+            {avatarImg && <img tw="rounded-full" src={avatarImg} alt="icons" />}
+          </div>
           <textarea
             tw="bg-gray-500 text-white w-[100%]"
             onChange={e => setComment(e.target.value)}
@@ -65,10 +78,10 @@ export const CommentForm: React.FC<{
             value={comment}
           />
         </div>
-        <div tw="flex justify-end gap-4">
-          <button>cancel</button>
+        <div tw="flex justify-end gap-10 text-sm">
+          <button>CANCEL</button>
           <button type="submit" value="Submit">
-            comment
+            COMMENT
           </button>
         </div>
       </form>
@@ -94,20 +107,35 @@ export const Comments: React.FC<{ comments: CommentType[] }> = props => {
  * todo: nested comments
  */
 export const Comment: React.FC<{ comment: CommentType }> = props => {
-  return (
-    <div
-      tw="mb-2"
-      style={{
-        border: '1px solid red'
-      }}
-    >
-      <div>{props.comment.user.username}</div>
-      <div>{props.comment.comment}</div>
+  const { avatarImg, fetchAvatar } = useAvatar();
 
-      {/* <Ratings
-        ratings={props.comment.ratings}
-        commentId={props.comment.commentId}
-      /> */}
+  useEffect(() => {
+    const { avatar, userId } = props.comment.user;
+    fetchAvatar({ userId, avatar });
+  }, []);
+
+  return (
+    <div tw="mb-6">
+      <div tw="flex gap-2">
+        <div tw="min-w-[48px] max-w-[48px]">
+          {avatarImg && <img tw="rounded-full" src={avatarImg} alt="icons" />}
+        </div>
+        <div>
+          <div tw="font-bold text-sm">{props.comment.user.username}</div>
+          <div tw='mb-2'>{props.comment.comment}</div>
+          <div tw="flex gap-6">
+            <Ratings
+              commentId={props.comment.commentId}
+              predictionId={props.comment.predictionId}
+              ratings={{
+                likes: props.comment.likes,
+                dislikes: props.comment.dislikes
+              }}
+            />
+            <button tw="text-sm">REPLY</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

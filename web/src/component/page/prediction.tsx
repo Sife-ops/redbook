@@ -6,7 +6,7 @@ import { Prediction as PredictionContainer } from '../container/prediction';
 import { Ratings } from '../element/ratings';
 import { usePredictionQuery } from '../../hook/urql';
 
-export const Prediction: React.FC = () => {
+export const Prediction: React.FC<{ user: {userId: string; avatar: string;} }> = props => {
   const params = useParams();
   const [predictionQueryState] = usePredictionQuery(params.predictionId!);
 
@@ -28,16 +28,17 @@ export const Prediction: React.FC = () => {
       </div>
       <div tw="mb-4">
         <Ratings
+          predictionId={prediction.predictionId}
           ratings={{
             likes: prediction.likes,
             dislikes: prediction.dislikes
           }}
-          predictionId={prediction.predictionId}
         />
       </div>
       <CommentsSection
-        predictionId={prediction.predictionId}
         comments={prediction.comments!}
+        predictionId={prediction.predictionId}
+        user={props.user}
       />
     </div>
   );
