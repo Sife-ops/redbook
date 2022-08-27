@@ -1,3 +1,4 @@
+import './index.css'
 import 'twin.macro';
 import GlobalStyles from './styles/global-styles';
 import ReactDOM from 'react-dom/client';
