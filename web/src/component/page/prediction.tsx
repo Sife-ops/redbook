@@ -23,7 +23,6 @@ export const Prediction: React.FC<{
   }
 
   const { prediction } = predictionQueryState.data;
-  console.log(prediction);
 
   return (
     <div>

@@ -121,9 +121,10 @@ export function stack({ stack }: StackContext) {
     handler: 'functions/import-json.handler',
     environment: {
       BUCKET: exportJsonBucket.bucketName,
+      ONBOARD_SQS: onboardSqs.queueUrl,
       TABLE: table.tableName,
     },
-    permissions: [exportJsonBucket, table],
+    permissions: [exportJsonBucket, table, onboardSqs],
   });
 
   stack.addOutputs({
