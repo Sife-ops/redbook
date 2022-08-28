@@ -107,7 +107,7 @@ export function stack({ stack }: StackContext) {
       BUCKET: exportJsonBucket.bucketName,
       TABLE: table.tableName,
     },
-    permissions: [exportJsonBucket],
+    permissions: [exportJsonBucket, table],
   });
 
   stack.addOutputs({
