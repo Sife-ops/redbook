@@ -2,6 +2,7 @@ export * as Prediction from "./prediction";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
+import { faker } from '@faker-js/faker';
 
 export const PredictionEntity = new Entity(
   {
@@ -11,26 +12,19 @@ export const PredictionEntity = new Entity(
       service: "redbook",
     },
     attributes: {
+      userId: {
+        type: "string",
+        required: true,
+      },
       predictionId: {
         type: "string",
         required: true,
-      },
-
-      prognosticatorId: {
-        type: "string",
-        required: true,
-      },
-      username: {
-        type: "string",
-        required: true,
-      },
-      discriminator: {
-        type: "string",
-        required: true,
-      },
-      avatar: {
-        type: "string",
-        required: true,
+        default: () => {
+          const a = faker.word.adjective();
+          const b = faker.word.adjective();
+          const c = faker.word.noun();
+          return `${a}-${b}-${c}`;
+        }
       },
 
       conditions: {
@@ -38,30 +32,43 @@ export const PredictionEntity = new Entity(
         required: true,
       },
       verdict: {
-        type: "boolean",
+        type: ["correct", "incorrect", "none"],
+        required: true,
+        default: 'none'
       },
       created_at: {
         type: "string",
         required: true,
+        default: () => Date.now().toString()
+      },
+
+      likes: {
+        type: "number",
+        required: true,
+        default: 0,
+      },
+      dislikes: {
+        type: "number",
+        required: true,
+        default: 0,
       },
     },
     indexes: {
-      prognosticatorPrediction: {
+
+      prediction: {
+        collection: 'user',
         pk: {
           field: "pk",
-          composite: ["prognosticatorId"],
+          composite: ["userId"],
         },
         sk: {
           field: "sk",
           composite: ["predictionId"],
         },
       },
-      prediction: {
-        collection: [
-          'predictionJudge',
-          'predictionRating',
-          'predictionComment'
-        ] as const,
+
+      collection: {
+        collection: 'prediction',
         index: 'gsi1',
         pk: {
           field: "gsi1pk",
@@ -69,13 +76,13 @@ export const PredictionEntity = new Entity(
         },
         sk: {
           field: "gsi1sk",
-          composite: [],
+          composite: ['userId'],
         },
       },
+
     },
   },
   Dynamo.Configuration
 );
 
 export type PredictionEntityType = EntityItem<typeof PredictionEntity>;
-

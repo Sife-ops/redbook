@@ -11,6 +11,10 @@ export const RatingEntity = new Entity(
       service: "redbook",
     },
     attributes: {
+      userId: {
+        type: "string",
+        required: true,
+      },
       predictionId: {
         type: "string",
         required: true,
@@ -18,45 +22,32 @@ export const RatingEntity = new Entity(
       commentId: {
         type: "string",
         required: true,
+        default: '',
       },
 
-      criticId: {
-        type: "string",
-        required: true,
-      },
-      username: {
-        type: "string",
-        required: true,
-      },
-      discriminator: {
-        type: "string",
-        required: true,
-      },
-      avatar: {
-        type: "string",
-        required: true,
-      },
-
-      like: {
-        type: "boolean",
+      rating: {
+        type: ['like', 'dislike', 'none'],
         required: true,
       },
     },
     indexes: {
-      criticRating: {
+
+      rating: {
+        collection: 'user',
         pk: {
           field: "pk",
-          composite: ["criticId"],
+          composite: ["userId"],
         },
         sk: {
           field: "sk",
           composite: ['predictionId', 'commentId'],
         },
       },
-      predictionRating: {
+
+      collection: {
         collection: [
-          'predictionJudge',
-          'predictionRating'
+          'prediction',
+          'comment',
         ] as const,
         index: 'gsi1',
         pk: {
@@ -65,21 +56,10 @@ export const RatingEntity = new Entity(
         },
         sk: {
           field: "gsi1sk",
-          composite: ["criticId"],
+          composite: ['userId'],
         },
       },
-      commentRating: {
-        collection: 'commentRating',
-        index: 'gsi2',
-        pk: {
-          field: "gsi2pk",
-          composite: ["commentId"],
-        },
-        sk: {
-          field: "gsi2sk",
-          composite: ["criticId"],
-        },
-      },
+
     },
   },
   Dynamo.Configuration

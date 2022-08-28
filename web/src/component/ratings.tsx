@@ -1,15 +1,17 @@
 import 'twin.macro';
 import React from 'react';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
-import { Rating as RatingType } from '../../../../graphql/genql/schema';
-import { useRating } from '../../hook/rating';
+import { useRatings } from '../hook/ratings';
 
 export const Ratings: React.FC<{
-  ratings: RatingType[];
+  ratings: {
+    likes: number;
+    dislikes: number;
+  };
   predictionId: string;
   commentId?: string;
 }> = props => {
-  const { ratingState, rate, percentage } = useRating(
+  const { ratingState, rate, percentage } = useRatings(
     props.ratings,
     props.predictionId,
     props.commentId
@@ -37,14 +39,16 @@ export const Ratings: React.FC<{
         </span>
         <span>{ratingState.dislikes}</span>
       </div>
-      <div tw="bg-red-500">
-        <div
-          tw="bg-green-500 h-[2px]"
-          style={{
-            width: `${percentage().toString()}%`
-          }}
-        />
-      </div>
+      {props.commentId === undefined && (
+        <div tw="bg-red-500">
+          <div
+            tw="bg-green-500 h-[2px]"
+            style={{
+              width: `${percentage().toString()}%`
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

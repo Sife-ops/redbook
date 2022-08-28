@@ -37,14 +37,16 @@ export const remove = {
     const { options } = body.data.options[0].options[0];
     const predictionId = optionValue(options, 'id');
 
-    const { PredictionEntity, JudgeEntity } = await redbookModel.collections.predictionJudge({
-      predictionId,
-    }).go()
+    const { PredictionEntity, VerdictEntity } = await redbookModel
+      .collections
+      .prediction({
+        predictionId,
+      }).go()
 
     // prediction must exist and belong to user
     if (
       PredictionEntity.length < 1 ||
-      PredictionEntity[0].prognosticatorId !== prognosticatorId
+      PredictionEntity[0].userId !== prognosticatorId
     ) {
       return {
         type: 4,
@@ -57,7 +59,7 @@ export const remove = {
     const judgeId = optionValue(options, 'judge');
 
     // specified user must be a judge
-    if (!JudgeEntity.find(e => e.judgeId === judgeId)) {
+    if (!VerdictEntity.find(e => e.userId === judgeId)) {
       return {
         type: 4,
         data: {
@@ -67,7 +69,7 @@ export const remove = {
     }
 
     // cannot remove last judge
-    if (JudgeEntity.length < 2) {
+    if (VerdictEntity.length < 2) {
       return {
         type: 4,
         data: {
@@ -78,8 +80,8 @@ export const remove = {
 
     // must remove self if you are a judge and there are only 2 judges
     if (
-      JudgeEntity.length < 3 &&
-      JudgeEntity.find((e) => e.judgeId === prognosticatorId) &&
+      VerdictEntity.length < 3 &&
+      VerdictEntity.find((e) => e.userId === prognosticatorId) &&
       judgeId !== prognosticatorId
     ) {
       return {
@@ -91,10 +93,12 @@ export const remove = {
     }
 
     // todo: use try/catch
-    await redbookModel.entities.JudgeEntity.remove({
-      judgeId,
-      predictionId,
-    }).go()
+    await redbookModel.entities
+      .VerdictEntity
+      .remove({
+        userId: judgeId,
+        predictionId,
+      }).go()
 
     const prediction = PredictionEntity[0]
 

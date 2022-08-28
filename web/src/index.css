@@ -1,0 +1,8 @@
+html, body {
+  background-color: rgb(17 24 39);
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}

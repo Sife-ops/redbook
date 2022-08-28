@@ -1,8 +1,9 @@
 import { createGQLHandler } from "@serverless-stack/node/graphql";
+import { redbookModel } from '@redbook/lib/db';
 import { schema } from "./schema";
 import { verify, JwtPayload } from 'jsonwebtoken';
 
-const { TOKEN_SECRET } = process.env
+const { TOKEN_SECRET } = process.env;
 
 interface ContextPayload extends JwtPayload {
   userId: string
@@ -14,23 +15,25 @@ interface ContextPayload extends JwtPayload {
 export const handler = createGQLHandler({
   schema,
   context: async (c) => {
-    const token = c.event.queryStringParameters?.token
+    const token = c.event.queryStringParameters?.token;
+
     if (token) {
-      const {
-        avatar,
-        discriminator,
-        userId,
-        username
-      } = verify(token, TOKEN_SECRET) as ContextPayload
+      const { userId } = verify(token, TOKEN_SECRET) as ContextPayload;
+
+      const [user] = await redbookModel
+        .entities
+        .UserEntity
+        .query
+        .user({
+          userId,
+        })
+        .go();
 
       return {
-        userId,
-        username,
-        discriminator,
-        avatar,
+        user,
       }
     } else {
-      return {}
+      return {};
     }
   }
 });

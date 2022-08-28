@@ -75,15 +75,24 @@ export function stack({ stack }: StackContext) {
     },
   });
 
-  const mnemonicDlq = new Queue(stack, "mnemonic-dlq");
+  const onboardSqs = new Queue(stack, "onboard-sqs", {
+    consumer: {
+      function: {
+        handler: 'functions/onboard.handler',
+        permissions: [table],
+        environment: {
+          TABLE: table.tableName,
+        }
+      }
+    }
+  });
 
-  // todo: rename to 'bot'
   const bot = new Api(stack, 'api', {
     defaults: {
       function: {
-        permissions: [table, mnemonicDlq],
+        permissions: [table, onboardSqs],
         environment: {
-          MNEMONIC_DLQ: mnemonicDlq.queueUrl, // todo: can't use queueName???
+          ONBOARD_SQS: onboardSqs.queueUrl,
           PUBLIC_KEY,
           REDBOOK_ENV,
           SITE_URL: site.url,
@@ -123,7 +132,6 @@ export function stack({ stack }: StackContext) {
     ImportJsonLambda: importJsonLambda.functionArn,
     BotEndpoint: bot.url,
     GraphqlApi: graphqlApi.url,
-    MnemonicDlq: mnemonicDlq.queueUrl,
     SiteUrl: site.url,
   });
 }

@@ -1,7 +1,7 @@
 import { CommentType } from './comment';
 import { JudgeType } from './judge';
 import { PredictionEntityType, redbookModel } from '@redbook/lib/db';
-import { RatingType } from './rating';
+import { UserType } from './user';
 import { builder } from "../builder";
 
 export const PredictionType = builder
@@ -10,53 +10,48 @@ export const PredictionType = builder
     fields: t => ({
       predictionId: t.exposeID("predictionId"),
 
-      prognosticatorId: t.exposeString("prognosticatorId"),
-      avatar: t.exposeString("avatar"),
-      discriminator: t.exposeString("discriminator"),
-      username: t.exposeString("username"),
-
       conditions: t.exposeString("conditions"),
+      verdict: t.exposeString("verdict"),
       created_at: t.exposeString("created_at"),
-      verdict: t.exposeBoolean("verdict", { nullable: true }),
+
+      likes: t.exposeInt('likes'),
+      dislikes: t.exposeInt('dislikes'),
+
+      user: t.field({
+        type: UserType,
+        resolve: async (parent) => {
+          const [user] = await redbookModel
+            .entities
+            .UserEntity
+            .query
+            .user({ userId: parent.userId })
+            .go();
+          return user;
+        }
+      }),
 
       judges: t.field({
         type: [JudgeType],
         resolve: async (parent) => {
-          // todo: parent resolver resolves judges...
-          const { JudgeEntity } = await redbookModel
-            .collections
-            .predictionJudge({
-              predictionId: parent.predictionId,
-            })
+          return await redbookModel
+            .entities
+            .VerdictEntity
+            .query
+            .collection({ predictionId: parent.predictionId })
             .go();
-          return JudgeEntity;
-        }
-      }),
-
-      ratings: t.field({
-        type: [RatingType],
-        resolve: async (parent) => {
-          const { RatingEntity } = await redbookModel
-            .collections
-            .predictionRating({
-              predictionId: parent.predictionId,
-            })
-            .where(({ commentId }, { eq }) => eq(commentId, ''))
-            .go();
-          return RatingEntity;
         }
       }),
 
       comments: t.field({
         type: [CommentType],
         resolve: async (parent) => {
-          const { CommentEntity } = await redbookModel
-            .collections
-            .predictionComment({
-              predictionId: parent.predictionId,
-            })
+          return await redbookModel
+            .entities
+            .CommentEntity
+            .query
+            .collection({ predictionId: parent.predictionId })
+            .where(({ replyTo }, { notExists }) => notExists(replyTo))
             .go();
-          return CommentEntity;
         }
       })
     })

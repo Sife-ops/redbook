@@ -39,8 +39,16 @@ export var isQuery = function(obj) {
 
 
 
-var Rating_possibleTypes = ['Rating']
-export var isRating = function(obj) {
-  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isRating"')
-  return Rating_possibleTypes.includes(obj.__typename)
+var Reply_possibleTypes = ['Reply']
+export var isReply = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isReply"')
+  return Reply_possibleTypes.includes(obj.__typename)
+}
+
+
+
+var User_possibleTypes = ['User']
+export var isUser = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isUser"')
+  return User_possibleTypes.includes(obj.__typename)
 }

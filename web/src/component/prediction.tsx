@@ -1,7 +1,7 @@
 import 'twin.macro';
 import React from 'react';
-import { Prediction as PredictionType } from '../../../../graphql/genql/schema';
-import { User } from '../element/user';
+import { Prediction as PredictionType } from '@redbook/graphql/genql/schema';
+import { User } from './user';
 
 interface Props {
   type: 'summary' | 'full';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Prediction: React.FC<Props> = props => {
-  const date = new Date(props.prediction.created_at);
+  const date = new Date(parseInt(props.prediction.created_at));
 
   return (
     <div>
@@ -32,24 +32,17 @@ export const Prediction: React.FC<Props> = props => {
           {props.type === 'full' && (
             <div>
               <span tw="italic text-xs text-gray-400">By:</span>
-              <User
-                user={{
-                  ...props.prediction,
-                  userId: props.prediction.prognosticatorId
-                }}
-              />
+              <User user={props.prediction.user} />
             </div>
           )}
           <span tw="italic text-xs text-gray-400">Judges:</span>
           <div tw="flex flex-col gap-2">
             {props.prediction.judges.map(e => (
               <User
-                key={e.judgeId}
+                key={e.user.userId}
                 type="judge"
-                user={{
-                  ...e,
-                  userId: e.judgeId
-                }}
+                user={e.user}
+                verdict={e.verdict}
               />
             ))}
           </div>

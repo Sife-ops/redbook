@@ -2,6 +2,7 @@ export * as Comment from "./comment";
 
 import { Dynamo } from "./dynamo";
 import { Entity, EntityItem } from "electrodb";
+import { ulid } from 'ulid';
 
 export const CommentEntity = new Entity(
   {
@@ -11,6 +12,10 @@ export const CommentEntity = new Entity(
       service: "redbook",
     },
     attributes: {
+      userId: {
+        type: "string",
+        required: true,
+      },
       predictionId: {
         type: "string",
         required: true,
@@ -18,28 +23,9 @@ export const CommentEntity = new Entity(
       commentId: {
         type: "string",
         required: true,
+        default: () => ulid()
       },
 
-      commenterId: {
-        type: "string",
-        required: true,
-      },
-      username: {
-        type: "string",
-        required: true,
-      },
-      discriminator: {
-        type: "string",
-        required: true,
-      },
-      avatar: {
-        type: "string",
-        required: true,
-      },
-
-      replyTo: {
-        type: "string",
-      },
       comment: {
         type: "string",
         required: true,
@@ -47,24 +33,41 @@ export const CommentEntity = new Entity(
       created_at: {
         type: "string",
         required: true,
+        default: () => Date.now().toString(),
+      },
+      replyTo: {
+        type: "string",
+      },
+
+      likes: {
+        type: "number",
+        required: true,
+        default: 0,
+      },
+      dislikes: {
+        type: "number",
+        required: true,
+        default: 0,
       },
     },
     indexes: {
-      commenterComment: {
+
+      comment: {
+        collection: 'user',
         pk: {
           field: "pk",
-          composite: ['commenterId'],
+          composite: ['userId'],
         },
         sk: {
           field: "sk",
           composite: ['commentId'],
         },
       },
-      predictionComment: {
+
+      collection: {
         collection: [
-          'predictionJudge',
-          'predictionRating',
-          'predictionComment'
+          'prediction',
+          'comment',
         ] as const,
         index: 'gsi1',
         pk: {
@@ -73,21 +76,10 @@ export const CommentEntity = new Entity(
         },
         sk: {
           field: "gsi1sk",
-          composite: ["commenterId"],
+          composite: ['commentId'],
         },
       },
-      comment: {
-        collection: 'commentRating',
-        index: 'gsi2',
-        pk: {
-          field: "gsi2pk",
-          composite: ["commentId"],
-        },
-        sk: {
-          field: "gsi2sk",
-          composite: [],
-        },
-      },
+
     },
   },
   Dynamo.Configuration

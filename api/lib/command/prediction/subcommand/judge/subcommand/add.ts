@@ -1,6 +1,11 @@
+import AWS from "aws-sdk";
 import Joi from 'joi';
 import { optionValue } from '@redbook/lib/utility';
 import { redbookModel } from '@redbook/lib/db';
+
+const sqs = new AWS.SQS();
+
+const { ONBOARD_SQS } = process.env;
 
 export const add = {
   schema: Joi.object({
@@ -37,10 +42,14 @@ export const add = {
     const { options } = body.data.options[0].options[0];
     const predictionId = optionValue(options, 'id');
 
-    const predictions = await redbookModel.entities.PredictionEntity.query.prognosticatorPrediction({
-      prognosticatorId,
-      predictionId,
-    }).go()
+    const predictions = await redbookModel
+      .entities
+      .PredictionEntity
+      .query
+      .prediction({
+        userId: prognosticatorId,
+        predictionId,
+      }).go()
 
     if (predictions.length < 1) {
       return {
@@ -54,13 +63,20 @@ export const add = {
     const judgeId = optionValue(options, 'judge');
     const judge = body.data.resolved.users[judgeId]; // todo: validation
 
-    await redbookModel.entities.JudgeEntity.create({
-      judgeId,
-      predictionId,
-      discriminator: judge.discriminator,
-      username: judge.username,
-      avatar: judge.avatar,
-    }).go()
+    await sqs
+      .sendMessage({
+        QueueUrl: ONBOARD_SQS!,
+        MessageBody: JSON.stringify(judge),
+      })
+      .promise();
+
+    await redbookModel
+      .entities
+      .VerdictEntity
+      .create({
+        userId: judge.id,
+        predictionId,
+      }).go()
 
     const prediction = predictions[0]
 

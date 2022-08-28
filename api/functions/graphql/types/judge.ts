@@ -1,20 +1,27 @@
+import { UserType } from './user';
+import { VerdictEntityType, redbookModel } from '@redbook/lib/db';
 import { builder } from "../builder";
 
-import { JudgeEntityType, } from '@redbook/lib/db';
-
 export const JudgeType = builder
-  .objectRef<JudgeEntityType>("Judge")
+  .objectRef<VerdictEntityType>("Judge")
   .implement({
     fields: t => ({
       predictionId: t.exposeString("predictionId"),
 
-      judgeId: t.exposeID("judgeId"),
-      avatar: t.exposeString("avatar"),
-      username: t.exposeString("username"),
-      discriminator: t.exposeString("discriminator"),
+      verdict: t.exposeString("verdict"),
 
-      verdict: t.exposeBoolean("verdict", { nullable: true })
+      user: t.field({
+        type: UserType,
+        resolve: async (parent) => {
+          const [user] = await redbookModel
+            .entities
+            .UserEntity
+            .query
+            .user({
+              userId: parent.userId
+            }).go()
+          return user;
+        }
+      })
     })
   })
-
-

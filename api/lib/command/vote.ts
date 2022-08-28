@@ -36,15 +36,15 @@ export const vote = {
     const { options } = body.data;
     const predictionId = optionValue(options, 'id');
 
-    const { PredictionEntity, JudgeEntity } = await redbookModel
+    const { PredictionEntity, VerdictEntity } = await redbookModel
       .collections
-      .predictionJudge({
+      .prediction({
         predictionId
       }).go();
 
     if (
       PredictionEntity.length < 1 ||
-      !JudgeEntity.find(e => e.judgeId === judgeId)
+      !VerdictEntity.find(e => e.userId === judgeId)
     ) {
       return {
         type: 4,
@@ -57,7 +57,7 @@ export const vote = {
     // 2) check prediction verdict
     const prediction = PredictionEntity[0];
 
-    if (prediction.verdict !== undefined) {
+    if (prediction.verdict !== 'none') {
       return {
         type: 4,
         data: {
@@ -67,20 +67,24 @@ export const vote = {
     }
 
     // 3) update judge verdict
-    const verdict = optionValue(options, 'verdict');
+    const verdict = (() => {
+      const v = optionValue(options, 'verdict');
+      return v ? 'correct' : 'incorrect';
+    })();
 
     await redbookModel
       .entities
-      .JudgeEntity
+      .VerdictEntity
       .update({
-        judgeId,
+        userId: judgeId,
         predictionId
       })
-      .set({ verdict })
-      .go()
+      .set({
+        verdict
+      }).go()
 
-    const judges = JudgeEntity.map(e => {
-      if (e.judgeId === judgeId) {
+    const judges = VerdictEntity.map(e => {
+      if (e.userId === judgeId) {
         return {
           ...e,
           verdict
@@ -91,43 +95,52 @@ export const vote = {
 
     // 4) count votes
     const count = judges.reduce(
-      (a: { yes: number; no: number; undecided: number }, c) => {
-        if (c.verdict !== true && c.verdict !== false) {
+      (a: { correct: number; incorrect: number; none: number }, c) => {
+        // if (c.verdict !== true && c.verdict !== false) {
+        if (c.verdict === 'none') {
           return {
             ...a,
-            undecided: a.undecided + 1,
+            none: a.none + 1,
           };
-        } else if (c.verdict === true) {
+        } else if (c.verdict === 'correct') {
           return {
             ...a,
-            yes: a.yes + 1,
+            correct: a.correct + 1,
           };
         } else {
           return {
             ...a,
-            no: a.no + 1,
+            incorrect: a.incorrect + 1,
           };
         }
       },
       {
-        yes: 0,
-        no: 0,
-        undecided: 0,
+        correct: 0,
+        incorrect: 0,
+        none: 0,
       }
     );
 
     // 5) format response
-    if (count.undecided < 1) {
-      if (count.yes < 1) {
-        await redbookModel.entities.PredictionEntity.put({
-          ...prediction,
-          verdict: false
-        }).go()
+    if (count.none < 1) {
+      if (count.correct < 1) {
+        await redbookModel
+          .entities
+          .PredictionEntity
+          .put({
+            ...prediction,
+            verdict: 'incorrect'
+          })
+          .go()
       } else {
-        await redbookModel.entities.PredictionEntity.put({
-          ...prediction,
-          verdict: true
-        }).go()
+        await redbookModel
+          .entities
+          .PredictionEntity
+          .put({
+            ...prediction,
+            verdict: 'correct'
+          })
+          .go()
       }
       return {
         type: 4,
@@ -135,9 +148,9 @@ export const vote = {
           embeds: [
             {
               title: 'Verdict',
-              description: `A prediction has been voted ${count.yes < 1 ? 'incorrect' : 'correct'
+              description: `A prediction has been voted ${count.correct < 1 ? 'incorrect' : 'correct'
                 } by the judge(s).`,
-              color: count.yes < 1 ? 0xff0000 : 0x00ff00,
+              color: count.correct < 1 ? 0xff0000 : 0x00ff00,
               fields: [
                 {
                   name: 'Prediction',
@@ -146,18 +159,18 @@ export const vote = {
                 },
                 {
                   name: 'Made On',
-                  value: prediction.created_at,
+                  value: new Date(parseInt(prediction.created_at)).toLocaleDateString(),
                   inline: false,
                 },
                 {
                   name: 'By',
-                  value: `<@${prediction.prognosticatorId}>`,
+                  value: `<@${prediction.userId}>`,
                   inline: false,
                 },
                 {
                   name: 'Judge(s)',
-                  value: JudgeEntity.reduce((a, c) => {
-                    return `${a}<@${c.judgeId}>`;
+                  value: VerdictEntity.reduce((a, c) => {
+                    return `${a}<@${c.userId}>`;
                   }, ''),
                   inline: false,
                 },
@@ -184,14 +197,14 @@ export const vote = {
                 },
                 {
                   name: 'By',
-                  value: `<@${prediction.prognosticatorId}>`,
+                  value: `<@${prediction.userId}>`,
                   inline: false,
                 },
                 {
                   name: 'Undecided',
                   value: judges.reduce((a, c) => {
-                    if (c.verdict !== true && c.verdict !== false) {
-                      return `${a}<@${c.judgeId}>`;
+                    if (c.verdict === 'none') {
+                      return `${a}<@${c.userId}>`;
                     }
                     return a;
                   }, ''),
@@ -210,3 +223,4 @@ export const vote = {
     }
   },
 };
+

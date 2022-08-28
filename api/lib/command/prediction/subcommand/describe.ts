@@ -29,21 +29,19 @@ export const describe = {
   }).options({ allowUnknown: true }),
 
   handler: async (body: any) => {
-    const {
-      id: userId,
-      username,
-      discriminator,
-      avatar
-    } = body.member.user;
-
+    const { id: userId } = body.member.user;
     const { options } = body.data.options[0];
     const predictionId = optionValue(options, 'id');
 
-    const { PredictionEntity, JudgeEntity } = await redbookModel
+    const {
+      PredictionEntity,
+      VerdictEntity
+    } = await redbookModel
       .collections
-      .predictionJudge({
+      .prediction({
         predictionId
-      }).go();
+      })
+      .go()
 
     if (PredictionEntity.length < 1) {
       return {
@@ -54,22 +52,26 @@ export const describe = {
       };
     }
 
-    // todo: direct message
     const prediction = PredictionEntity[0];
+
+    const [user] = await redbookModel
+      .entities
+      .UserEntity
+      .query
+      .user({
+        userId
+      }).go()
+
+    const token = sign({
+      userId,
+      username: user.username,
+      discriminator: user.discriminator,
+      avatar: user.avatar,
+    }, TOKEN_SECRET);
 
     const url = REDBOOK_ENV === 'dev'
       ? 'http://localhost:5173'
       : SITE_URL;
-
-    const token = sign(
-      {
-        userId,
-        username,
-        discriminator,
-        avatar,
-      },
-      TOKEN_SECRET
-    );
 
     return {
       type: 4,
@@ -83,21 +85,21 @@ export const describe = {
             fields: [
               {
                 name: 'By',
-                value: `<@${prediction.prognosticatorId}>`,
+                value: `<@${prediction.userId}>`,
                 inline: true,
               },
               {
                 name: 'Made On',
-                value: prediction.created_at,
+                value: new Date(parseInt(prediction.created_at)).toLocaleDateString(),
                 inline: false,
               },
               {
                 name: 'Judge(s)',
-                value: JudgeEntity.reduce((a, c) => {
+                value: VerdictEntity.reduce((a, c) => {
                   if (!a) {
-                    return `<@${c.judgeId}>`;
+                    return `<@${c.userId}>`;
                   } else {
-                    return `${a} <@${c.judgeId}>`;
+                    return `${a} <@${c.userId}>`;
                   }
                 }, ''),
                 inline: true,
@@ -120,3 +122,4 @@ export const describe = {
     };
   },
 };
+

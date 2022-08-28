@@ -2,39 +2,34 @@ export default {
     "scalars": [
         1,
         2,
-        4
+        3,
+        6
     ],
     "types": {
         "Comment": {
-            "avatar": [
-                1
-            ],
             "comment": [
                 1
             ],
             "commentId": [
                 2
             ],
-            "commenterId": [
-                1
-            ],
             "created_at": [
                 1
             ],
-            "discriminator": [
-                1
+            "dislikes": [
+                3
+            ],
+            "likes": [
+                3
             ],
             "predictionId": [
                 2
             ],
-            "ratings": [
-                8
+            "replies": [
+                9
             ],
-            "replyTo": [
-                1
-            ],
-            "username": [
-                1
+            "user": [
+                10
             ],
             "__typename": [
                 1
@@ -42,30 +37,21 @@ export default {
         },
         "String": {},
         "ID": {},
+        "Int": {},
         "Judge": {
-            "avatar": [
-                1
-            ],
-            "discriminator": [
-                1
-            ],
-            "judgeId": [
-                2
-            ],
             "predictionId": [
                 1
             ],
-            "username": [
-                1
+            "user": [
+                10
             ],
             "verdict": [
-                4
+                1
             ],
             "__typename": [
                 1
             ]
         },
-        "Boolean": {},
         "Mutation": {
             "comment": [
                 0,
@@ -73,18 +59,9 @@ export default {
                     "comment": [
                         1,
                         "String!"
-                    ]
-                }
-            ],
-            "rate": [
-                1,
-                {
+                    ],
                     "commentId": [
                         1
-                    ],
-                    "like": [
-                        4,
-                        "Boolean!"
                     ],
                     "predictionId": [
                         1,
@@ -92,14 +69,42 @@ export default {
                     ]
                 }
             ],
+            "rateComment": [
+                1,
+                {
+                    "commentId": [
+                        1,
+                        "String!"
+                    ],
+                    "predictionId": [
+                        1,
+                        "String!"
+                    ],
+                    "rating": [
+                        6,
+                        "Boolean!"
+                    ]
+                }
+            ],
+            "ratePrediction": [
+                1,
+                {
+                    "predictionId": [
+                        1,
+                        "String!"
+                    ],
+                    "rating": [
+                        6,
+                        "Boolean!"
+                    ]
+                }
+            ],
             "__typename": [
                 1
             ]
         },
+        "Boolean": {},
         "Prediction": {
-            "avatar": [
-                1
-            ],
             "comments": [
                 0
             ],
@@ -109,26 +114,23 @@ export default {
             "created_at": [
                 1
             ],
-            "discriminator": [
-                1
+            "dislikes": [
+                3
             ],
             "judges": [
+                4
+            ],
+            "likes": [
                 3
             ],
             "predictionId": [
                 2
             ],
-            "prognosticatorId": [
-                1
-            ],
-            "ratings": [
-                8
-            ],
-            "username": [
-                1
+            "user": [
+                10
             ],
             "verdict": [
-                4
+                1
             ],
             "__typename": [
                 1
@@ -136,7 +138,7 @@ export default {
         },
         "Query": {
             "prediction": [
-                6,
+                7,
                 {
                     "predictionId": [
                         1,
@@ -145,7 +147,7 @@ export default {
                 }
             ],
             "predictions": [
-                6,
+                7,
                 {
                     "userId": [
                         1,
@@ -157,24 +159,44 @@ export default {
                 1
             ]
         },
-        "Rating": {
-            "avatar": [
+        "Reply": {
+            "comment": [
                 1
             ],
             "commentId": [
                 2
             ],
-            "criticId": [
+            "created_at": [
+                1
+            ],
+            "dislikes": [
+                3
+            ],
+            "likes": [
+                3
+            ],
+            "predictionId": [
+                2
+            ],
+            "user": [
+                10
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "User": {
+            "avatar": [
+                1
+            ],
+            "created_at": [
                 1
             ],
             "discriminator": [
                 1
             ],
-            "like": [
-                4
-            ],
-            "predictionId": [
-                2
+            "userId": [
+                1
             ],
             "username": [
                 1
