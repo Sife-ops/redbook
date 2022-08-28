@@ -97,12 +97,19 @@ export function stack({ stack }: StackContext) {
     },
   });
 
-  /*
-   * todo: update exportJsonLambda for new data model
-   */
   const exportJsonBucket = new Bucket(stack, 'exportJsonBucket');
+
   const exportJsonLambda = new Function(stack, 'exportJsonLambda', {
     handler: 'functions/export-json.handler',
+    environment: {
+      BUCKET: exportJsonBucket.bucketName,
+      TABLE: table.tableName,
+    },
+    permissions: [exportJsonBucket, table],
+  });
+
+  const importJsonLambda = new Function(stack, 'importJsonLambda', {
+    handler: 'functions/import-json.handler',
     environment: {
       BUCKET: exportJsonBucket.bucketName,
       TABLE: table.tableName,
@@ -113,6 +120,7 @@ export function stack({ stack }: StackContext) {
   stack.addOutputs({
     ExportJsonBucket: exportJsonBucket.bucketName,
     ExportJsonLambda: exportJsonLambda.functionArn,
+    ImportJsonLambda: importJsonLambda.functionArn,
     BotEndpoint: bot.url,
     GraphqlApi: graphqlApi.url,
     MnemonicDlq: mnemonicDlq.queueUrl,
