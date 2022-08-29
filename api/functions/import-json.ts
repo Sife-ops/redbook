@@ -46,6 +46,8 @@ export const handler = async () => {
       Key: latest.Key!
     }).promise()
 
+    console.log('latest object', obj);
+
     const jsObj = JSON.parse(obj.Body?.toString()!)
 
     const { predictions, judges } = jsObj as {
@@ -57,7 +59,7 @@ export const handler = async () => {
      * import users
      */
 
-    [
+    const users = [
       ...predictions.map(e => ({
         id: e.prognosticatorId,
         username: e.username,
@@ -71,14 +73,15 @@ export const handler = async () => {
         avatar: e.avatar,
       })),
     ]
-      .map(async (e) => {
-        await sqs
-          .sendMessage({
-            QueueUrl: ONBOARD_SQS!,
-            MessageBody: JSON.stringify(e),
-          })
-          .promise();
-      });
+
+    for (const user of users) {
+      await sqs
+        .sendMessage({
+          QueueUrl: ONBOARD_SQS!,
+          MessageBody: JSON.stringify(user),
+        })
+        .promise();
+    }
 
     /*
      * import predictions
@@ -94,31 +97,31 @@ export const handler = async () => {
       }
     }
 
-    predictions.map(async (e) => {
+    for (const prediction of predictions) {
       await redbookModel
         .entities
         .PredictionEntity
         .create({
-          userId: e.prognosticatorId,
-          predictionId: e.predictionId,
-          conditions: e.conditions,
-          created_at: Date.parse(e.created_at).toString(),
-          verdict: verdict(e.verdict)
+          userId: prediction.prognosticatorId,
+          predictionId: prediction.predictionId,
+          conditions: prediction.conditions,
+          created_at: Date.parse(prediction.created_at).toString(),
+          verdict: verdict(prediction.verdict)
         })
         .go()
-    });
+    }
 
-    judges.map(async (e) => {
+    for (const judge of judges) {
       await redbookModel
         .entities
         .VerdictEntity
         .create({
-          userId: e.judgeId || 'FUCK',
-          predictionId: e.predictionId || 'FUCK',
-          verdict: verdict(e.verdict)
+          userId: judge.judgeId,
+          predictionId: judge.predictionId,
+          verdict: verdict(judge.verdict)
         })
         .go()
-    });
+    }
 
   } catch (e) {
     console.log(e);
